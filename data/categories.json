@@ -1,0 +1,75 @@
+{
+    "proteins": [
+        "Round steak, 1 kilogram",
+        "Sirloin steak, 1 kilogram",
+        "Prime rib roast, 1 kilogram",
+        "Blade roast, 1 kilogram",
+        "Stewing beef, 1 kilogram",
+        "Ground beef, 1 kilogram",
+        "Pork chops, 1 kilogram",
+        "Chicken, 1 kilogram",
+        "Bacon, 500 grams",
+        "Wieners, 450 grams",
+        "Canned salmon, 213 grams",
+        "Eggs, 1 dozen"
+    ],
+    "milk products": [
+        "Butter, 454 grams",
+        "Processed cheese slices, 250 grams",
+        "Evaporated milk, 385 millilitres",
+        "Homogenized milk, 4 litres",
+        "Partly skimmed milk, 4 litres"
+    ],
+    "starches": [
+        "Bread, 675 grams",
+        "Potatoes, 4.54 kilograms",
+        "Macaroni, 500 grams",
+        "Flour, 2.5 kilograms"
+    ],
+    "biscuits": [
+        "Soda crackers, 450 grams",
+        "Corn flakes, 675 grams"
+    ],
+    "fruits": [
+        "Apples, 1 kilogram",
+        "Bananas, 1 kilogram",
+        "Oranges, 1 kilogram"
+    ],
+    "juices": [
+        "Apple juice, 1.36 litres",
+        "Orange juice, 1 litre"
+    ],
+    "vegetables": [
+        "Carrots, 1 kilogram",
+        "Onions, 1 kilogram",
+        "French fried potatoes, frozen, 1 kilogram",
+        "Baked beans, canned, 398 millilitres",
+        "Tomatoes, canned, 796 millilitres",
+        "Tomato juice, 1.36 litres",
+        "Ketchup, 1 litre",
+        "Soup, canned, 284 millilitres"
+    ],
+    "mushrooms": [
+        "Mushrooms, 1 kilogram"
+    ],
+    "hygiene products": [
+        "Paper towels (2 rolls)",
+        "Facial tissue (200 tissues)",
+        "Bathroom tissue (4 rolls)",
+        "Shampoo, 300 millilitres",
+        "Deodorant, 60 grams",
+        "Toothpaste, 100 millilitres"
+    ],
+    "drink": [
+        "Coffee, roasted, 300 grams",
+        "Coffee, instant, 200 grams",
+        "Tea (72 bags)"
+    ],
+    "other": [
+        "Sugar, white, 2 kilograms",
+        "Cooking or salad oil, 1 litre",
+        "Baby food, 128 millilitres",
+        "Peanut butter, 500 grams",
+        "Cigarettes (200)"
+    ]
+}
