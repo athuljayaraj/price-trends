@@ -5,23 +5,11 @@ scroller.centerSections();
   scroller.centerSections()
   document.addEventListener('scroll', function () {
     console.log('scroll')
-    const windowHeight = window.innerHeight
-    d3.selectAll('section').each(function (d, i) {
-      // Check how much of the window is visible
-      const section = d3.select(this)
-      const sectionTop = section.node().getBoundingClientRect().top
-      const sectionHeight = section.node().getBoundingClientRect().height
-      const sectionBottom = sectionTop + sectionHeight
-      const isVisible = sectionTop < windowHeight && sectionBottom > 0
-      if (isVisible) {
-        const percentage = (100, (Math.min(windowHeight, sectionBottom) - Math.max(0, sectionTop)) / sectionHeight * 100)
-        console.log('section', section.attr('id'), 'is visible at ' + percentage.toFixed(2) + '%')
-      } else {
-        console.log('section', section.attr('id'), 'is not visible')
-      }
-    })
-  })
+    scroller.mainScroll()
+  }
+  )
   window.addEventListener('resize', function () {
     console.log('resize')
+    scroller.centerSections();
   })
 })(d3)
