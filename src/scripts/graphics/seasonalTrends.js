@@ -49,7 +49,6 @@ export function main (data) {
       end: new Date(1997, 11, 31)
     }
   ]
-  console.log([...new Set(Array.from(seasons.map(d => d.name)))])
   const seasonsScale = d3.scaleOrdinal()
     .domain([...new Set(Array.from(seasons.map(d => d.name)))])
     .range(['blue', 'lightgreen', 'green', 'orange'])
@@ -125,7 +124,7 @@ export function main (data) {
   // Create line plots
   const lineGroup = svg.append('g')
     .attr('transform', `translate(${glob.sizes.vizSvgSizes.margin.left}, ${glob.sizes.vizSvgSizes.margin.top})`)
-  console.log(data)
+  
   data.values.forEach(function (dataYear) {
     lineGroup.append('path')
       .attr('class', 'curve')
@@ -138,10 +137,11 @@ export function main (data) {
       .attr('stroke-width', '2')
       .attr('fill', 'none')
       .on('mouseenter', function (d) {
+        console.log('tooltip')
         d3.select(this)
           .attr('stroke', 'red')
           .attr('stroke-width', '4')
-        d3.select('#visualization-div')
+        d3.select('body')
           .append('div')
           .attr('id', 'tooltip')
           .style('position', 'absolute')
@@ -158,8 +158,8 @@ export function main (data) {
         d3.select(this)
           .attr('stroke', 'black')
           .attr('stroke-width', '2')
-        // d3.select('#tooltip')
-        //   .remove()
+        d3.select('#tooltip')
+          .remove()
       }
       )
   })
