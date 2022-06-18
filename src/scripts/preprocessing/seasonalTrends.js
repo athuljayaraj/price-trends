@@ -16,6 +16,7 @@ export function main (dataNorm) {
                     }
                 ]
                 */
+  console.log(dataNorm)
   const dicoData = {}
   // const values = (dataNorm.filter(d=>d.product.includes('Onions')).map(x=>parseFloat(x.value)))
   // console.log(Math.min(...values))

@@ -79,17 +79,23 @@ export function main (data) {
       const middleY = svgInfos.top +
         glob.sizes.vizSvgSizes.margin.top -
         middleYMarginTooltip
-      d3.select('#vizualization-div')
+      const divTooltip = d3.select('#vizualization-div')
         .append('div')
         .attr('id', 'tooltip')
         .style('position', 'absolute')
         .style('z-index', '10')
         .style('background', 'white')
         .style('padding', '10px')
-        .style('border-radius', '5px')
-        .style('box-shadow', '1px 1px 5px black')
         .style('top', middleY + 'px')
-        .html(`<strong>${season.name}</strong>`)
+        .style('background', 'transparent')
+        .style('text-align', 'center')
+      divTooltip.append('p')
+        .text(season.name)
+        .style('background', 'transparent')
+      divTooltip.append('img')
+        .attr('src', 'images/' + season.name + '.png')
+        .style('width', '25px')
+        .style('background', 'transparent')
       d3.select('#tooltip')
         .style('left', function () {
           const offset = d3.select(this).node().getBoundingClientRect().width / 2
@@ -107,7 +113,7 @@ export function main (data) {
       d3.select('#tooltip')
         .remove()
     })
-    // Create groups and plot axis
+  // Create groups and plot axis
   svg.append('g')
     .attr('class', 'x axis')
     .attr('transform', `translate(${glob.sizes.vizSvgSizes.margin.left}, ${glob.sizes.vizSvgSizes.innerHeight + glob.sizes.vizSvgSizes.margin.top})`)
@@ -119,7 +125,7 @@ export function main (data) {
   // Create line plots
   const lineGroup = svg.append('g')
     .attr('transform', `translate(${glob.sizes.vizSvgSizes.margin.left}, ${glob.sizes.vizSvgSizes.margin.top})`)
-  
+
   data.values.forEach(function (dataYear) {
     lineGroup.append('path')
       .attr('class', 'curve')
