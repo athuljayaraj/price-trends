@@ -1,5 +1,8 @@
+import * as scroller from './scripts/scroller'
 
+scroller.centerSections();
 (function (d3) {
+  scroller.centerSections()
   document.addEventListener('scroll', function () {
     console.log('scroll')
     const windowHeight = window.innerHeight
@@ -11,11 +14,14 @@
       const sectionBottom = sectionTop + sectionHeight
       const isVisible = sectionTop < windowHeight && sectionBottom > 0
       if (isVisible) {
-        const percentage = (100, (Math.min(windowHeight,sectionBottom) - Math.max(0,sectionTop)) / sectionHeight * 100)
+        const percentage = (100, (Math.min(windowHeight, sectionBottom) - Math.max(0, sectionTop)) / sectionHeight * 100)
         console.log('section', section.attr('id'), 'is visible at ' + percentage.toFixed(2) + '%')
       } else {
         console.log('section', section.attr('id'), 'is not visible')
       }
     })
+  })
+  window.addEventListener('resize', function () {
+    console.log('resize')
   })
 })(d3)
