@@ -26,27 +26,22 @@ export function main (data) {
     {
       name: 'Winter',
       start: new Date(1995, 0, 1),
-      end: new Date(1995, 2, 1)
+      end: new Date(1995, 2, 20)
     },
     {
       name: 'Spring',
-      start: new Date(1995, 2, 1),
-      end: new Date(1995, 5, 1)
+      start: new Date(1995, 2, 20),
+      end: new Date(1995, 5, 21)
     },
     {
       name: 'Summer',
-      start: new Date(1995, 5, 1),
-      end: new Date(1995, 8, 1)
+      start: new Date(1995, 5, 21),
+      end: new Date(1995, 8, 22)
     },
     {
       name: 'Fall',
-      start: new Date(1995, 8, 1),
+      start: new Date(1995, 8, 22),
       end: new Date(1995, 11, 1)
-    },
-    {
-      name: 'Winter',
-      start: new Date(1996, 11, 1),
-      end: new Date(1997, 11, 31)
     }
   ]
   const seasonsScale = d3.scaleOrdinal()
