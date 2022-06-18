@@ -1,8 +1,9 @@
+
+var percentageVisible = {}
 /**
  *
  */
-export function centerSections() {
-  console.log('centerSections')
+export function centerSections () {
   const windowHeight = window.innerHeight
   d3.selectAll('section')
     .style('margin-bottom', function () {
@@ -13,9 +14,11 @@ export function centerSections() {
       const height = d3.select(this).node().getBoundingClientRect().height
       return (windowHeight / 2 - height / 2) + 'px'
     })
-  console.log(windowHeight)
 }
-export function mainScroll() {
+/**
+ *
+ */
+export function mainScroll () {
   const windowHeight = window.innerHeight
   d3.selectAll('section').each(function (d, i) {
     // Check how much of the window is visible
@@ -26,9 +29,23 @@ export function mainScroll() {
     const isVisible = sectionTop < windowHeight && sectionBottom > 0
     if (isVisible) {
       const percentage = (100, (Math.min(windowHeight, sectionBottom) - Math.max(0, sectionTop)) / sectionHeight * 100)
-      console.log('section', section.attr('id'), 'is visible at ' + percentage.toFixed(2) + '%')
+      percentageVisible[section.attr('id')] = percentage
     } else {
-      console.log('section', section.attr('id'), 'is not visible')
+      percentageVisible[section.attr('id')] = 0
     }
   })
+}
+/**
+ *
+ */
+export function svgCenter () {
+  d3.select('#vizualization-svg')
+    .style('margin-top', function () {
+      console.log('svgCenter', percentageVisible)
+      const height = d3.select(this).node().getBoundingClientRect().height
+      console.log(glob.sizes.vizDivSizes.height)
+      const out = (glob.sizes.vizDivSizes.height / 2 - height / 2) + 'px'
+      console.log('svgCenter', out)
+      return out
+    })
 }
