@@ -157,15 +157,8 @@ export function main (data) {
       })
       .on('mouseleave', function (d) {
         d3.select(this)
-          .transition()
-          .duration(0)
-          .attr('stroke', 'red')
-          .attr('stroke-width', '4')
-          .transition()
-          .duration(500)
           .attr('stroke', 'black')
           .attr('stroke-width', '2')
-          
         d3.select('#tooltip')
           .remove()
       }
