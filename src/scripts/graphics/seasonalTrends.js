@@ -5,7 +5,7 @@ export function main () {
   if (glob.data.seasonalTrends.mainData === undefined) {
     return
   }
-  const controls = d3.select('#controls')
+  const controls = d3.select('#controls1')
   controls
     .append('p')
     .text('Products')
@@ -32,7 +32,7 @@ export function main () {
  *
  */
 function reBuild () {
-  d3.select('#vizualization-svg')
+  d3.select('#vizualization-svg1')
     .selectAll('*')
     .remove()
   build()
@@ -43,7 +43,7 @@ function reBuild () {
 function build () {
   const data = glob.data.seasonalTrends.mainData.filter(d => d.name === glob.data.seasonalTrends.current_selection)[0]
   console.log(data)
-  const svg = d3.select('#vizualization-svg')
+  const svg = d3.select('#vizualization-svg1')
   // Create scales
   const xScale = d3.scaleTime()
     .domain([data.minX, data.maxX])
@@ -103,8 +103,8 @@ function build () {
     .on('mouseenter', function (season) {
       d3.select(this)
         .attr('opacity', 0.75)
-      const svgInfos = d3.select('svg').node().getBoundingClientRect()
-      const divInfos = d3.select('#vizualization-div').node().getBoundingClientRect()
+      const svgInfos = d3.select('#vizualization-svg1').node().getBoundingClientRect()
+      const divInfos = d3.select('#vizualization-div1').node().getBoundingClientRect()
       const margingContainerGraphic = 10
       const middleX = svgInfos.left -
         divInfos.left +
@@ -115,7 +115,7 @@ function build () {
       const middleY = svgInfos.top +
         glob.sizes.vizSvgSizes.margin.top -
         middleYMarginTooltip
-      const divTooltip = d3.select('#vizualization-div')
+      const divTooltip = d3.select('#vizualization-div1')
         .append('div')
         .attr('id', 'tooltip')
         .style('position', 'absolute')

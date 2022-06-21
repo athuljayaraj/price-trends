@@ -2,8 +2,8 @@
  *
  */
 export function updateResize () {
-  const svgSizes = window.getComputedStyle(d3.select('#vizualization-svg').node())
-  const vizDivSizes = window.getComputedStyle(d3.select('#container-graphic').node())
+  const svgSizes = window.getComputedStyle(d3.select('#vizualization-svg1').node())
+  const vizDivSizes = window.getComputedStyle(d3.select('#vizualization-svg1').node())
   glob.sizes.vizSvgSizes.width = parseFloat(svgSizes.width.slice(0, -2))
   glob.sizes.vizSvgSizes.height = parseFloat(svgSizes.height.slice(0, -2))
   glob.sizes.vizSvgSizes.innerWidth = glob.sizes.vizSvgSizes.width - glob.sizes.vizSvgSizes.margin.left - glob.sizes.vizSvgSizes.margin.right

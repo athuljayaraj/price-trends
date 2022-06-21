@@ -18,9 +18,6 @@ export function main(dataNorm, seasonalTrends) {
                 ]
                 */
   const dicoData = {}
-  // const values = (dataNorm.filter(d=>d.product.includes('Onions')).map(x=>parseFloat(x.value)))
-  // console.log(Math.min(...values))
-  // console.log(Math.max(...values))
   dataNorm.forEach(function (d) {
     if (!dicoData[d.product]) {
       dicoData[d.product] = []

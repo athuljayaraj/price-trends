@@ -1,24 +1,35 @@
-.text-container {
+section {
     width: 25%;
     height: 100%;
+     position: relative;
     padding: 10px;
     text-align: justify;
     background-color: burlywood;
+    margin-bottom: auto;
+    float: left;
+    transform: translateY(50%);
 }
 
-#container-graphic {
-    padding: 10px;
-    background-color: transparent;
-    float: top;
-    position: fixed;
-    top: 0;
-    right: 0;
-    width: 70%;
-    height: 100%;
+.container {
+    padding-top: 200px;;
+}
+.element {
+    display: inline-block;
 }
 
+.vizualization-div {
+    height: 500px;
+    /* flex-grow: 1; */
+    width: calc(70% - 100px);
+    margin: 10px 10px 10px 10px;
+}
+.vizualization-div {
+    padding-left: 100px;
+}
 svg {
     height: 500px;
+    width: 100%;
+
 }
 
 .axis {

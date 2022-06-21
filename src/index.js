@@ -5,14 +5,14 @@ import * as seasons from './scripts/graphics/seasonalTrends.js'
 window.glob = {
   sizes: {
     vizDivSizes: { width: 0, height: 0 },
-    vizSvgSizes: { 
-      width: 0, 
+    vizSvgSizes: {
+      width: 0,
       height: 0,
       margin: { top: 40, right: 40, bottom: 40, left: 40 },
       innerWidth: 0,
       innerHeight: 0
     },
-    tooltip:{
+    tooltip: {
       offsetX: 15,
       offsetY: 20
     }
@@ -21,25 +21,24 @@ window.glob = {
 };
 (function (d3) {
   // TODO: programmatically add the sections texts
-  scroller.centerSections()
+  // scroller.centerSections()
   resize.updateResize()
-  scroller.svgCenter()
+  // scroller.svgCenter()
   d3.csv('data_norm.csv').then(function (dataNorm) {
     d3.json('seasonalTrends.json').then(function (seasonalTrends) {
-      preprocessSeason.main(dataNorm,seasonalTrends)
+      preprocessSeason.main(dataNorm, seasonalTrends)
       build(glob.data)
     })
   })
-  document.addEventListener('scroll', function () {
-    scroller.mainScroll()
-  }
-  )
+  
   window.addEventListener('resize', function () {
-    d3.select('#vizualization-svg').selectAll('*').remove()
+    console.log('resize')
+    d3.select('.visualization-svg').selectAll('*').remove()
+    d3.select('.controls').selectAll('*').remove()
     resize.updateResize()
-    build(glob.data)
+    build()
   })
-  function build(data){
+  function build(data) {
     seasons.main(glob.data)
 
   }
