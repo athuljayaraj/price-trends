@@ -20,12 +20,15 @@ window.glob = {
   data: {}
 };
 (function (d3) {
+  // TODO: programmatically add the sections texts
   scroller.centerSections()
   resize.updateResize()
   scroller.svgCenter()
   d3.csv('data_norm.csv').then(function (dataNorm) {
-    preprocessSeason.main(dataNorm)
-    build(glob.data)
+    d3.json('seasonalTrends.json').then(function (seasonalTrends) {
+      preprocessSeason.main(dataNorm,seasonalTrends)
+      build(glob.data)
+    })
   })
   document.addEventListener('scroll', function () {
     scroller.mainScroll()
@@ -38,5 +41,6 @@ window.glob = {
   })
   function build(data){
     seasons.main(glob.data)
+
   }
 })(d3)

@@ -1,11 +1,47 @@
 /**
  * @param data
  */
-export function main (data) {
-  if (data === undefined) {
+export function main () {
+  if (glob.data.seasonalTrends.mainData === undefined) {
     return
   }
-  data = data.seasonalTrends.filter(d => d.name === 'Onions, 1 kilogram')[0]
+  const controls = d3.select('#controls')
+  controls
+    .append('p')
+    .text('Products')
+    .style('display', 'inline-block')
+
+  controls
+    .append('select')
+    .attr('id', 'selectProduct')
+    .on('change', function () {
+      console.log('change')
+      glob.data.seasonalTrends.current_selection = d3.select('#selectProduct').property('value')
+      reBuild()
+    })
+    .selectAll('option')
+    .data(glob.data.seasonalTrends.selectedProd)
+    .enter()
+    .append('option')
+    .text(d => d)
+    .attr('value', function (d) { return d })
+  glob.data.seasonalTrends.current_selection = d3.select('#selectProduct').property('value')
+  build()
+}
+/**
+ *
+ */
+function reBuild () {
+  d3.select('#vizualization-svg')
+    .selectAll('*')
+    .remove()
+  build()
+}
+/**
+ *
+ */
+function build () {
+  const data = glob.data.seasonalTrends.mainData.filter(d => d.name === glob.data.seasonalTrends.current_selection)[0]
   console.log(data)
   const svg = d3.select('#vizualization-svg')
   // Create scales

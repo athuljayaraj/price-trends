@@ -1,7 +1,8 @@
 /**
  * @param dataNorm
+ * @param seasonalTrends
  */
-export function main (dataNorm) {
+export function main(dataNorm, seasonalTrends) {
   /* We would like something like this:
                 [
                     {
@@ -16,7 +17,6 @@ export function main (dataNorm) {
                     }
                 ]
                 */
-  console.log(dataNorm)
   const dicoData = {}
   // const values = (dataNorm.filter(d=>d.product.includes('Onions')).map(x=>parseFloat(x.value)))
   // console.log(Math.min(...values))
@@ -62,6 +62,10 @@ export function main (dataNorm) {
       maxY: d3.max(dicoData[key], x => x.value)
     })
   }
-  glob.data.seasonalTrends = data
+  glob.data.seasonalTrends = {
+    mainData: data,
+    selectedProd: seasonalTrends,
+    current_selection: seasonalTrends[0]
+  }
   console.log(glob)
 }
