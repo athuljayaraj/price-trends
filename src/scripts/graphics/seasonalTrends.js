@@ -1,7 +1,7 @@
 /**
  * @param data
  */
-export function main () {
+export function main() {
   if (glob.data.seasonalTrends.mainData === undefined) {
     return
   }
@@ -31,7 +31,7 @@ export function main () {
 /**
  *
  */
-function reBuild () {
+function reBuild() {
   d3.select('#vizualization-svg1')
     .selectAll('*')
     .remove()
@@ -40,7 +40,7 @@ function reBuild () {
 /**
  *
  */
-function build () {
+function build() {
   const data = glob.data.seasonalTrends.mainData.filter(d => d.name === glob.data.seasonalTrends.current_selection)[0]
   console.log(data)
   const svg = d3.select('#vizualization-svg1')
@@ -106,8 +106,7 @@ function build () {
       const svgInfos = d3.select('#vizualization-svg1').node().getBoundingClientRect()
       const divInfos = d3.select('#vizualization-div1').node().getBoundingClientRect()
       const margingContainerGraphic = 10
-      const middleX = svgInfos.left -
-        divInfos.left +
+      const middleX = svgInfos.left +
         glob.sizes.vizSvgSizes.margin.left +
         margingContainerGraphic +
         xScale(season.start) + (xScale(season.end) - xScale(season.start)) / 2
