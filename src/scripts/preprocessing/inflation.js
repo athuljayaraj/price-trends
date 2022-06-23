@@ -23,7 +23,8 @@ export function main (dataNorm, inflationProducts, inflation) {
     return {
       product: product,
       category: category,
-      data: rateOfChange
+      data: rateOfChange,
+      active: true
     }
   })
   glob.data.inflation = {
@@ -44,7 +45,9 @@ export function main (dataNorm, inflationProducts, inflation) {
           category: 2
         }
       }
-    }).filter(x => x !== undefined)
+    }
+    ).filter(x => x !== undefined),
+    active: true
   })
   glob.data.inflation.data = productGrowthRate
 }

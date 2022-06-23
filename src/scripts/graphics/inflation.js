@@ -2,6 +2,14 @@
  *
  */
 export function main () {
+  glob.data.inflation.hovered_elem = null
+  glob.data.inflation.selected_elem = [0, 1, 2]
+  build()
+}
+/**
+ *
+ */
+function build () {
   const data = glob.data.inflation
   // main svg
   const svg = d3.select('#vizualization-svgInfl')
@@ -33,10 +41,38 @@ export function main () {
     .append('g')
     .attr('transform', (d, i) => `translate(0,${20 * (i + 1)})`)
   gpe.append('rect')
+    .attr('class', 'legend-rect')
     .attr('width', '50px')
-    .attr('height', '2px')
+    .attr('height', '4px')
     .attr('transform', 'translate(0,-7)')
     .attr('fill', d => colorScale(d.category))
+    .on('mouseenter', function (d) {
+      glob.data.inflation.hovered_elem = d.category
+      svg.selectAll('.legend-rect')
+        .attr('opacity', function (e) {
+          return opacityFunc(e.category)
+        })
+      refreshData(svg)
+    })
+    .on('mouseleave', function (d) {
+      glob.data.inflation.hovered_elem = null
+      svg.selectAll('.legend-rect')
+        .attr('opacity', 1)
+      refreshData(svg)
+    })
+    .on('click', function (d) {
+      if (glob.data.inflation.selected_elem.includes(d.category)) {
+        glob.data.inflation.selected_elem = glob.data.inflation.selected_elem.filter(x => x !== d.category)
+      } else {
+        glob.data.inflation.selected_elem.push(d.category)
+      }
+      svg.selectAll('.legend-rect')
+        .attr('opacity', function (e) {
+          return opacityFunc(e.category)
+        })
+      refreshData(svg)
+    })
+
   gpe.append('text')
     .attr('transform', 'translate(60,0)')
     .attr('font-size', '14px')
@@ -45,19 +81,17 @@ export function main () {
   gpeLegend
     .attr('transform', `translate(${(sizes.width - sizes.margin.left - sizes.margin.right - widthLegend) / 2 + sizes.margin.left},${sizes.margin.top})`)
   // plot curves
-  const opacityFunc = category => category === 0 ? 0.5 : 1
+
   // to move to front on hover : https://stackoverflow.com/questions/14167863/how-can-i-bring-a-circle-to-the-front-with-d3
-  d3.selection.prototype.moveToFront = function () {
-    return this.each(function () {
-      this.parentNode.appendChild(this)
-    })
-  }
+
   svg.append('g')
     .attr('id', 'curvesInfl')
     .attr('transform', `translate(${glob.sizes.vizSvgSizes.margin.left}, ${glob.sizes.vizSvgSizes.margin.top})`)
-    .selectAll('path')
+    .selectAll('.curves-graph')
     .data(data.data)
     .enter()
+    .append('g')
+    .attr('class', 'curves-graph')
     .append('path')
     .datum(d => d.data.filter(x => x.date > data.minX))
     .attr('d', d3.line()
@@ -67,38 +101,71 @@ export function main () {
     .attr('stroke', d => { return colorScale(d.map(x => x.category)[0]) })
     .attr('stroke-width', '2')
     .attr('fill', 'none')
-    .attr('opacity', d => opacityFunc(d.map(x => x.category)[0]))
+    .attr('opacity', function (d) { return d3.select(this.parentNode).data()[0].active ? 1 : 0 })
     .on('mouseenter', function (d) {
-      d3.select(this).raise()
-      d3.select(this)
-        .attr('opacity', 1)
-        .attr('stroke-width', '4')
-        .attr('stroke', 'orange')
-      d3.select('body')
-        .append('div')
-        .attr('id', 'tooltip')
-        .style('position', 'absolute')
-        .style('z-index', '10')
-        .style('background', 'white')
-        .style('padding', '10px')
-        .style('border-radius', '5px')
-        .style('box-shadow', '1px 1px 5px black')
-        .style('left', (d3.event.pageX + glob.sizes.tooltip.offsetY) + 'px')
-        .style('top', (d3.event.pageY + glob.sizes.tooltip.offsetY) + 'px')
-        .html(`<strong>${d.map(x => x.product)[0]}</strong>`)
+      if (d3.select(this.parentNode).data()[0].active) {
+        d3.select(this.parentNode).raise()
+        d3.select(this)
+          .attr('opacity', 1)
+          .attr('stroke-width', '4')
+          .attr('stroke', 'orange')
+        d3.select('body')
+          .append('div')
+          .attr('id', 'tooltip')
+          .style('position', 'absolute')
+          .style('z-index', '10')
+          .style('background', 'white')
+          .style('padding', '10px')
+          .style('border-radius', '5px')
+          .style('box-shadow', '1px 1px 5px black')
+          .style('left', (d3.event.pageX + glob.sizes.tooltip.offsetY) + 'px')
+          .style('top', (d3.event.pageY + glob.sizes.tooltip.offsetY) + 'px')
+          .html(`<strong>${d.map(x => x.product)[0]}</strong>`)
+      }
     })
     .on('mouseleave', function (d) {
-      d3.select(this)
-        .attr('opacity', opacityFunc(d.map(x => x.category)[0]))
-        .attr('stroke-width', '2')
-        .attr('stroke', colorScale(d.map(x => x.category)[0]))
-      d3.select('#tooltip')
-        .remove()
-      d3.select('#vizualization-svgInfl').select('#curvesInfl').selectAll('path')
-        .filter(function (d) {
-          return d.map(x => x.category === 2)[0]
-        })
-        .attr('stroke-width', '2')
-        .raise()
+      if (d3.select(this.parentNode).data()[0].active) {
+        d3.select(this)
+          .attr('opacity', d => 0.75)
+          .attr('stroke-width', '2')
+          .attr('stroke', colorScale(d.map(x => x.category)[0]))
+        d3.select('#tooltip')
+          .remove()
+        d3.selectAll('.curves-graph')
+          .filter(function (d) {
+            return d3.select(this).data()[0].category === 2
+          })
+          .raise()
+      }
     })
+}
+/**
+ * @param category
+ */
+function checkIfCatVisible (category) {
+  return (glob.data.inflation.selected_elem.includes(category) && glob.data.inflation.hovered_elem === null) || glob.data.inflation.hovered_elem === category
+}
+/**
+ * @param category
+ * @param defaultVal
+ * @param d
+ */
+function opacityFunc (category) {
+  if (checkIfCatVisible(category)) {
+    return 1
+  } else {
+    return 0.5
+  }
+}
+/**
+ * @param svg
+ */
+function refreshData (svg) {
+  const data = svg.selectAll('.curves-graph').data().map(function (d) {
+    d.active = checkIfCatVisible(d.category)
+    return d
+  })
+  svg.selectAll('.curves-graph')
+    .data(data)
+    .attr('opacity', function (d) { return d3.select(this).data()[0].active ? 0.75 : 0 })
 }
