@@ -25,12 +25,13 @@ export function main () {
   // add legend
   const sizes = glob.sizes.vizSvgSizes
   const gpeLegend = svg.append('g')
+    .attr('transform', (d, i) => `translate(${(sizes.width - sizes.margin.left - sizes.margin.right) / 2 + sizes.margin.left},${sizes.margin.top})`)
   const gpe = gpeLegend
     .selectAll('.legendElem')
-    .data([{ text: 'Inflation', category: 2 }, { text: 'Products with significant deviations from inflation', category: 1 }])
+    .data([{ text: 'Inflation', category: 2 }, { text: 'Products with significant deviations from inflation', category: 1 }, { text: 'Other products', category: 0 }])
     .enter()
     .append('g')
-    .attr('transform', (d, i) => `translate(${(sizes.width - sizes.margin.left - sizes.margin.right) / 2 + sizes.margin.left},${sizes.margin.top + 20 * (i + 1)})`)
+    .attr('transform', (d, i) => `translate(0,${20 * (i + 1)})`)
   gpe.append('rect')
     .attr('width', '50px')
     .attr('height', '2px')
@@ -40,6 +41,9 @@ export function main () {
     .attr('transform', 'translate(60,0)')
     .attr('font-size', '14px')
     .text(d => d.text)
+  const widthLegend = gpeLegend.node().getBoundingClientRect().width
+  gpeLegend
+    .attr('transform', `translate(${(sizes.width - sizes.margin.left - sizes.margin.right - widthLegend) / 2 + sizes.margin.left},${sizes.margin.top})`)
   // plot curves
   const opacityFunc = category => category === 0 ? 0.5 : 1
   // to move to front on hover : https://stackoverflow.com/questions/14167863/how-can-i-bring-a-circle-to-the-front-with-d3
