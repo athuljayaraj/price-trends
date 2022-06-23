@@ -3,13 +3,15 @@ import * as preprocessSeason from './scripts/preprocessing/seasonalTrends.js'
 import * as preprocessInfl from './scripts/preprocessing/inflation.js'
 import * as seasons from './scripts/graphics/seasonalTrends.js'
 import * as inflation from './scripts/graphics/inflation.js'
+import * as preprocessCat from './scripts/preprocessing/categories.js'
+import * as categories from './scripts/graphics/categories.js'
 window.glob = {
   sizes: {
     vizDivSizes: { width: 0, height: 0 },
     vizSvgSizes: {
       width: 0,
       height: 0,
-      margin: { top: 40, right: 40, bottom: 40, left: 40 },
+      margin: { top: 40, right: 80, bottom: 40, left: 80 },
       innerWidth: 0,
       innerHeight: 0
     },
@@ -29,9 +31,12 @@ window.glob = {
     d3.json('seasonalTrends.json').then(function (seasonalTrends) {
       d3.json('inflationProducts.json').then(function (inflationProducts) {
         d3.csv('inflation.csv').then(function (inflation) {
-          preprocessSeason.main(dataNorm, seasonalTrends)
-          preprocessInfl.main(dataNorm, inflationProducts, inflation)
-          build(glob.data)
+          d3.json('categories_groups.json').then(function (categories) {
+            preprocessSeason.main(dataNorm, seasonalTrends)
+            preprocessInfl.main(dataNorm, inflationProducts, inflation)
+            preprocessCat.main(dataNorm, categories)
+            build(glob.data)
+          })
         })
       })
     })
@@ -46,5 +51,6 @@ window.glob = {
   function build (data) {
     seasons.main(glob.data)
     inflation.main()
+    categories.main()
   }
 })(d3)

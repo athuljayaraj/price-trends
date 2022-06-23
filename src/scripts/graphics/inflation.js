@@ -25,7 +25,7 @@ export function main () {
   // plot curves
   const opacityFunc = category => category === 0 ? 0.5 : 1
   svg.append('g')
-    .attr('id', 'curves')
+    .attr('id', 'curvesInfl')
     .attr('transform', `translate(${glob.sizes.vizSvgSizes.margin.left}, ${glob.sizes.vizSvgSizes.margin.top})`)
     .selectAll('path')
     .data(data.data)
