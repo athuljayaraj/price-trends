@@ -67,7 +67,11 @@ function build (category) {
     .attr('class', 'y axis')
     .attr('transform', `translate(${glob.sizes.vizSvgSizes.margin.left}, ${glob.sizes.vizSvgSizes.margin.top})`)
     .call(yAxis)
-
+  // Adding y label
+  svg.append('text')
+    .text('Price ($)')
+    .attr('x',glob.sizes.vizSvgSizes.margin.left/2)
+    .attr('y',glob.sizes.vizSvgSizes.margin.top/2)
   // Draw curves
   svg.append('g')
     .attr('id', 'curvesCat')
