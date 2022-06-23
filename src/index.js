@@ -1,7 +1,8 @@
-import * as scroller from './scripts/scroller.js'
 import * as resize from './scripts/resize.js'
 import * as preprocessSeason from './scripts/preprocessing/seasonalTrends.js'
+import * as preprocessInfl from './scripts/preprocessing/inflation.js'
 import * as seasons from './scripts/graphics/seasonalTrends.js'
+import * as inflation from './scripts/graphics/inflation.js'
 window.glob = {
   sizes: {
     vizDivSizes: { width: 0, height: 0 },
@@ -26,20 +27,24 @@ window.glob = {
   // scroller.svgCenter()
   d3.csv('data_norm.csv').then(function (dataNorm) {
     d3.json('seasonalTrends.json').then(function (seasonalTrends) {
-      preprocessSeason.main(dataNorm, seasonalTrends)
-      build(glob.data)
+      d3.json('inflationProducts.json').then(function (inflationProducts) {
+        d3.csv('inflation.csv').then(function (inflation) {
+          preprocessSeason.main(dataNorm, seasonalTrends)
+          preprocessInfl.main(dataNorm, inflationProducts, inflation)
+          build(glob.data)
+        })
+      })
     })
   })
-  
+
   window.addEventListener('resize', function () {
-    console.log('resize')
-    d3.select('.visualization-svg').selectAll('*').remove()
-    d3.select('.controls').selectAll('*').remove()
+    d3.selectAll('.visualization-svg').selectAll('*').remove()
+    d3.selectAll('.controls').selectAll('*').remove()
     resize.updateResize()
     build()
   })
-  function build(data) {
+  function build (data) {
     seasons.main(glob.data)
-
+    inflation.main()
   }
 })(d3)

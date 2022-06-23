@@ -64,5 +64,4 @@ export function main(dataNorm, seasonalTrends) {
     selectedProd: seasonalTrends,
     current_selection: seasonalTrends[0]
   }
-  console.log(glob)
 }
