@@ -1,54 +1,81 @@
 {
     "same_same": [
-        [
-            "Round steak, 1 kilogram",
-            "Blade roast, 1 kilogram",
-            "Ground beef, 1 kilogram",
-            "Sirloin steak, 1 kilogram",
-            "Stewing beef, 1 kilogram",
-            "Prime rib roast, 1 kilogram",
-            "Pork chops, 1 kilogram"
-        ],
-        [
-            "Wieners, 450 grams",
-            "Chicken, 1 kilogram",
-            "Bacon, 500 grams"
-        ],
-        [
-            "Carrots, 1 kilogram",
-            "Onions, 1 kilogram"
-        ],
-        [
-            "Tomatoes, canned, 796 millilitres",
-            "Baked beans, canned, 398 millilitres"
-        ]
+        {
+            "name": "Meats 1",
+            "data": [
+                "Round steak, 1 kilogram",
+                "Blade roast, 1 kilogram",
+                "Ground beef, 1 kilogram",
+                "Sirloin steak, 1 kilogram",
+                "Stewing beef, 1 kilogram",
+                "Prime rib roast, 1 kilogram",
+                "Pork chops, 1 kilogram"
+            ]
+        },
+        {
+            "name": "Meat 2",
+            "data": [
+                "Wieners, 450 grams",
+                "Chicken, 1 kilogram",
+                "Bacon, 500 grams"
+            ]
+        },
+        {
+            "name": "Carrots-Onions",
+            "data": [
+                "Carrots, 1 kilogram",
+                "Onions, 1 kilogram"
+            ]
+        },
+        {
+            "name": "Tomatoes-Beans",
+            "data": [
+                "Tomatoes, canned, 796 millilitres",
+                "Baked beans, canned, 398 millilitres"
+            ]
+        }
     ],
     "same_diff": [
-        [
-            "Shampoo, 300 millilitres",
-            "Deodorant, 60 grams"
-        ],
-        [
-            "Coffee, roasted, 300 grams",
-            "Coffee, instant, 200 grams",
-            "Tea (72 bags)"
-        ],
-        [
-            "Apples, 1 kilogram",
-            "Oranges, 1 kilogram",
-            "Bananas, 1 kilogram"
-        ]
+        {
+            "name": "Hygienic products",
+            "data": [
+                "Shampoo, 300 millilitres",
+                "Deodorant, 60 grams"
+            ]
+        },
+        {
+            "name": "Hot drinks",
+            "data": [
+                "Coffee, roasted, 300 grams",
+                "Coffee, instant, 200 grams",
+                "Tea (72 bags)"
+            ]
+        },
+        {
+            "name": "Fruits",
+            "data": [
+                "Apples, 1 kilogram",
+                "Oranges, 1 kilogram",
+                "Bananas, 1 kilogram"
+            ]
+        }
     ],
     "diff_same": [
-        [
-            "Baby food, 128 millilitres",
-            "Paper towels (2 rolls)"
-        ],
-        [
-            "Tomato juice, 1.36 litres",
-            "Toothpaste, 100 millilitres",
-            "Bread, 675 grams",
-            "Eggs, 1 dozen"
-        ]
+        {
+            "name": "Group 1",
+            "data": [
+                "Baby food, 128 millilitres",
+                "Paper towels (2 rolls)"
+            ]
+        },
+        {
+            "name": "Group 2",
+            "data": [
+                "Tomato juice, 1.36 litres",
+                "Toothpaste, 100 millilitres",
+                "Bread, 675 grams",
+                "Eggs, 1 dozen"
+            ]
+        }
     ]
 }

@@ -11,8 +11,8 @@ export function main (dataNorm, categories) {
   Array.from(['same_same', 'same_diff', 'diff_same']).forEach(function (category) {
     out[category] = categories[category].map(function (group, i) {
       const groupD = {
-        name: 'group' + i,
-        data: group.map(function (product) {
+        name: group.name,
+        data: group.data.map(function (product) {
           return dataNorm.filter(x => x.product === product).map(x => {
             return {
               product: x.product,

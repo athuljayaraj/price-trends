@@ -3,7 +3,6 @@
  */
 export function main () {
   const dataGlob = glob.data.categories
-  console.log(dataGlob)
   Array.from(['same_same', 'same_diff', 'diff_same']).forEach(function (category) {
     const data = dataGlob[category]
     const controls = d3.select('#controls' + category.charAt(0).toUpperCase() + category.slice(1))
@@ -26,7 +25,7 @@ export function main () {
       .append('option')
       .text(d => d)
       .attr('value', d => d)
-    glob.data.categories[category].current_gpe = 'group0'
+    glob.data.categories[category].current_gpe = d3.select('#selectGpe'+category).property('value')
     build(category)
   })
 }
@@ -44,7 +43,6 @@ function reBuild (category) {
  */
 function build (category) {
   const data = glob.data.categories[category].filter(x => x.name === glob.data.categories[category].current_gpe)[0]
-  console.log(data)
   const svg = d3.select('#cat' + category.charAt(0).toUpperCase() + category.slice(1))
   // Create scales
   const xScale = d3.scaleTime()
