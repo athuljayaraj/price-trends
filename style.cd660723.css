@@ -1,0 +1,42 @@
+section {
+    height: auto;
+    text-align: justify;
+    background-color: burlywood;
+    padding: 20px;
+    border-radius: 10px;
+    /* float: left; */
+    /* transform: translateY(50%); */
+}
+.text-container {
+    width: 30%;
+}
+.container {
+    padding-top: 200px;;
+    display: table;
+}
+.element {
+    display: table-cell;
+    vertical-align: middle;
+    /* display: inline-block; */
+}
+
+.vizualization-div {
+    height: 500px;
+    /* flex-grow: 1; */
+    width: calc(70% - 100px);
+    margin: 10px 10px 10px 10px;
+}
+.vizualization-div {
+    padding-left: 100px;
+}
+svg {
+    height: 500px;
+    width: 100%;
+
+}
+
+.axis {
+    font-size: 14px;
+}
+
+/*# sourceMappingURL=/style.cd660723.css.map */
