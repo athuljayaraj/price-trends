@@ -27,11 +27,11 @@ window.glob = {
   // scroller.centerSections()
   resize.updateResize()
   // scroller.svgCenter()
-  d3.csv('data_norm.csv').then(function (dataNorm) {
-    d3.json('seasonalTrends.json').then(function (seasonalTrends) {
-      d3.json('inflationProducts.json').then(function (inflationProducts) {
-        d3.csv('inflation.csv').then(function (inflation) {
-          d3.json('categories_groups.json').then(function (categories) {
+  d3.csv('data/data_norm.csv').then(function (dataNorm) {
+    d3.json('data/seasonalTrends.json').then(function (seasonalTrends) {
+      d3.json('data/inflationProducts.json').then(function (inflationProducts) {
+        d3.csv('data/inflation.csv').then(function (inflation) {
+          d3.json('data/categories_groups.json').then(function (categories) {
             preprocessSeason.main(dataNorm, seasonalTrends)
             preprocessInfl.main(dataNorm, inflationProducts, inflation)
             preprocessCat.main(dataNorm, categories)
