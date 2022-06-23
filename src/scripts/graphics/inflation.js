@@ -31,7 +31,7 @@ export function main () {
     .data(data.data)
     .enter()
     .append('path')
-    .datum(d => d.data)
+    .datum(d => d.data.filter(x => x.date > data.minX))
     .attr('d', d3.line()
       .x(function (e) { return xScale(e.date) })
       .y(function (e) { return yScale(e.value) })
@@ -66,5 +66,11 @@ export function main () {
         .attr('stroke', colorScale(d.map(x => x.category)[0]))
       d3.select('#tooltip')
         .remove()
+      d3.select('#vizualization-svgInfl').select('#curves').selectAll('path')
+        .filter(function (d) {
+          return d.map(x => x.category === 2)[0]
+        })
+        .raise()
+        .attr('stroke-width', '2')
     })
 }
