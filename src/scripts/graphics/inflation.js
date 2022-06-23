@@ -22,8 +22,32 @@ export function main () {
   svg.append('g')
     .call(d3.axisLeft(yScale))
     .attr('transform', `translate(${glob.sizes.vizSvgSizes.margin.left},${glob.sizes.vizSvgSizes.margin.top})`)
+  // add legend
+  const sizes = glob.sizes.vizSvgSizes
+  const gpeLegend = svg.append('g')
+  const gpe = gpeLegend
+    .selectAll('.legendElem')
+    .data([{ text: 'Inflation', category: 2 }, { text: 'Products with significant deviations from inflation', category: 1 }])
+    .enter()
+    .append('g')
+    .attr('transform', (d, i) => `translate(${(sizes.width - sizes.margin.left - sizes.margin.right) / 2 + sizes.margin.left},${sizes.margin.top + 20 * (i + 1)})`)
+  gpe.append('rect')
+    .attr('width', '50px')
+    .attr('height', '2px')
+    .attr('transform', 'translate(0,-7)')
+    .attr('fill', d => colorScale(d.category))
+  gpe.append('text')
+    .attr('transform', 'translate(60,0)')
+    .attr('font-size', '14px')
+    .text(d => d.text)
   // plot curves
   const opacityFunc = category => category === 0 ? 0.5 : 1
+  // to move to front on hover : https://stackoverflow.com/questions/14167863/how-can-i-bring-a-circle-to-the-front-with-d3
+  d3.selection.prototype.moveToFront = function () {
+    return this.each(function () {
+      this.parentNode.appendChild(this)
+    })
+  }
   svg.append('g')
     .attr('id', 'curvesInfl')
     .attr('transform', `translate(${glob.sizes.vizSvgSizes.margin.left}, ${glob.sizes.vizSvgSizes.margin.top})`)
@@ -66,11 +90,11 @@ export function main () {
         .attr('stroke', colorScale(d.map(x => x.category)[0]))
       d3.select('#tooltip')
         .remove()
-      d3.select('#vizualization-svgInfl').select('#curves').selectAll('path')
+      d3.select('#vizualization-svgInfl').select('#curvesInfl').selectAll('path')
         .filter(function (d) {
           return d.map(x => x.category === 2)[0]
         })
-        .raise()
         .attr('stroke-width', '2')
+        .raise()
     })
 }

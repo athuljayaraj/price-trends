@@ -33,16 +33,16 @@
                 "Tomatoes, canned, 796 millilitres",
                 "Baked beans, canned, 398 millilitres"
             ]
-        }
-    ],
-    "same_diff": [
+        },
         {
             "name": "Hygienic products",
             "data": [
                 "Shampoo, 300 millilitres",
                 "Deodorant, 60 grams"
             ]
-        },
+        }
+    ],
+    "same_diff": [
         {
             "name": "Hot drinks",
             "data": [
