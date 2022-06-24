@@ -16,7 +16,7 @@ export function main (dataNorm) {
     if (!dicoData[d.product]) {
       dicoData[d.product] = []
     }
-    const date = d.date.slice(0, -1) + '2' // Because the 1st day returns the previous month
+    const date = d.date.slice(0, -2) + '02' // Because the 1st day returns the previous month
     // date = date.toLocaleDateString('fr-CA', { year: 'numeric', month: 'long', day: 'numeric' })
 
     dicoData[d.product][date] = {}
@@ -33,10 +33,12 @@ export function main (dataNorm) {
       })
     }
   }
-
+  
   glob.data.priceChanges = {
     mainData: data,
     currentSelectedStartDate: data[0].date,
-    currentSelectedEndDate: data[1].date
+    currentSelectedEndDate: data[1].date,
+    minDate: d3.min(dataNorm, d => (new Date(d.date.slice(0, -2) + '02')).getTime()),
+    maxDate: d3.max(dataNorm, d => (new Date(d.date.slice(0, -2) + '02')).getTime())
   }
 }

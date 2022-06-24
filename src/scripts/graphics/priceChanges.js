@@ -7,21 +7,15 @@ export function main () {
   }
 
   createSlider()
-  // window.onload = function () {
-  //   slideOne()
-  //   slideTwo()
-  // }
-
   build()
 }
-
 
 /**
  *
  */
 // Code for the slider inspired by https://codingartistweb.com/2021/06/double-range-slider-html-css-javascript/
 function createSlider () {
-  const controls = d3.select('#controls2')
+  const controls = d3.select('#controls3')
     .attr('transform', `translate(${glob.sizes.vizSvgSizes.margin.left}, ${glob.sizes.vizSvgSizes.innerHeight + glob.sizes.vizSvgSizes.margin.top})`)
     .attr('width', `${glob.sizes.vizSvgSizes.innerWidth}`)
     .attr('height', 50)
@@ -34,33 +28,22 @@ function createSlider () {
   controls.append('input')
     .attr('type', 'range')
     .attr('min', 0)
-    .attr('max', glob.sizes.vizSvgSizes.innerWidth)
+    .attr('max', 100)
     .attr('value', 30)
     .attr('id', 'slider-1')
     .on('change', () => {
       slideOne()
-      reBuild()
     })
 
   controls.append('input')
     .attr('type', 'range')
     .attr('min', 0)
-    .attr('max', glob.sizes.vizSvgSizes.innerWidth)
+    .attr('max', 100)
     .attr('value', 70)
     .attr('id', 'slider-2')
     .on('change', () => {
       slideTwo()
-      reBuild()
     })
-}
-/**
- *
- */
-function reBuild () {
-  d3.select('#vizualization-svg2')
-    .selectAll('*')
-    .remove()
-  build()
 }
 
 /**
@@ -68,13 +51,18 @@ function reBuild () {
  */
 // Code taken from https://codingartistweb.com/2021/06/double-range-slider-html-css-javascript/
 function slideOne () {
-  const sliderOne = document.getElementById('slider-1')
-  const sliderTwo = document.getElementById('slider-2')
+  const sliderOne = d3.select('#slider-1').node()
+  const sliderTwo = d3.select('#slider-2').node()
   const minGap = 0
   if (sliderTwo.value - sliderOne.value <= minGap) {
     sliderOne.value = sliderTwo.value - minGap
   }
   fillColor()
+
+  d3.select('#axisValuePriceChange')
+    .attr('transform', `translate(${glob.sizes.vizSvgSizes.margin.left + sliderOne.value / 100 * (glob.sizes.vizSvgSizes.innerWidth)}, ${glob.sizes.vizSvgSizes.margin.top})`)
+  d3.selectAll('.curvePriceChange').remove()
+  drawLines()
 }
 
 /**
@@ -82,13 +70,17 @@ function slideOne () {
  */
 // Code taken from https://codingartistweb.com/2021/06/double-range-slider-html-css-javascript/
 function slideTwo () {
-  const sliderOne = document.getElementById('slider-1')
-  const sliderTwo = document.getElementById('slider-2')
+  const sliderOne = d3.select('#slider-1').node()
+  const sliderTwo = d3.select('#slider-2').node()
   const minGap = 1
   if (parseInt(sliderTwo.value) - parseInt(sliderOne.value) <= minGap) {
     sliderTwo.value = parseInt(sliderOne.value) + minGap
   }
   fillColor()
+  d3.select('#secondBar')
+    .attr('transform', `translate(${sliderTwo.value / 100 * glob.sizes.vizSvgSizes.innerWidth + glob.sizes.vizSvgSizes.margin.left}, ${glob.sizes.vizSvgSizes.margin.top})`)
+  d3.selectAll('.curvePriceChange').remove()
+  drawLines()
 }
 
 /**
@@ -108,66 +100,81 @@ function fillColor () {
  *
  */
 function build () {
-  const sliderOne = document.getElementById('slider-1')
-  const sliderTwo = document.getElementById('slider-2')
+  const sliderOne = d3.select('#slider-1').node()
+  const sliderTwo = d3.select('#slider-2').node()
 
-  // Create the x Scale
+  // Create the scales
   const xDomain = d3.extent(d3.map(glob.data.priceChanges.mainData, d => {
     return Date.parse(d.date)
   }))
   const xScale = d3.scaleTime().domain(xDomain).range([0, glob.sizes.vizSvgSizes.innerWidth])
+  const sliderScale = d3.scaleLinear().domain([0, 100]).range([0, glob.sizes.vizSvgSizes.innerWidth])
+  const yScale = d3.scaleLog().range([glob.sizes.vizSvgSizes.innerHeight, 0])
 
-  // // Slider scale
-  // const sliderScale = d3.scaleTime().domain(xDomain).range([0, glob.sizes.vizSvgSizes.innerWidth])
-
-  // Convert slider values to dates
-  const startDate = xScale.invert(sliderOne.value)
-  const endDate = xScale.invert(sliderTwo.value)
-
-  // Tick labels
-  const startDateLabel = startDate.toLocaleDateString('fr-CA', { year: 'numeric', month: 'long' })
-  const endDateLabel = endDate.toLocaleDateString('fr-CA', { year: 'numeric', month: 'long' })
-  const tickLabels = [startDateLabel, endDateLabel]
-
-  // Filter data to only get data for the start and end dates
-  const data = glob.data.priceChanges.mainData.filter(d => {
-    const dateToString = new Date(Date.parse(d.date)).toLocaleDateString('fr-CA', { year: 'numeric', month: 'long' })
-    return dateToString.localeCompare(startDateLabel) === 0 || dateToString.localeCompare(endDateLabel) === 0
-  })
-
-  // Create the y Scale
-  const yDomain = d3.extent(d3.map(data, d => d.price))
-  const yScale = d3.scaleLog().domain(yDomain).range([glob.sizes.vizSvgSizes.innerHeight, 0])
-
+  glob.data.priceChanges.xScale = xScale
+  glob.data.priceChanges.sliderScale = sliderScale
+  glob.data.priceChanges.yScale = yScale
   // Create axes
-  const xAxis = d3.axisTop(xScale).tickSize(-glob.sizes.vizSvgSizes.innerHeight).tickValues([startDate, endDate]).tickFormat((d, i) => tickLabels[i])
-  const sliderAxis = d3.axisBottom(xScale).ticks(3).tickFormat((d, i) => {
-    console.log(d)
-    return d.toLocaleDateString('fr-CA', { year: 'numeric', month: 'long' })
-  })
+  const xAxis = d3.axisBottom(xScale)
   const yAxis = d3.axisLeft(yScale)
     .tickFormat(d3.format('.2f'))
 
-  const svg = d3.select('#vizualization-svg2')
+  // Draw
+  const svg = d3.select('#vizualization-svg3')
+  svg
+    .append('path')
+    .attr('id', 'secondBar')
+    .datum([{ x: 0, y: yScale.domain()[0] }, { x: 0, y: yScale.domain()[1] }])
+    .attr('d', d3.line()
+      .x(function (a) { return a.x })
+      .y(function (a) { return yScale(a.y) })
+    )
+    .attr('stroke', 'black')
+    .attr('stroke-width', '2')
+    .attr('fill', 'none')
+    .attr('transform', 'translate(' + (sliderTwo.value / 100 * glob.sizes.vizSvgSizes.innerWidth + glob.sizes.vizSvgSizes.margin.left) + ',' + glob.sizes.vizSvgSizes.margin.top + ')')
 
   // Plot axis
   svg.append('g')
     .attr('class', 'x axis')
-    .attr('transform', `translate(${glob.sizes.vizSvgSizes.margin.left}, ${glob.sizes.vizSvgSizes.margin.top})`)
+    .attr('transform', `translate(${glob.sizes.vizSvgSizes.margin.left}, ${glob.sizes.vizSvgSizes.height - glob.sizes.vizSvgSizes.margin.bottom})`)
     .call(xAxis)
-    .call(g => g.select('.domain').remove())
 
   svg.append('g')
-    .attr('class', 'slider-axis')
-    .attr('transform', `translate(${glob.sizes.vizSvgSizes.margin.left}, ${glob.sizes.vizSvgSizes.innerHeight + glob.sizes.vizSvgSizes.margin.top})`)
-    .call(sliderAxis)
-
-  svg.append('g')
-    .attr('class', 'y axis1')
-    .attr('transform', `translate(${glob.sizes.vizSvgSizes.margin.left + xScale(startDate)}, ${glob.sizes.vizSvgSizes.margin.top})`)
+    .attr('class', 'y axis')
+    .attr('id', 'axisValuePriceChange')
     .call(yAxis)
-    .call(g => g.select('.domain').remove())
+  svg.append('text')
+    .attr('id', 'textStart')
+    .style('text-anchor', 'middle')
+  svg.append('text')
+    .attr('id', 'textEnd')
+    .style('text-anchor', 'middle')
+  // position y axis
 
+  d3.select('#axisValuePriceChange')
+    .attr('transform', `translate(${glob.sizes.vizSvgSizes.margin.left + sliderOne.value / 100 * (glob.sizes.vizSvgSizes.innerWidth)}, ${glob.sizes.vizSvgSizes.margin.top})`)
+
+  // Create line plots and tooltip
+  svg.append('g')
+    .attr('id', 'linesPriceChange')
+    .attr('transform', `translate(${glob.sizes.vizSvgSizes.margin.left}, ${glob.sizes.vizSvgSizes.margin.top})`)
+  drawLines()
+}
+/**
+ * @param data
+ * @param dataTmp
+ */
+function preprocessTop6 () {
+  var startDate = new Date(Math.round((new Date(d3.select('#slider-1').node().value / 100 * (glob.data.priceChanges.maxDate - glob.data.priceChanges.minDate) + glob.data.priceChanges.minDate)).getTime()))
+  startDate.setDate(2)
+  var endDate = new Date(Math.round((new Date(d3.select('#slider-2').node().value / 100 * (glob.data.priceChanges.maxDate - glob.data.priceChanges.minDate) + glob.data.priceChanges.minDate)).getTime()))
+  endDate.setDate(2)
+  startDate = startDate.toLocaleDateString('fr-CA', { year: 'numeric', month: 'numeric', day: 'numeric' })
+  endDate = endDate.toLocaleDateString('fr-CA', { year: 'numeric', month: 'numeric', day: 'numeric' })
+  const data = glob.data.priceChanges.mainData.filter(d => {
+    return d.date === startDate || d.date === endDate
+  })
   // Group data by product
   const groupData = {}
   data.forEach((d) => {
@@ -180,7 +187,8 @@ function build () {
     } else {
       groupData[d.product] = [{
         date: d.date,
-        price: d.price
+        price: d.price,
+        product: d.product
       }]
     }
   })
@@ -200,53 +208,69 @@ function build () {
     const change = Math.abs(product1.values[0].price - product1.values[1].price) - Math.abs(product2.values[0].price - product2.values[1].price)
     return change
   })
-  const selectedData = [newData[0], newData[1], newData[2], newData[newData.length - 3], newData[newData.length - 2], newData[newData.length - 1]]
-
-  // Create line generator
-  const line = d3.line()
-    .x(d => xScale(Date.parse(d.date)))
-    .y(d => yScale(d.price))
-    .curve(d3.curveCatmullRom.alpha(0.5))
-
-  // Create line plots and tooltip
-  const lineGroup = svg.append('g')
-    .attr('transform', `translate(${glob.sizes.vizSvgSizes.margin.left}, ${glob.sizes.vizSvgSizes.margin.top})`)
-
-  selectedData.forEach(function (product) {
-    lineGroup.append('path')
-      .attr('class', 'curve')
-      .datum(product.values)
-      .attr('d', line)
-      .attr('stroke', 'black')
-      .attr('stroke-width', '2')
-      .attr('fill', 'none')
-      .on('mouseenter', function (d) {
-        d3.select(this)
-          .attr('stroke', 'red')
-          .attr('stroke-width', '4')
-        d3.select('body')
-          .append('div')
-          .attr('id', 'tooltip')
-          .style('position', 'absolute')
-          .style('z-index', '10')
-          .style('background', 'white')
-          .style('padding', '10px')
-          .style('border-radius', '5px')
-          .style('box-shadow', '1px 1px 5px black')
-          .style('left', (d3.event.pageX + glob.sizes.tooltip.offsetY) + 'px')
-          .style('top', (d3.event.pageY + glob.sizes.tooltip.offsetY) + 'px')
-          .html(`<strong>Produit: ${product.product}<br/> 
-                  Prix en ${d.map(a => a.date)[0]}: ${d.map(a => a.price)[0]}<br/> 
-                  Prix en ${d.map(a => a.date)[1]}: ${d.map(a => a.price)[1]}
-                  </strong>`)
-      })
-      .on('mouseleave', function (d) {
-        d3.select(this)
-          .attr('stroke', 'black')
-          .attr('stroke-width', '2')
-        d3.select('#tooltip')
-          .remove()
-      }
-      )
+  return Array.from([0, 1, 2, newData.length - 3, newData.length - 2, newData.length - 1]).map(x => {
+    const val = groupData[newData[x].product]
+    return val
   })
+}
+/**
+ *
+ */
+function drawLines () {
+  const xScale = glob.data.priceChanges.xScale
+  const yScale = glob.data.priceChanges.yScale
+  const selectedData = preprocessTop6()
+  const min = d3.min(selectedData, x => d3.min(x, d => d.price))
+  const max = d3.max(selectedData, x => d3.max(x, d => d.price))
+  yScale.domain([min, max])
+  d3.select('#linesPriceChange')
+    .selectAll('.curvePriceChange')
+    .data(selectedData)
+    .enter()
+    .append('g')
+    .attr('class', 'curvePriceChange')
+    .append('path')
+    .datum(d => d)
+    .attr('d', d3.line()
+      .x(d => xScale(Date.parse(d.date)))
+      .y(d => yScale(d.price))
+      .curve(d3.curveCatmullRom.alpha(0.5)))
+    .attr('stroke', 'black')
+    .attr('stroke-width', '2')
+    .attr('fill', 'none')
+    .on('mouseenter', function (d) {
+      d3.select(this)
+        .attr('stroke', 'red')
+        .attr('stroke-width', '4')
+      d3.select('body')
+        .append('div')
+        .attr('id', 'tooltip')
+        .style('position', 'absolute')
+        .style('z-index', '10')
+        .style('background', 'white')
+        .style('padding', '10px')
+        .style('border-radius', '5px')
+        .style('box-shadow', '1px 1px 5px black')
+        .style('left', (d3.event.pageX + glob.sizes.tooltip.offsetY) + 'px')
+        .style('top', (d3.event.pageY + glob.sizes.tooltip.offsetY) + 'px')
+        .html(`<strong>Produit: ${d.map(a => a.product)[0]}<br/> 
+                Prix en ${d.map(a => a.date)[0]}: ${d.map(a => a.price)[0]}<br/> 
+                Prix en ${d.map(a => a.date)[1]}: ${d.map(a => a.price)[1]}
+                </strong>`)
+    })
+    .on('mouseleave', function (d) {
+      d3.select(this)
+        .attr('stroke', 'black')
+        .attr('stroke-width', '2')
+      d3.select('#tooltip')
+        .remove()
+    }
+    )
+  const formatDate = d => (new Date(d)).toLocaleDateString('en-CA', { year: 'numeric', month: 'long' })
+  d3.select('#textStart')
+    .text(formatDate(selectedData[0][0].date))
+    .attr('transform', 'translate(' + (xScale(Date.parse(selectedData[0][0].date)) + glob.sizes.vizSvgSizes.margin.left) + ',' + glob.sizes.vizSvgSizes.margin.top / 2 + ')')
+  d3.select('#textEnd')
+    .text(formatDate(selectedData[0][1].date))
+    .attr('transform', 'translate(' + (xScale(Date.parse(selectedData[0][1].date)) + glob.sizes.vizSvgSizes.margin.left) + ',' + glob.sizes.vizSvgSizes.margin.top / 2 + ')')
 }

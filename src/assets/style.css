@@ -1,3 +1,4 @@
+/* Code taken from https://codingartistweb.com/2021/06/double-range-slider-html-css-javascript/ */
 *,
 *:before,
 *:after{
@@ -7,7 +8,7 @@
     font-family: "Poppins",sans-serif;
 }
 
-#controls2 {
+#controls3 {
     position: relative;
     width: 95vmin;
     background-color: #ffffff;
