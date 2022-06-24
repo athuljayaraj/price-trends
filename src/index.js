@@ -1,16 +1,19 @@
-import * as scroller from './scripts/scroller.js'
 import * as resize from './scripts/resize.js'
 import * as preprocessSeason from './scripts/preprocessing/seasonalTrends.js'
-import * as preprocessPriceChanges from './scripts/preprocessing/priceChanges.js'
+import * as preprocessInfl from './scripts/preprocessing/inflation.js'
 import * as seasons from './scripts/graphics/seasonalTrends.js'
+import * as inflation from './scripts/graphics/inflation.js'
+import * as preprocessCat from './scripts/preprocessing/categories.js'
+import * as categories from './scripts/graphics/categories.js'
 import * as priceChanges from './scripts/graphics/priceChanges.js'
+import * as preprocessPriceChanges from './scripts/preprocessing/priceChanges.js'
 window.glob = {
   sizes: {
     vizDivSizes: { width: 0, height: 0 },
     vizSvgSizes: {
       width: 0,
       height: 0,
-      margin: { top: 40, right: 40, bottom: 40, left: 40 },
+      margin: { top: 40, right: 80, bottom: 40, left: 80 },
       innerWidth: 0,
       innerHeight: 0
     },
@@ -26,26 +29,36 @@ window.glob = {
   // scroller.centerSections()
   resize.updateResize()
   // scroller.svgCenter()
-  d3.csv('data_norm.csv').then(function (dataNorm) {
-    d3.json('seasonalTrends.json').then(function (seasonalTrends) {
-      preprocessSeason.main(dataNorm, seasonalTrends)
-      seasons.main(glob.data)
+  d3.csv('assets/data/data_norm.csv').then(function (dataNorm) {
+    // console.log(dataNorm)
+    d3.json('assets/data/seasonalTrends.json').then(function (seasonalTrends) {
+      d3.json('assets/data/inflationProducts.json').then(function (inflationProducts) {
+        d3.csv('assets/data/inflation.csv').then(function (inflation) {
+          d3.json('assets/data/categories_groups.json').then(function (categories) {
+            preprocessSeason.main(dataNorm, seasonalTrends)
+            preprocessInfl.main(dataNorm, inflationProducts, inflation)
+            preprocessCat.main(dataNorm, categories)
+            build(glob.data)
+          })
+        })
+      })
     })
     preprocessPriceChanges.main(dataNorm)
     priceChanges.main(glob.data)
     // build(glob.data)
   })
-  
+
   window.addEventListener('resize', function () {
-    console.log('resize')
-    d3.select('.visualization-svg').selectAll('*').remove()
-    d3.select('.controls').selectAll('*').remove()
+    d3.selectAll('.visualization-svg').selectAll('*').remove()
+    d3.selectAll('.controls').selectAll('*').remove()
     resize.updateResize()
     build()
+    priceChanges.main(glob.data)
   })
   function build(data) {
-    priceChanges.main(glob.data)
+   // priceChanges.main(glob.data)
     seasons.main(glob.data)
-
+    inflation.main()
+    categories.main()
   }
 })(d3)

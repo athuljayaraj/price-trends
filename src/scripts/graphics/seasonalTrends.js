@@ -15,7 +15,6 @@ export function main() {
     .append('select')
     .attr('id', 'selectProduct')
     .on('change', function () {
-      console.log('change')
       glob.data.seasonalTrends.current_selection = d3.select('#selectProduct').property('value')
       reBuild()
     })
@@ -42,7 +41,6 @@ function reBuild() {
  */
 function build() {
   const data = glob.data.seasonalTrends.mainData.filter(d => d.name === glob.data.seasonalTrends.current_selection)[0]
-  console.log(data)
   const svg = d3.select('#vizualization-svg1')
   // Create scales
   const xScale = d3.scaleTime()
@@ -128,7 +126,7 @@ function build() {
         .text(season.name)
         .style('background', 'transparent')
       divTooltip.append('img')
-        .attr('src', 'images/' + season.name + '.png')
+        .attr('src', 'images/' + season.name.toLocaleLowerCase() + '.png')
         .style('width', '25px')
         .style('background', 'transparent')
       d3.select('#tooltip')
@@ -173,7 +171,6 @@ function build() {
       .attr('stroke-width', '2')
       .attr('fill', 'none')
       .on('mouseenter', function (d) {
-        console.log('tooltip')
         d3.select(this)
           .attr('stroke', 'red')
           .attr('stroke-width', '4')

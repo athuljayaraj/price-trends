@@ -15,28 +15,12 @@ export function main () {
   build()
 }
 
+
 /**
  *
  */
+// Code for the slider inspired by https://codingartistweb.com/2021/06/double-range-slider-html-css-javascript/
 function createSlider () {
-  //  // Create the x Scale
-  //  const xDomain = d3.extent(d3.map(glob.data.priceChanges.mainData, d => {
-  //   return Date.parse(d.date)
-  // }))
-  // const xScale = d3.scaleTime().domain(xDomain).range([0, glob.sizes.vizSvgSizes.innerWidth])
-
-  // const sliderAxis = d3.axisBottom(xScale).ticks(3).tickFormat((d, i) => {
-  //   console.log(d)
-  //   return d.toLocaleDateString('fr-CA', { year: 'numeric', month: 'long' })
-  // })
-
-  // const slider = d3.select('#vizualization-svg2').append('g')
-  // .attr('class', 'slider-axis')
-  // .attr('transform', `translate(${glob.sizes.vizSvgSizes.margin.left}, ${glob.sizes.vizSvgSizes.innerHeight + glob.sizes.vizSvgSizes.margin.top})`)
-  // .call(sliderAxis)
-
-  // d3.select('#vizualization-svg2').select('.slider-axis')
-  // d3.select('#controls2').attr('transform', `translate(${glob.sizes.vizSvgSizes.margin.left}, ${glob.sizes.vizSvgSizes.innerHeight + glob.sizes.vizSvgSizes.margin.top})`)
   const controls = d3.select('#controls2')
     .attr('transform', `translate(${glob.sizes.vizSvgSizes.margin.left}, ${glob.sizes.vizSvgSizes.innerHeight + glob.sizes.vizSvgSizes.margin.top})`)
     .attr('width', `${glob.sizes.vizSvgSizes.innerWidth}`)
@@ -82,6 +66,7 @@ function reBuild () {
 /**
  *
  */
+// Code taken from https://codingartistweb.com/2021/06/double-range-slider-html-css-javascript/
 function slideOne () {
   const sliderOne = document.getElementById('slider-1')
   const sliderTwo = document.getElementById('slider-2')
@@ -95,6 +80,7 @@ function slideOne () {
 /**
  *
  */
+// Code taken from https://codingartistweb.com/2021/06/double-range-slider-html-css-javascript/
 function slideTwo () {
   const sliderOne = document.getElementById('slider-1')
   const sliderTwo = document.getElementById('slider-2')
@@ -108,6 +94,7 @@ function slideTwo () {
 /**
  *
  */
+// Code taken from https://codingartistweb.com/2021/06/double-range-slider-html-css-javascript/
 function fillColor () {
   const sliderOne = document.getElementById('slider-1')
   const sliderTwo = document.getElementById('slider-2')
@@ -170,49 +157,16 @@ function build () {
     .call(xAxis)
     .call(g => g.select('.domain').remove())
 
-  const slider = svg.append('g')
+  svg.append('g')
     .attr('class', 'slider-axis')
     .attr('transform', `translate(${glob.sizes.vizSvgSizes.margin.left}, ${glob.sizes.vizSvgSizes.innerHeight + glob.sizes.vizSvgSizes.margin.top})`)
     .call(sliderAxis)
-    // .call(g => g.select('.domain').remove())
-
-  // const bl = slider.select('.domain').append('div')
-  //   .attr('class', 'slider-container')
-  //   .attr('width', `${glob.sizes.vizSvgSizes.width}`)
-  // .attr('transform', `translate(${glob.sizes.vizSvgSizes.margin.left}, ${glob.sizes.vizSvgSizes.margin.top})`)
-
-  // .attr('position', 'relative')
-
-  // bl.append('div').attr('class', 'slider-track')
-
-  // bl.append('input')
-  //   .attr('type', 'range')
-  //   .attr('min', 0)
-  //   .attr('max', glob.sizes.vizSvgSizes.innerWidth)
-  //   .attr('value', 30)
-  //   .attr('id', 'slider-1')
-  //   .on('change', () => {
-  //     slideOne()
-  //     // reBuild()
-  //   })
-
-  // bl.append('input')
-  //   .attr('type', 'range')
-  //   .attr('min', 0)
-  //   .attr('max', glob.sizes.vizSvgSizes.innerWidth)
-  //   .attr('value', 70)
-  //   .attr('id', 'slider-2')
-  //   .on('change', () => {
-  //     slideTwo()
-  //     // reBuild()
-  //   })
 
   svg.append('g')
     .attr('class', 'y axis1')
     .attr('transform', `translate(${xScale(startDate) + 42}, ${glob.sizes.vizSvgSizes.margin.top})`)
     .call(yAxis)
     .call(g => g.select('.domain').remove())
-    // .append('')
 
   // Group data by product
   const groupData = {}

@@ -114,22 +114,25 @@ input[type="range"]:active::-webkit-slider-thumb{
 }
 
 section {
-    width: 25%;
-    height: 100%;
-     position: relative;
-    padding: 10px;
+    height: auto;
     text-align: justify;
     background-color: burlywood;
-    margin-bottom: auto;
-    float: left;
-    transform: translateY(50%);
+    padding: 20px;
+    border-radius: 10px;
+    /* float: left; */
+    /* transform: translateY(50%); */
 }
-
+.text-container {
+    width: 30%;
+}
 .container {
     padding-top: 200px;;
+    display: table;
 }
 .element {
-    display: inline-block;
+    display: table-cell;
+    vertical-align: middle;
+    /* display: inline-block; */
 }
 
 .vizualization-div {
