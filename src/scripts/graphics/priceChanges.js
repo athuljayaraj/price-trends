@@ -164,7 +164,7 @@ function build () {
 
   svg.append('g')
     .attr('class', 'y axis1')
-    .attr('transform', `translate(${xScale(startDate) + 42}, ${glob.sizes.vizSvgSizes.margin.top})`)
+    .attr('transform', `translate(${glob.sizes.vizSvgSizes.margin.left + xScale(startDate)}, ${glob.sizes.vizSvgSizes.margin.top})`)
     .call(yAxis)
     .call(g => g.select('.domain').remove())
 
