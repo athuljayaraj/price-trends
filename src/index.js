@@ -1,7 +1,9 @@
 import * as scroller from './scripts/scroller.js'
 import * as resize from './scripts/resize.js'
 import * as preprocessSeason from './scripts/preprocessing/seasonalTrends.js'
+import * as preprocessPriceChanges from './scripts/preprocessing/priceChanges.js'
 import * as seasons from './scripts/graphics/seasonalTrends.js'
+import * as priceChanges from './scripts/graphics/priceChanges.js'
 window.glob = {
   sizes: {
     vizDivSizes: { width: 0, height: 0 },
@@ -27,8 +29,11 @@ window.glob = {
   d3.csv('data_norm.csv').then(function (dataNorm) {
     d3.json('seasonalTrends.json').then(function (seasonalTrends) {
       preprocessSeason.main(dataNorm, seasonalTrends)
-      build(glob.data)
+      seasons.main(glob.data)
     })
+    preprocessPriceChanges.main(dataNorm)
+    priceChanges.main(glob.data)
+    // build(glob.data)
   })
   
   window.addEventListener('resize', function () {
@@ -39,6 +44,7 @@ window.glob = {
     build()
   })
   function build(data) {
+    priceChanges.main(glob.data)
     seasons.main(glob.data)
 
   }
