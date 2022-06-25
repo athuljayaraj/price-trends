@@ -253,9 +253,9 @@ function drawLines () {
         .style('box-shadow', '1px 1px 5px black')
         .style('left', (d3.event.pageX + glob.sizes.tooltip.offsetY) + 'px')
         .style('top', (d3.event.pageY + glob.sizes.tooltip.offsetY) + 'px')
-        .html(`<strong>Produit: ${d.map(a => a.product)[0]}<br/> 
-                Prix en ${d.map(a => a.date)[0]}: ${d.map(a => a.price)[0]}<br/> 
-                Prix en ${d.map(a => a.date)[1]}: ${d.map(a => a.price)[1]}
+        .html(`<strong>Product: ${d.map(a => a.product)[0]}<br/> 
+                Price in ${d.map(a => a.date)[0]}: ${d.map(a => a.price)[0]}<br/> 
+                Price in ${d.map(a => a.date)[1]}: ${d.map(a => a.price)[1]}
                 </strong>`)
     })
     .on('mouseleave', function (d) {
