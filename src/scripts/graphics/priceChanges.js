@@ -61,6 +61,8 @@ function slideOne () {
 
   d3.select('#axisValuePriceChange')
     .attr('transform', `translate(${glob.sizes.vizSvgSizes.margin.left + sliderOne.value / 100 * (glob.sizes.vizSvgSizes.innerWidth)}, ${glob.sizes.vizSvgSizes.margin.top})`)
+  d3.select('#priceLegendChange')
+  .attr('transform', `translate(${glob.sizes.vizSvgSizes.margin.left / 3 + sliderOne.value / 100 * (glob.sizes.vizSvgSizes.innerWidth)}, ${glob.sizes.vizSvgSizes.margin.top + glob.sizes.vizSvgSizes.innerHeight / 2}) rotate(-90)`)
   d3.selectAll('.curvePriceChange').remove()
   drawLines()
 }
@@ -121,6 +123,9 @@ function build () {
 
   // Draw
   const svg = d3.select('#vizualization-svg3')
+  svg.append('text')
+    .text('Price ($)')
+    .attr('id', 'priceLegendChange')
   svg
     .append('path')
     .attr('id', 'secondBar')
@@ -155,6 +160,8 @@ function build () {
   d3.select('#axisValuePriceChange')
     .attr('transform', `translate(${glob.sizes.vizSvgSizes.margin.left + sliderOne.value / 100 * (glob.sizes.vizSvgSizes.innerWidth)}, ${glob.sizes.vizSvgSizes.margin.top})`)
 
+  d3.select('#priceLegendChange')
+    .attr('transform', `translate(${glob.sizes.vizSvgSizes.margin.left / 3 + sliderOne.value / 100 * (glob.sizes.vizSvgSizes.innerWidth)}, ${glob.sizes.vizSvgSizes.margin.top + glob.sizes.vizSvgSizes.innerHeight / 2}) rotate(-90)`)
   // Create line plots and tooltip
   svg.append('g')
     .attr('id', 'linesPriceChange')
@@ -273,4 +280,6 @@ function drawLines () {
   d3.select('#textEnd')
     .text(formatDate(selectedData[0][1].date))
     .attr('transform', 'translate(' + (xScale(Date.parse(selectedData[0][1].date)) + glob.sizes.vizSvgSizes.margin.left) + ',' + glob.sizes.vizSvgSizes.margin.top / 2 + ')')
+
+  
 }
