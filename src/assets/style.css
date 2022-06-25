@@ -214,3 +214,7 @@ option {
 body {
     /* background-color: var(--background); */
 }
+section {
+    background-color: var(--controls-text);
+    color:var(--front)
+}
