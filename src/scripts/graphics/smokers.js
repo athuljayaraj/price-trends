@@ -5,9 +5,7 @@
  *
  * @param {*} data
  */
-export function main(data) {
-  // const margin = { top: 10, right: 30, bottom: 30, left: 60 }
-
+export function main (data) {
   const xScale = d3.scaleTime()
     .domain([data.limits.minX, data.limits.maxX])
     .range([0, glob.sizes.vizSvgSizes.innerWidth])
@@ -42,7 +40,6 @@ export function main(data) {
       }))
     .attr('fill', 'none')
     .attr('stroke', 'black')
-  // rangeSlider(data, svg)
   svg.append('g')
     .attr('class', 'x axis')
     .attr('transform', `translate(${glob.sizes.vizSvgSizes.margin.left}, ${glob.sizes.vizSvgSizes.innerHeight + glob.sizes.vizSvgSizes.margin.top})`)
@@ -52,15 +49,6 @@ export function main(data) {
     .attr('transform', `translate(${glob.sizes.vizSvgSizes.margin.left}, ${glob.sizes.vizSvgSizes.margin.top})`)
     .call(yAxis)
 
-  // var slider = document.getElementById('slider')
-  // noUiSlider.create(slider, {
-  //   start: [20, 80],
-  //   connect: true,
-  //   range: {
-  //     min: 0,
-  //     max: 100
-  //   }
-  // })
   buildNumberOfCigTextbox(data.data)
 }
 
@@ -70,7 +58,7 @@ export function main(data) {
  * @param data
  * @param svg
  */
-function rangeSlider(data, svg) {
+function rangeSlider (data, svg) {
   // Range
   var sliderRange = sliderBottom()
     .min(data.limits.minX)
@@ -86,16 +74,13 @@ function rangeSlider(data, svg) {
 }
 
 /**
+ * @param data
  * @param svg
  */
-function buildNumberOfCigTextbox(data, svg) {
+function buildNumberOfCigTextbox (data, svg) {
   const control = d3.select('#cig-control')
 
-  // var select = control
-  //   .append('div')
-  //   .append('select')
-
-  var input = control
+  control
     .append('div')
     .append('input')
     .attr('type', 'number')
@@ -103,28 +88,10 @@ function buildNumberOfCigTextbox(data, svg) {
     .on('change', function () {
       console.log(calculateCost(data))
     })
-
-  // input.addEventListener('change', (v) => console.log(v));
-
-  // select
-  //   .on('change', function (d) {
-  //     var value = d3.select(this).property('value')
-  //     alert(value)
-  //   })
-
-  // select.selectAll('cig-control')
-  //   .data(options)
-  //   .enter()
-  //   .append('option')
-  //   .attr('value', function (d) {
-  //     console.log(d)
-  //     return d
-  //   })
-  //   .text(function (d) {
-  //     console.log(d)
-
-  //     return d
-  //   })
+  control
+    .append('text')
+    .text('Total cost in ($): ')
+    .attr('id', 'cig-cost')
 }
 
 /**
@@ -133,9 +100,9 @@ function buildNumberOfCigTextbox(data, svg) {
  * @param endDate
  * @param numOfCigs
  */
-function calculateCost(data, startDate, endDate) {
-  const startDate2 = new Date("03-09-2003")
-  const endDate2 = new Date("03-09-2013")
+function calculateCost (data, startDate, endDate) {
+  const startDate2 = new Date('03-09-2003')
+  const endDate2 = new Date('03-09-2013')
   const numOfCigsPerDay = document.getElementById('cig-num').value
   let partialSum = 0
   data.filter(d => d[0] >= startDate2 && d[0] <= endDate2).forEach(element => {
