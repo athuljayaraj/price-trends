@@ -1,12 +1,11 @@
 /* eslint-disable no-undef */
 /* eslint-disable semi */
-import { sliderBottom } from 'd3-simple-slider';
 
 /**
  *
  * @param {*} data
  */
-export function main (data) {
+export function main(data) {
   // const margin = { top: 10, right: 30, bottom: 30, left: 60 }
 
   const xScale = d3.scaleTime()
@@ -36,14 +35,14 @@ export function main (data) {
     .datum(data.data)
     .attr('d', d3.line()
       .x(function (d) {
-        return xScale(new Date(d[0]))
+        return xScale(d[0])
       })
       .y(function (d) {
-        return yScale(parseFloat(d[1]))
+        return yScale(d[1])
       }))
     .attr('fill', 'none')
     .attr('stroke', 'black')
-  rangeSlider(data, svg)
+  // rangeSlider(data, svg)
   svg.append('g')
     .attr('class', 'x axis')
     .attr('transform', `translate(${glob.sizes.vizSvgSizes.margin.left}, ${glob.sizes.vizSvgSizes.innerHeight + glob.sizes.vizSvgSizes.margin.top})`)
@@ -52,6 +51,17 @@ export function main (data) {
     .attr('class', 'y axis')
     .attr('transform', `translate(${glob.sizes.vizSvgSizes.margin.left}, ${glob.sizes.vizSvgSizes.margin.top})`)
     .call(yAxis)
+
+  // var slider = document.getElementById('slider')
+  // noUiSlider.create(slider, {
+  //   start: [20, 80],
+  //   connect: true,
+  //   range: {
+  //     min: 0,
+  //     max: 100
+  //   }
+  // })
+  buildNumberOfCigTextbox(data.data)
 }
 
 // eslint-disable-next-line no-multiple-empty-lines
@@ -60,7 +70,7 @@ export function main (data) {
  * @param data
  * @param svg
  */
-function rangeSlider (data, svg) {
+function rangeSlider(data, svg) {
   // Range
   var sliderRange = sliderBottom()
     .min(data.limits.minX)
@@ -70,7 +80,66 @@ function rangeSlider (data, svg) {
 
   const g = svg
     .append('g')
-    .attr('transform', 'translate(30,30)');
+    .attr('transform', 'translate(30,30)')
 
-  g.call(sliderRange);
+  g.call(sliderRange)
+}
+
+/**
+ * @param svg
+ */
+function buildNumberOfCigTextbox(data, svg) {
+  const control = d3.select('#cig-control')
+
+  // var select = control
+  //   .append('div')
+  //   .append('select')
+
+  var input = control
+    .append('div')
+    .append('input')
+    .attr('type', 'number')
+    .attr('id', 'cig-num')
+    .on('change', function () {
+      console.log(calculateCost(data))
+    })
+
+  // input.addEventListener('change', (v) => console.log(v));
+
+  // select
+  //   .on('change', function (d) {
+  //     var value = d3.select(this).property('value')
+  //     alert(value)
+  //   })
+
+  // select.selectAll('cig-control')
+  //   .data(options)
+  //   .enter()
+  //   .append('option')
+  //   .attr('value', function (d) {
+  //     console.log(d)
+  //     return d
+  //   })
+  //   .text(function (d) {
+  //     console.log(d)
+
+  //     return d
+  //   })
+}
+
+/**
+ * @param data
+ * @param startDate
+ * @param endDate
+ * @param numOfCigs
+ */
+function calculateCost(data, startDate, endDate) {
+  const startDate2 = new Date("03-09-2003")
+  const endDate2 = new Date("03-09-2013")
+  const numOfCigsPerDay = document.getElementById('cig-num').value
+  let partialSum = 0
+  data.filter(d => d[0] >= startDate2 && d[0] <= endDate2).forEach(element => {
+    partialSum = partialSum + element[1]
+  });
+  return partialSum * numOfCigsPerDay;
 }
