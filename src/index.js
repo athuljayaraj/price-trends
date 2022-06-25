@@ -30,7 +30,6 @@ window.glob = {
   resize.updateResize()
   // scroller.svgCenter()
   d3.csv('assets/data/data_norm.csv').then(function (dataNorm) {
-    // console.log(dataNorm)
     d3.json('assets/data/seasonalTrends.json').then(function (seasonalTrends) {
       d3.json('assets/data/inflationProducts.json').then(function (inflationProducts) {
         d3.csv('assets/data/inflation.csv').then(function (inflation) {
@@ -45,7 +44,6 @@ window.glob = {
     })
     preprocessPriceChanges.main(dataNorm)
     priceChanges.main(glob.data)
-    // build(glob.data)
   })
 
   window.addEventListener('resize', function () {
@@ -56,7 +54,6 @@ window.glob = {
     priceChanges.main(glob.data)
   })
   function build(data) {
-   // priceChanges.main(glob.data)
     seasons.main(glob.data)
     inflation.main()
     categories.main()
