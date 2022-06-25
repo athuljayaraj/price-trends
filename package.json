@@ -32,7 +32,7 @@
   },
   "staticFiles": {
     "staticPath": [
-      "./src/assets/data"
+      "./src"
     ]
   }
 }
