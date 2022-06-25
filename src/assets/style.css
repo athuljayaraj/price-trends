@@ -120,8 +120,7 @@ section {
     background-color: burlywood;
     padding: 20px;
     border-radius: 10px;
-    /* float: left; */
-    /* transform: translateY(50%); */
+    margin-left: 10px;
 }
 .text-container {
     width: 30%;
