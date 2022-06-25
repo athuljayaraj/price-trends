@@ -8,6 +8,9 @@
   <title>TP5 | INF8808</title>
 
   <link rel="stylesheet" href="assets/style.css">
+  <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
+  <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+  <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
 </head>
 
 
@@ -16,18 +19,20 @@
     <div class="container">
       <div class="text-container element" id="section1">
         <section>
-        <h1>Seasonal trends</h1>
-        <p>On the graphic, we can observe that multiple products follow a seasonal trend. Preselected products are shown
-          in the combobox.
-          They are sorted by the one with the most visible seasonal trends to those with smaller seasonal trends. With
-          this, we can see
-          that some products depends of the season of each product production. It is the case for carrots which have
-          their lower price
-          in september and their higher price in june. The same applies for onions and oranges (not sure oranges).
-          The wheat harvest season <a href="https://www.thecanadianencyclopedia.ca/en/article/cereal-crops">starting mid
-            july/august</a>,
-          it corresponds to the point where less flour is available and so the price increase
-        </p>
+          <h1>Seasonal trends</h1>
+          <p>On the graphic, we can observe that multiple products follow a seasonal trend. Preselected products are
+            shown
+            in the combobox.
+            They are sorted by the one with the most visible seasonal trends to those with smaller seasonal trends. With
+            this, we can see
+            that some products depends of the season of each product production. It is the case for carrots which have
+            their lower price
+            in september and their higher price in june. The same applies for onions and oranges (not sure oranges).
+            The wheat harvest season <a href="https://www.thecanadianencyclopedia.ca/en/article/cereal-crops">starting
+              mid
+              july/august</a>,
+            it corresponds to the point where less flour is available and so the price increase
+          </p>
         </section>
       </div>
       <div class="vizualization-div element" id="vizualization-div1">
@@ -40,20 +45,15 @@
     <div class="container">
       <div class="text-container element" id="section2">
         <section>
-          <h1>Product outliers: Products with the biggest and smallest price variation</h1>
-          <p>The aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaar control points to change the 
-            time period. Hover the mouse over the curves to get information about the presented product. 
-            You will see, for example, that between September 1996 and November 2001, the three products 
-            with the biggest price changes were cigarettes, rib roast premium and sirloin steak. 
-            Those with the smallest price change are macaroni, toothpaste and tomato juice. 
-            The cigarette stands out by having had, in all periods of time, the biggest price increase.</p>
-      </section>
+          <h1>Save life, and perhaps some money!</h1>
+          <p>Smoking is an expensive habit. Here's a tool to figure out of how much it costs to be a smoker!</p>
+        </section>
       </div>
       <div class="vizualization-div element">
-        <svg id="vizualization-svg2" class="visualization-svg" width="100%"></svg>
-        <!-- <div id="controls2" class="controls"></div> -->
-        <div id="controls2" class="controls">
-      </div>
+        <svg id="vizualization-smokers" class="visualization-svg" width="100%"></svg>
+        <div id="cig-control" class="controls">
+          <div id="slider"></div>
+        </div>
       </div>
     </div>
   </div>
@@ -75,8 +75,7 @@
       <div class="vizualization-div element">
         <svg id="vizualization-svg3" class="visualization-svg" width="100%"></svg>
         <!-- <div id="controls2" class="controls"></div> -->
-        <div id="controls3" class="controls">
-      </div>
+        <div id="controls3" class="controls"></div>
       </div>
     </div>
   </div>
@@ -84,9 +83,11 @@
     <div class="container">
       <div class="text-container element" id="sectionInfl">
         <section>
-        <h1>Inflation rate compared to product prices growth rate</h1>
-        <p>On the following graphic we can see all products plotted for the full period. We can see in green the top 6 product where the price growth rate deviates multiple times from the inflation curve. This products are onions, carrots, potatoes, roasted coffee, peanut butter and canned salmon.</p>
-      </section>
+          <h1>Inflation rate compared to product prices growth rate</h1>
+          <p>On the following graphic we can see all products plotted for the full period. We can see in green the top 6
+            product where the price growth rate deviates multiple times from the inflation curve. This products are
+            onions, carrots, potatoes, roasted coffee, peanut butter and canned salmon.</p>
+        </section>
       </div>
       <div class="vizualization-div element">
         <svg id="vizualization-svgInfl" class="visualization-svg" width="100%"></svg>
@@ -98,20 +99,24 @@
     <div class="container">
       <div class="text-container element" id="sectionCat1">
         <section>
-        <h1>Similar trend</h1>
-        <p>We can see that multiple types of products share similar trends. We can classify these groups of products of similar trends in 3 categories: </p>
+          <h1>Similar trend</h1>
+          <p>We can see that multiple types of products share similar trends. We can classify these groups of products
+            of similar trends in 3 categories: </p>
           <ul>
             <li>Products of similar food categories with similar trends</li>
             <li>Products of similar food categories with different trends</li>
             <li>Products of different food categories with similar trends</li>
             <li>Products of different food categories with different trends</li>
           </ul>
-        <p>The three first categories can be intesresting to investigate. We will do so in the following graphics</p>
-        <h2>Products of similar food categories with similar trends</h2>
-        <p>We can observe that some categories have the same trends. It is especially visible for the group Meat 1. Due to their similar constraints, 
-          meats share similar trends. We can observe especially a similar growth in meats prices between 2014 and 2016. </p>
-          <p>The group Carrots-Onions is also interesting: we can observe a similar periodicity in the variation of these two products</p>
-      </section>
+          <p>The three first categories can be intesresting to investigate. We will do so in the following graphics</p>
+          <h2>Products of similar food categories with similar trends</h2>
+          <p>We can observe that some categories have the same trends. It is especially visible for the group Meat 1.
+            Due to their similar constraints,
+            meats share similar trends. We can observe especially a similar growth in meats prices between 2014 and
+            2016. </p>
+          <p>The group Carrots-Onions is also interesting: we can observe a similar periodicity in the variation of
+            these two products</p>
+        </section>
       </div>
       <div class="vizualization-div element">
         <svg id="catSame_same" class="visualization-svg svgCat" width="100%"></svg>
@@ -123,9 +128,14 @@
     <div class="container">
       <div class="text-container element" id="sectionCat2">
         <section>
-        <h2>Products of similar food categories with different trends</h2>
-        <p>For the group hot drinks we can clearly see two different trends for the coffees and the tea. At the start, we can clearly see a decrease in the price of coffees prices up until 2022 and then a stronger increase from 2008 to 2012. Tea on the contrary, even if it follows an attenuated version of the trend of coffee. We can also see this different trends for some fruits. The orange and apples follow a similar increasing with regular spikes pattern, whereas the bananas have only experienced a growth in price after 2008 but keep globally a stable price</p>
-      </section>
+          <h2>Products of similar food categories with different trends</h2>
+          <p>For the group hot drinks we can clearly see two different trends for the coffees and the tea. At the start,
+            we can clearly see a decrease in the price of coffees prices up until 2022 and then a stronger increase from
+            2008 to 2012. Tea on the contrary, even if it follows an attenuated version of the trend of coffee. We can
+            also see this different trends for some fruits. The orange and apples follow a similar increasing with
+            regular spikes pattern, whereas the bananas have only experienced a growth in price after 2008 but keep
+            globally a stable price</p>
+        </section>
       </div>
       <div class="vizualization-div element">
         <svg id="catSame_diff" class="visualization-svg svgCat" width="100%"></svg>
@@ -137,11 +147,13 @@
     <div class="container">
       <div class="text-container element" id="sectionCat3">
         <section>
-        <h2>Products of different food categories with similar trends</h2>
-        <p>But we can also find products that share common trends even if the do not belong to the same product categories.
-          We can see here two examples where the paper towel has similar trends as the baby food and where the eggs, bread, tomatoe juice and toothpaste share common trends
-        </p>
-      </section>
+          <h2>Products of different food categories with similar trends</h2>
+          <p>But we can also find products that share common trends even if the do not belong to the same product
+            categories.
+            We can see here two examples where the paper towel has similar trends as the baby food and where the eggs,
+            bread, tomatoe juice and toothpaste share common trends
+          </p>
+        </section>
       </div>
       <div class="vizualization-div element">
         <svg id="catDiff_same" class="visualization-svg svgCat" width="100%"></svg>
@@ -154,4 +166,5 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.16.0/d3.min.js"></script>
   <script src="https://d3js.org/d3-array.v2.min.js"></script>
 </body>
+
 </html>
