@@ -52,27 +52,6 @@ export function main (data) {
   buildNumberOfCigTextbox(data.data)
 }
 
-// eslint-disable-next-line no-multiple-empty-lines
-
-/**
- * @param data
- * @param svg
- */
-function rangeSlider (data, svg) {
-  // Range
-  var sliderRange = sliderBottom()
-    .min(data.limits.minX)
-    .max(data.limits.maxX)
-    .step(3)
-    .width(900)
-
-  const g = svg
-    .append('g')
-    .attr('transform', 'translate(30,30)')
-
-  g.call(sliderRange)
-}
-
 /**
  * @param data
  * @param svg
@@ -89,41 +68,13 @@ function buildNumberOfCigTextbox (data, svg) {
     .attr('min', 0)
     .attr('id', 'cig-num')
     .on('change', function () {
-      console.log(calculateCost(data))
-      // d3.select('text.abc').text(some_other_variable);
+      slideOne()
     })
   control
     .append('text')
-    .text('Total cost in ($): ' + calculateCost(data))
+    .text('Total cost in ($): 0')
     .attr('id', 'cig-cost')
-  const div = control
-    .append('div')
-  Array.from(['start', 'end']).forEach(function (id) {
-    div.append('p')
-      .text(id.charAt(0).toUpperCase() + id.slice(1) + ' date (YYYY-MM):')
-      .style('display', 'inline-block')
-    div.append('input')
-      .attr('id', id + 'DateSmoke')
-      .style('display', 'inline-block')
-  })
-  div.append('button')
-    .text('Compute')
-    .style('margin', '10px')
-    .on('click', function () {
-      const regex_text = x => (/^[0-9]{4}-[0-9]{2}$/).test(x)
-      if (!regex_text(d3.select('#startDateSmoke').node().value)) {
-        return
-      }
-      if (!regex_text(d3.select('#endDateSmoke').node().value)) {
-        return
-      }
-      const startDate = new Date(Date.parse(d3.select('#startDateSmoke').node().value))
-      const endDate = new Date(Date.parse(d3.select('#endDateSmoke').node().value))
-      if (endDate.getTime() <= startDate.getTime()) {
-        return
-      }
-      calculateCost(data, startDate, endDate)
-    })
+  createSlider()
 }
 
 /**
@@ -132,7 +83,8 @@ function buildNumberOfCigTextbox (data, svg) {
  * @param endDate
  * @param numOfCigs
  */
-function calculateCost (data, startDate, endDate) {
+function calculateCost (startDate, endDate) {
+  const data = glob.data.smokers.data
   const NUMBER_OF_DAYS_PER_MONTH = 30
   const NUMBER_OF_CIGS_IN_DATA = 200
   const numOfCigsPerDay = document.getElementById('cig-num').value
@@ -140,7 +92,93 @@ function calculateCost (data, startDate, endDate) {
   data.filter(d => d[0] >= startDate && d[0] <= endDate).forEach(element => {
     partialSum = partialSum + element[1]
   });
+  console.log(partialSum)
   const totalCost = Math.round((partialSum / NUMBER_OF_CIGS_IN_DATA) * numOfCigsPerDay * NUMBER_OF_DAYS_PER_MONTH)
   d3.select('#cig-cost').text('Total cost in ($): ' + totalCost);
   return partialSum * numOfCigsPerDay;
+}
+/**
+ *
+ */
+function createSlider () {
+  const controls = d3.select('#cig-control').attr('transform', `translate(${glob.sizes.vizSvgSizes.margin.left}, ${glob.sizes.vizSvgSizes.innerHeight + glob.sizes.vizSvgSizes.margin.top})`)
+    .attr('width', `${glob.sizes.vizSvgSizes.innerWidth}`)
+    .attr('height', 50)
+    .insert('div', ':first-child')
+    .attr('class', 'slider-container')
+    .style('overflow', 'visible')
+
+  controls
+    .append('div').attr('class', 'slider-trackSmoker')
+    .style('top', '-75px')
+  controls.append('input')
+    .attr('type', 'range')
+    .attr('min', 0)
+    .attr('max', 100)
+    .attr('value', 30)
+    .attr('id', 'slider-1Smoker')
+    .style('top', '-75px')
+    .on('change', () => {
+      slideOne()
+    })
+
+  controls.append('input')
+    .attr('type', 'range')
+    .attr('min', 0)
+    .attr('max', 100)
+    .attr('value', 70)
+    .attr('id', 'slider-2Smoker')
+    .style('top', '-75px')
+    .on('change', () => {
+      slideTwo()
+    })
+}
+/**
+ *
+ */
+// Code taken from https://codingartistweb.com/2021/06/double-range-slider-html-css-javascript/
+function slideOne () {
+  const sliderOne = d3.select('#slider-1Smoker').node()
+  const sliderTwo = d3.select('#slider-2Smoker').node()
+  const minGap = 0
+  if (sliderTwo.value - sliderOne.value <= minGap) {
+    sliderOne.value = sliderTwo.value - minGap
+  }
+  fillColor()
+
+  const mapToDate = x => new Date(Math.round((new Date(x / 100 * (glob.data.smokers.limits.maxX.getTime() - glob.data.smokers.limits.minX.getTime()) + glob.data.smokers.limits.minX.getTime())).getTime()))
+  const startDate = mapToDate(sliderOne.value)
+  const endDate = mapToDate(sliderTwo.value)
+  calculateCost(startDate, endDate)
+}
+
+/**
+ *
+ */
+// Code taken from https://codingartistweb.com/2021/06/double-range-slider-html-css-javascript/
+function slideTwo () {
+  const sliderOne = d3.select('#slider-1Smoker').node()
+  const sliderTwo = d3.select('#slider-2Smoker').node()
+  const minGap = 1
+  if (parseInt(sliderTwo.value) - parseInt(sliderOne.value) <= minGap) {
+    sliderTwo.value = parseInt(sliderOne.value) + minGap
+  }
+  fillColor()
+  const mapToDate = x => new Date(Math.round((new Date(x / 100 * (glob.data.smokers.limits.maxX.getTime() - glob.data.smokers.limits.minX.getTime()) + glob.data.smokers.limits.minX.getTime())).getTime()))
+  const startDate = mapToDate(sliderOne.value)
+  const endDate = mapToDate(sliderTwo.value)
+  calculateCost(startDate, endDate)
+}
+/**
+ *
+ */
+// Code taken from https://codingartistweb.com/2021/06/double-range-slider-html-css-javascript/
+function fillColor () {
+  const sliderOne = document.getElementById('slider-1Smoker')
+  const sliderTwo = document.getElementById('slider-2Smoker')
+  const sliderTrack = document.querySelector('.slider-trackSmoker')
+  const sliderMaxValue = document.getElementById('slider-1Smoker').max
+  const percent1 = (sliderOne.value / sliderMaxValue) * 100
+  const percent2 = (sliderTwo.value / sliderMaxValue) * 100
+  sliderTrack.style.background = `linear-gradient(to right, #dadae5 ${percent1}% , #3264fe ${percent1}% , #3264fe ${percent2}%, #dadae5 ${percent2}%)`
 }

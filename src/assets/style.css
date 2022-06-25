@@ -8,7 +8,7 @@
     font-family: "Poppins",sans-serif;
 }
 
-#controls3 {
+#controls3, #cig-control {
     position: relative;
     width: 95vmin;
     background-color: #ffffff;
@@ -35,7 +35,7 @@ input[type="range"]{
     background-color: transparent;
     pointer-events: none;
 }
-.slider-track{
+.slider-track, .slider-trackSmoker{
     width: 100%;
     height: 5px;
     position: absolute;
