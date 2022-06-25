@@ -5,7 +5,7 @@
  *
  * @param {*} data
  */
-export function main(data) {
+export function main (data) {
   const xScale = d3.scaleTime()
     .domain([data.limits.minX, data.limits.maxX])
     .range([0, glob.sizes.vizSvgSizes.innerWidth])
@@ -58,7 +58,7 @@ export function main(data) {
  * @param data
  * @param svg
  */
-function rangeSlider(data, svg) {
+function rangeSlider (data, svg) {
   // Range
   var sliderRange = sliderBottom()
     .min(data.limits.minX)
@@ -77,7 +77,7 @@ function rangeSlider(data, svg) {
  * @param data
  * @param svg
  */
-function buildNumberOfCigTextbox(data, svg) {
+function buildNumberOfCigTextbox (data, svg) {
   const control = d3.select('#cig-control')
 
   control
@@ -90,13 +90,40 @@ function buildNumberOfCigTextbox(data, svg) {
     .attr('id', 'cig-num')
     .on('change', function () {
       console.log(calculateCost(data))
-      d3.select("text.abc").text(some_other_variable);
-
+      // d3.select('text.abc').text(some_other_variable);
     })
   control
     .append('text')
     .text('Total cost in ($): ' + calculateCost(data))
     .attr('id', 'cig-cost')
+  const div = control
+    .append('div')
+  Array.from(['start', 'end']).forEach(function (id) {
+    div.append('p')
+      .text(id.charAt(0).toUpperCase() + id.slice(1) + ' date (YYYY-MM):')
+      .style('display', 'inline-block')
+    div.append('input')
+      .attr('id', id + 'DateSmoke')
+      .style('display', 'inline-block')
+  })
+  div.append('button')
+    .text('Compute')
+    .style('margin', '10px')
+    .on('click', function () {
+      const regex_text = x => (/^[0-9]{4}-[0-9]{2}$/).test(x)
+      if (!regex_text(d3.select('#startDateSmoke').node().value)) {
+        return
+      }
+      if (!regex_text(d3.select('#endDateSmoke').node().value)) {
+        return
+      }
+      const startDate = new Date(Date.parse(d3.select('#startDateSmoke').node().value))
+      const endDate = new Date(Date.parse(d3.select('#endDateSmoke').node().value))
+      if (endDate.getTime() <= startDate.getTime()) {
+        return
+      }
+      calculateCost(data, startDate, endDate)
+    })
 }
 
 /**
@@ -105,14 +132,12 @@ function buildNumberOfCigTextbox(data, svg) {
  * @param endDate
  * @param numOfCigs
  */
-function calculateCost(data, startDate, endDate) {
-  const startDate2 = new Date('03-09-2003')
-  const endDate2 = new Date('03-09-2013')
+function calculateCost (data, startDate, endDate) {
   const NUMBER_OF_DAYS_PER_MONTH = 30
   const NUMBER_OF_CIGS_IN_DATA = 200
   const numOfCigsPerDay = document.getElementById('cig-num').value
   let partialSum = 0
-  data.filter(d => d[0] >= startDate2 && d[0] <= endDate2).forEach(element => {
+  data.filter(d => d[0] >= startDate && d[0] <= endDate).forEach(element => {
     partialSum = partialSum + element[1]
   });
   const totalCost = Math.round((partialSum / NUMBER_OF_CIGS_IN_DATA) * numOfCigsPerDay * NUMBER_OF_DAYS_PER_MONTH)
