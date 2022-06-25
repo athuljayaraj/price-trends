@@ -5,7 +5,7 @@
  *
  * @param {*} data
  */
-export function main (data) {
+export function main(data) {
   const xScale = d3.scaleTime()
     .domain([data.limits.minX, data.limits.maxX])
     .range([0, glob.sizes.vizSvgSizes.innerWidth])
@@ -58,7 +58,7 @@ export function main (data) {
  * @param data
  * @param svg
  */
-function rangeSlider (data, svg) {
+function rangeSlider(data, svg) {
   // Range
   var sliderRange = sliderBottom()
     .min(data.limits.minX)
@@ -77,20 +77,25 @@ function rangeSlider (data, svg) {
  * @param data
  * @param svg
  */
-function buildNumberOfCigTextbox (data, svg) {
+function buildNumberOfCigTextbox(data, svg) {
   const control = d3.select('#cig-control')
 
   control
     .append('div')
+    .append('p')
+    .text('Number of cigarettes per day: ')
     .append('input')
     .attr('type', 'number')
+    .attr('min', 0)
     .attr('id', 'cig-num')
     .on('change', function () {
       console.log(calculateCost(data))
+      d3.select("text.abc").text(some_other_variable);
+
     })
   control
     .append('text')
-    .text('Total cost in ($): ')
+    .text('Total cost in ($): ' + calculateCost(data))
     .attr('id', 'cig-cost')
 }
 
@@ -100,7 +105,7 @@ function buildNumberOfCigTextbox (data, svg) {
  * @param endDate
  * @param numOfCigs
  */
-function calculateCost (data, startDate, endDate) {
+function calculateCost(data, startDate, endDate) {
   const startDate2 = new Date('03-09-2003')
   const endDate2 = new Date('03-09-2013')
   const numOfCigsPerDay = document.getElementById('cig-num').value
@@ -108,5 +113,9 @@ function calculateCost (data, startDate, endDate) {
   data.filter(d => d[0] >= startDate2 && d[0] <= endDate2).forEach(element => {
     partialSum = partialSum + element[1]
   });
+  const totalCost = Math.round(partialSum * numOfCigsPerDay)
+  d3.select('#cig-cost').text('Total cost in ($): ' + totalCost);
+
   return partialSum * numOfCigsPerDay;
 }
+
