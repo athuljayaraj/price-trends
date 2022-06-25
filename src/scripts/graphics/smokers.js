@@ -23,6 +23,9 @@ export function main (data) {
   var svg = d3.select('#vizualization-smokers')
     // .append('svg')
     .attr('width', '100%')
+  svg.append('text')
+    .text('Price ($)')
+    .attr('transform', `translate(${glob.sizes.vizSvgSizes.margin.left / 2}, ${glob.sizes.vizSvgSizes.margin.top / 2})`)
   // .attr('height', '100%')
   var chartGroup = svg
     .append('g')

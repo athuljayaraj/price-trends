@@ -13,6 +13,9 @@ function build () {
   const data = glob.data.inflation
   // main svg
   const svg = d3.select('#vizualization-svgInfl')
+  svg.append('text')
+    .text('Price monthly growth rate (%)')
+    .attr('transform', `translate(${glob.sizes.vizSvgSizes.margin.left / 2}, ${glob.sizes.vizSvgSizes.margin.top / 2})`)
   // Create scales
   const xScale = d3.scaleTime()
     .domain([data.minX, data.maxX])

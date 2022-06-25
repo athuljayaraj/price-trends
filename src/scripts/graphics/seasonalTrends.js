@@ -155,6 +155,9 @@ function build() {
     .attr('class', 'y axis')
     .attr('transform', `translate(${glob.sizes.vizSvgSizes.margin.left}, ${glob.sizes.vizSvgSizes.margin.top})`)
     .call(yAxis)
+  svg.append('text')
+    .text('Price ($)')
+    .attr('transform', `translate(${glob.sizes.vizSvgSizes.margin.left/2}, ${glob.sizes.vizSvgSizes.margin.top/2})`)
   // Create line plots
   const lineGroup = svg.append('g')
     .attr('transform', `translate(${glob.sizes.vizSvgSizes.margin.left}, ${glob.sizes.vizSvgSizes.margin.top})`)
