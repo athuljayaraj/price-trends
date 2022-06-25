@@ -20,7 +20,7 @@ export function main(data) {
     .tickFormat(d3.format('.2f'))
 
   // append the svg object to the body of the page
-  var svg = d3.select('#vizualization-svg2')
+  var svg = d3.select('#vizualization-smokers')
     // .append('svg')
     .attr('width', '100%')
   // .attr('height', '100%')
@@ -108,14 +108,14 @@ function buildNumberOfCigTextbox(data, svg) {
 function calculateCost(data, startDate, endDate) {
   const startDate2 = new Date('03-09-2003')
   const endDate2 = new Date('03-09-2013')
+  const NUMBER_OF_DAYS_PER_MONTH = 30
+  const NUMBER_OF_CIGS_IN_DATA = 200
   const numOfCigsPerDay = document.getElementById('cig-num').value
   let partialSum = 0
   data.filter(d => d[0] >= startDate2 && d[0] <= endDate2).forEach(element => {
     partialSum = partialSum + element[1]
   });
-  const totalCost = Math.round(partialSum * numOfCigsPerDay)
+  const totalCost = Math.round((partialSum / NUMBER_OF_CIGS_IN_DATA) * numOfCigsPerDay * NUMBER_OF_DAYS_PER_MONTH)
   d3.select('#cig-cost').text('Total cost in ($): ' + totalCost);
-
   return partialSum * numOfCigsPerDay;
 }
-
