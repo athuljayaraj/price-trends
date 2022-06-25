@@ -126,7 +126,7 @@ function build() {
         .text(season.name)
         .style('background', 'transparent')
       divTooltip.append('img')
-        .attr('src', 'images/' + season.name.toLocaleLowerCase() + '.png')
+        .attr('src', 'assets/data/images/' + season.name.toLocaleLowerCase() + '.png')
         .style('width', '25px')
         .style('background', 'transparent')
       d3.select('#tooltip')
