@@ -5,6 +5,8 @@ import * as seasons from './scripts/graphics/seasonalTrends.js'
 import * as inflation from './scripts/graphics/inflation.js'
 import * as preprocessCat from './scripts/preprocessing/categories.js'
 import * as categories from './scripts/graphics/categories.js'
+import * as priceChanges from './scripts/graphics/priceChanges.js'
+import * as preprocessPriceChanges from './scripts/preprocessing/priceChanges.js'
 window.glob = {
   sizes: {
     vizDivSizes: { width: 0, height: 0 },
@@ -40,6 +42,8 @@ window.glob = {
         })
       })
     })
+    preprocessPriceChanges.main(dataNorm)
+    priceChanges.main(glob.data)
   })
 
   window.addEventListener('resize', function () {
@@ -47,8 +51,9 @@ window.glob = {
     d3.selectAll('.controls').selectAll('*').remove()
     resize.updateResize()
     build()
+    priceChanges.main(glob.data)
   })
-  function build (data) {
+  function build(data) {
     seasons.main(glob.data)
     inflation.main()
     categories.main()
