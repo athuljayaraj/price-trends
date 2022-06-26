@@ -119,7 +119,7 @@ section {
     text-align: justify;
     background-color: burlywood;
     padding: 20px;
-    border-radius:var(--corner-rad);
+    border-radius: 10px;
     margin-left: 10px;
 }
 .text-container {
@@ -188,29 +188,3 @@ svg {
     background: #04AA6D;
     cursor: pointer;
   }
-  :root {
-    --accent2: #8ECAE6;
-    --accent: #219EBC;
-    --front: #023047;
-    --background: #FFB703;
-    --controls-text: #FB8500;
-    --corner-rad: 5px;
-  }
-  
-
-select {
-	padding: 10px;
-    border-radius:var(--corner-rad);
-    color:var(--controls-text);
-    border-color:var(--controls-text);
-    background-color:transparent;
-}
-option {
-    margin: 50px
-}
-.controls p {
-    color: var(--controls-text);
-}
-body {
-    /* background-color: var(--background); */
-}

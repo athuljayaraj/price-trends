@@ -9,7 +9,6 @@ import * as preprocessCat from './scripts/preprocessing/categories.js'
 import * as categories from './scripts/graphics/categories.js'
 import * as priceChanges from './scripts/graphics/priceChanges.js'
 import * as preprocessPriceChanges from './scripts/preprocessing/priceChanges.js'
-import * as styling from './scripts/graphics/styling.js'
 window.glob = {
   sizes: {
     vizDivSizes: { width: 0, height: 0 },
@@ -62,6 +61,5 @@ window.glob = {
     smokers.main(glob.data.smokers)
     inflation.main()
     categories.main()
-    styling.main()
   }
 })(d3)

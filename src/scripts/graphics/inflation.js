@@ -16,10 +16,6 @@ function build () {
   svg.append('text')
     .text('Price monthly growth rate (%)')
     .attr('transform', `translate(${glob.sizes.vizSvgSizes.margin.left / 2}, ${glob.sizes.vizSvgSizes.margin.top / 2})`)
-    svg.append('text')
-      .text('Date')
-      .attr('transform', `translate(${glob.sizes.vizSvgSizes.margin.left  + glob.sizes.vizSvgSizes.innerWidth/2}, ${glob.sizes.vizSvgSizes.margin.top+ glob.sizes.vizSvgSizes.innerHeight + glob.sizes.vizSvgSizes.margin.bottom})`)
-      .style('text-anchor','middle')
   // Create scales
   const xScale = d3.scaleTime()
     .domain([data.minX, data.maxX])
@@ -29,7 +25,7 @@ function build () {
     .range([glob.sizes.vizSvgSizes.innerHeight, 0])
   const colorScale = d3.scaleOrdinal()
     .domain([0, 1, 2])
-    .range(['var(--front)', 'var(--accent2)', 'var(--controls-text)'])
+    .range(['black', 'green', 'red'])
   // Creates groups
   svg.append('g')
     .call(d3.axisBottom(xScale))
@@ -115,7 +111,7 @@ function build () {
         d3.select(this)
           .attr('opacity', 1)
           .attr('stroke-width', '4')
-          .attr('stroke', 'var(--accent)')
+          .attr('stroke', 'orange')
         d3.select('body')
           .append('div')
           .attr('id', 'tooltip')
