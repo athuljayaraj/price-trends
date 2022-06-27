@@ -217,3 +217,59 @@ body {
 section {
     background-color: var(--controls-text);
 }
+/* From https://stackoverflow.com/questions/826782/how-to-disable-text-selection-highlighting */
+.noselect {
+    -webkit-touch-callout: none; /* iOS Safari */
+      -webkit-user-select: none; /* Safari */
+       -khtml-user-select: none; /* Konqueror HTML */
+         -moz-user-select: none; /* Old versions of Firefox */
+          -ms-user-select: none; /* Internet Explorer/Edge */
+              user-select: none; /* Non-prefixed version, currently
+                                    supported by Chrome, Edge, Opera and Firefox */
+  }
+  #popupHelp {
+    
+  position: fixed;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  }
+  #mainPopup {
+    
+    position: fixed;
+    left: 25%;
+    top: 25%;
+    height: 50%;
+    width: 50%;
+    background-color: rgb(255, 255, 255);
+    border-radius: 25px;
+    padding:25px;
+  }
+  .arrow-right {
+    width:10%;
+    height: 10%;
+    position: fixed;
+    right: 15%;
+    top: 45%;
+    background-color: var(--front);
+    -webkit-mask: url(data/images/angle-right-solid.svg) no-repeat center;
+    mask: url(data/images/angle-right-solid.svg) no-repeat center;
+  }
+  .arrow-left {
+    width:10%;
+    height: 10%;
+    position: fixed;
+    left: 15%;
+    top: 45%;
+    background-color: var(--front);
+    -webkit-mask: url(data/images/angle-left-solid.svg) no-repeat center;
+    mask: url(data/images/angle-left-solid.svg) no-repeat center;
+  }
+  .arrow-right:hover {
+    background-color: var(--accent);
+  }
+  .arrow-left:hover {
+    background-color: var(--accent);
+  }

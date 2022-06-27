@@ -5,6 +5,7 @@ export function main () {
   if (glob.data.seasonalTrends.mainData === undefined) {
     return
   }
+  createHelper()
   const controls = d3.select('#controls1')
   controls
     .append('p')
@@ -182,7 +183,7 @@ function build () {
         d3.select(this)
           .attr('stroke', 'var(--accent)')
           .attr('stroke-width', '4')
-          // console.log(d[0].date.getFullYear() === e.originalYear,d[0].date.getFullYear(),e.originalYear); 
+          // console.log(d[0].date.getFullYear() === e.originalYear,d[0].date.getFullYear(),e.originalYear);
         d3.selectAll('.scatterSeasons')
           .filter(e => { return d[0].originalYear === e.originalYear })
           .attr('fill', 'var(--accent)')
@@ -222,4 +223,58 @@ function build () {
       .attr('cx', function (e) { return xScale(e.date) })
       .attr('cy', function (e) { return yScale(e.value) })
   })
+}
+/**
+ *
+ */
+function createHelper () {
+  const helper = d3.select('#vizualization-div1')
+    .append('div')
+    .attr('class', 'noselect')
+    .text('?')
+    .style('font-size', '20px')
+    .style('background-color', 'var(--front)')
+    .style('color', 'white')
+    .style('padding', '10px')
+    .style('border-radius', '50px')
+    .style('width', '45px')
+    .style('display', 'inline-block')
+    .style('text-align', 'center')
+    .on('mouseenter', function () {
+      d3.select(this)
+        .style('background-color', 'var(--accent)')
+    })
+    .on('mouseleave', function () {
+      d3.select(this)
+        .style('background-color', 'var(--front)')
+    })
+    .on('click', function () {
+      createHelp()
+    })
+  const divBoundings = d3.select('#vizualization-div1').node().getBoundingClientRect()
+  helper.style('position', 'absolute')
+    .style('right', '20px')
+    .style('top', divBoundings.top + 'px')
+}
+/**
+ *
+ */
+function createHelp () {
+  const popupHelp = d3.select('body')
+    .append('div')
+    .attr('id', 'popupHelp')
+    .on('click', function () {
+      d3.select(this).remove()
+    })
+  const contentDiv = popupHelp.append('div').attr('id', 'mainPopup')
+  d3.text('assets/data/popup/seasons/1.html').then(function (data) {
+    console.log(data)
+    contentDiv.node().innerHTML = data
+  })
+  popupHelp
+    .append('div')
+    .attr('class', 'arrow-right')
+  popupHelp
+    .append('div')
+    .attr('class', 'arrow-left')
 }
