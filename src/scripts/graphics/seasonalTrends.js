@@ -103,7 +103,6 @@ function build () {
       d3.select(this)
         .attr('opacity', 0.75)
       const svgInfos = d3.select('#vizualization-svg1').node().getBoundingClientRect()
-      const divInfos = d3.select('#vizualization-div1').node().getBoundingClientRect()
       const margingContainerGraphic = 10
       const middleX = svgInfos.left +
         glob.sizes.vizSvgSizes.margin.left +
@@ -159,10 +158,16 @@ function build () {
   svg.append('text')
     .text('Price ($)')
     .attr('transform', `translate(${glob.sizes.vizSvgSizes.margin.left / 2}, ${glob.sizes.vizSvgSizes.margin.top / 2})`)
+  svg.append('text')
+    .text('Month of the year')
+    .style('text-anchor', 'middle')
+    .attr('transform', `translate(${glob.sizes.vizSvgSizes.margin.left + glob.sizes.vizSvgSizes.innerWidth / 2}, ${glob.sizes.vizSvgSizes.margin.top + glob.sizes.vizSvgSizes.innerHeight + glob.sizes.vizSvgSizes.margin.bottom / 5 * 4})`)
   // Create line plots
   const lineGroup = svg.append('g')
     .attr('transform', `translate(${glob.sizes.vizSvgSizes.margin.left}, ${glob.sizes.vizSvgSizes.margin.top})`)
 
+  const scatterGroup = svg.append('g')
+    .attr('transform', `translate(${glob.sizes.vizSvgSizes.margin.left}, ${glob.sizes.vizSvgSizes.margin.top})`)
   data.values.forEach(function (dataYear) {
     lineGroup.append('path')
       .attr('class', 'curve')
@@ -171,12 +176,12 @@ function build () {
         .x(function (e) { return xScale(e.date) })
         .y(function (e) { return yScale(e.value) })
       )
-      .attr('stroke', 'black')
+      .attr('stroke', 'var(--front)')
       .attr('stroke-width', '2')
       .attr('fill', 'none')
       .on('mouseenter', function (d) {
         d3.select(this)
-          .attr('stroke', 'red')
+          .attr('stroke', 'var(--accent)')
           .attr('stroke-width', '4')
           // console.log(d[0].date.getFullYear() === e.originalYear,d[0].date.getFullYear(),e.originalYear);
         d3.selectAll('.scatterSeasons')
@@ -198,12 +203,25 @@ function build () {
       })
       .on('mouseleave', function (d) {
         d3.select(this)
-          .attr('stroke', 'black')
+          .attr('stroke', 'var(--front)')
           .attr('stroke-width', '2')
+        d3.selectAll('.scatterSeasons')
+          .attr('fill', 'var(--front)')
+          .attr('r', '2px')
         d3.select('#tooltip')
           .remove()
       }
       )
+    scatterGroup.append('g')
+      .selectAll('.scatterSeasons')
+      .data(dataYear)
+      .enter()
+      .append('circle')
+      .attr('class', 'scatterSeasons')
+      .attr('fill', 'var(--front)')
+      .attr('r', '2px')
+      .attr('cx', function (e) { return xScale(e.date) })
+      .attr('cy', function (e) { return yScale(e.value) })
   })
 }
 /**
