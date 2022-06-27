@@ -61,6 +61,9 @@ export function main (data) {
  */
 function buildNumberOfCigTextbox (data, svg) {
   const control = d3.select('#cig-control')
+    .style('width', `${glob.sizes.vizSvgSizes.innerWidth}` + 'px')
+    .style('padding', '30px 30px 20px 40px')
+    .style('padding-left', `${glob.sizes.vizSvgSizes.margin.left}` + 'px')
 
   control
     .append('div')

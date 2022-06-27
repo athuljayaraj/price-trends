@@ -2,7 +2,6 @@
 *,
 *:before,
 *:after{
-    /* padding-left: 100px; */
     margin: 0;
     box-sizing: border-box;
     font-family: "Poppins",sans-serif;
@@ -10,11 +9,8 @@
 
 #controls3, #cig-control {
     position: relative;
-    width: 116vmin;
     background-color: #ffffff;
-    /* padding: 50px 40px 20px 40px; */
     border-radius: 10px;
-    padding-left: 70px;
 } 
 .controls.slider-container{
     position: relative;

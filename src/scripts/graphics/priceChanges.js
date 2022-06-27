@@ -1,7 +1,7 @@
 /**
  * @param data
  */
- export function main () {
+export function main () {
   if (glob.data.priceChanges.mainData === undefined) {
     return
   }
@@ -16,10 +16,8 @@
 // Code for the slider inspired by https://codingartistweb.com/2021/06/double-range-slider-html-css-javascript/
 function createSlider () {
   const controls = d3.select('#controls3')
-    .attr('transform', `translate(${glob.sizes.vizSvgSizes.margin.left}, ${glob.sizes.vizSvgSizes.innerHeight + glob.sizes.vizSvgSizes.margin.top})`)
-    .attr('width', `${glob.sizes.vizSvgSizes.innerWidth}`)
-    .attr('height', 50)
-    .attr('position', 'relative')
+    .style('width', `${glob.sizes.vizSvgSizes.innerWidth}` + 'px')
+    .style('padding-left', `${glob.sizes.vizSvgSizes.margin.left}` + 'px')
     .append('div')
     .attr('class', 'slider-container')
 
