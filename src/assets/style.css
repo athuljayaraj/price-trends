@@ -1,28 +1,33 @@
-/* Code taken from https://codingartistweb.com/2021/06/double-range-slider-html-css-javascript/ */
+/* Code for sliders taken and adapted from https://codingartistweb.com/2021/06/double-range-slider-html-css-javascript/ */
 *,
 *:before,
-*:after{
-    /* padding-left: 100px; */
+*:after {
     margin: 0;
     box-sizing: border-box;
-    font-family: "Poppins",sans-serif;
+    font-family: "Poppins", sans-serif;
 }
 
-#controls3, #cig-control {
+#controls3,
+#cig-control {
     position: relative;
-    width: 95vmin;
-    background-color: #ffffff;
-    padding: 50px 40px 20px 40px;
     border-radius: 10px;
-    padding-left: 100px;
-} 
-.controls.slider-container{
+}
+
+#cig-cost {
+    font-size: 20px;
+    /* top: -500px;
+    position: absolute;
+    left: 450px; */
+}
+
+.controls.slider-container {
     position: relative;
     width: 100%;
-    height: 100px;
+    height: 50px;
     margin-top: 30px;
-} 
-input[type="range"]{
+}
+
+input[type="range"] {
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
@@ -35,7 +40,9 @@ input[type="range"]{
     background-color: transparent;
     pointer-events: none;
 }
-.slider-track, .slider-trackSmoker{
+
+.slider-track,
+.slider-trackSmoker {
     width: 100%;
     height: 5px;
     position: absolute;
@@ -43,30 +50,36 @@ input[type="range"]{
     top: 0;
     bottom: 0;
     border-radius: 5px;
+    color: #3264fe
 }
-input[type="range"]::-webkit-slider-runnable-track{
+
+input[type="range"]::-webkit-slider-runnable-track {
     -webkit-appearance: none;
     height: 5px;
 }
-input[type="range"]::-moz-range-track{
+
+input[type="range"]::-moz-range-track {
     -moz-appearance: none;
     height: 5px;
 }
-input[type="range"]::-ms-track{
+
+input[type="range"]::-ms-track {
     appearance: none;
     height: 5px;
 }
-input[type="range"]::-webkit-slider-thumb{
+
+input[type="range"]::-webkit-slider-thumb {
     -webkit-appearance: none;
-    height: 1.7em;
-    width: 1.7em;
+    height: 1em;
+    width: 1em;
     background-color: #3264fe;
     cursor: pointer;
-    margin-top: -9px;
+    margin-top: -5px;
     pointer-events: auto;
     border-radius: 50%;
 }
-input[type="range"]::-moz-range-thumb{
+
+input[type="range"]::-moz-range-thumb {
     -webkit-appearance: none;
     height: 1.7em;
     width: 1.7em;
@@ -75,7 +88,8 @@ input[type="range"]::-moz-range-thumb{
     background-color: #3264fe;
     pointer-events: auto;
 }
-input[type="range"]::-ms-thumb{
+
+input[type="range"]::-ms-thumb {
     appearance: none;
     height: 1.7em;
     width: 1.7em;
@@ -84,51 +98,32 @@ input[type="range"]::-ms-thumb{
     background-color: #3264fe;
     pointer-events: auto;
 }
-input[type="range"]:active::-webkit-slider-thumb{
+
+input[type="range"]:active::-webkit-slider-thumb {
     background-color: #ffffff;
     border: 3px solid #3264fe;
 }
-.values{
-    background-color: #3264fe;
-    width: 32%;
-    position: relative;
-    margin: auto;
-    padding: 10px 0;
-    border-radius: 5px;
-    text-align: center;
-    font-weight: 500;
-    font-size: 25px;
-    color: #ffffff;
-}
-.values:before{
-    content: "";
-    position: absolute;
-    height: 0;
-    width: 0;
-    border-top: 15px solid #3264fe;
-    border-left: 15px solid transparent;
-    border-right: 15px solid transparent;
-    margin: auto;
-    bottom: -14px;
-    left: 0;
-    right: 0;
-}
+/*End of code for sliders*/
 
 section {
     height: auto;
     text-align: justify;
     background-color: burlywood;
     padding: 20px;
-    border-radius: 10px;
+    border-radius: var(--corner-rad);
     margin-left: 10px;
 }
+
 .text-container {
     width: 30%;
 }
+
 .container {
-    padding-top: 200px;;
+    padding-top: 200px;
+    ;
     display: table;
 }
+
 .element {
     display: table-cell;
     vertical-align: middle;
@@ -141,9 +136,11 @@ section {
     width: calc(70% - 100px);
     margin: 10px 10px 10px 10px;
 }
+
 .vizualization-div {
     padding-left: 100px;
 }
+
 svg {
     height: 500px;
     width: 100%;
@@ -156,9 +153,9 @@ svg {
 
 .slidecontainer {
     width: 100%;
-  }
-  
-  .slider {
+}
+
+.slider {
     -webkit-appearance: none;
     width: 100%;
     height: 25px;
@@ -167,24 +164,165 @@ svg {
     opacity: 0.7;
     -webkit-transition: .2s;
     transition: opacity .2s;
-  }
-  
-  .slider:hover {
+}
+
+.slider:hover {
     opacity: 1;
-  }
-  
-  .slider::-webkit-slider-thumb {
+}
+
+.slider::-webkit-slider-thumb {
     -webkit-appearance: none;
     appearance: none;
     width: 25px;
     height: 25px;
     background: #04AA6D;
     cursor: pointer;
-  }
-  
-  .slider::-moz-range-thumb {
+}
+
+.slider::-moz-range-thumb {
     width: 25px;
     height: 25px;
     background: #04AA6D;
     cursor: pointer;
-  }
+}
+
+:root {
+    --accent2: #8ECAE6;
+    --accent: #219EBC;
+    --front: #023047;
+    --background: #FFB703;
+    --controls-text: #FB8500;
+    --corner-rad: 5px;
+}
+
+
+select {
+    padding: 10px;
+    border-radius: var(--corner-rad);
+    color: var(--front);
+    border-color: var(--front);
+    border-width: 3px;
+    background-color: transparent;
+    font-size: 16px;
+}
+
+option {
+    margin: 50px
+}
+
+.controls p {
+    color: var(--front);
+}
+
+body {
+    background-color: var(--background);
+}
+
+section {
+    background-color: var(--controls-text);
+}
+
+section p {
+
+    font-size: 18px;
+    font-family: Verdana;
+}
+
+/* From https://stackoverflow.com/questions/826782/how-to-disable-text-selection-highlighting */
+.noselect {
+    -webkit-touch-callout: none;
+    /* iOS Safari */
+    -webkit-user-select: none;
+    /* Safari */
+    -khtml-user-select: none;
+    /* Konqueror HTML */
+    -moz-user-select: none;
+    /* Old versions of Firefox */
+    -ms-user-select: none;
+    /* Internet Explorer/Edge */
+    user-select: none;
+    /* Non-prefixed version, currently
+                                    supported by Chrome, Edge, Opera and Firefox */
+}
+
+#popupHelp {
+
+    position: fixed;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+#mainPopup {
+    display: table;
+    width:70%;
+    position: fixed;
+    left: 50%;
+    top:50%;
+    transform: translate(-50%, -50%);
+}
+#mainPopup-content {
+
+    background-color: var(--background);
+    border-radius: 25px;
+    padding: 25px;
+    overflow: hidden;
+    display: table-cell;
+}
+#mainPopup-content div {
+    text-align: center;
+}
+#mainPopup-content div img {
+    width: 70vw;
+    max-height: 100%;
+    object-fit: cover;
+    
+}
+#mainPopup-content p {
+    font-size: 18px;
+    color:var(--front)
+}
+.arrow-right {
+    position: fixed;
+    top: 45%;
+    right:1%;
+    width: 10%;
+    height: 10%;
+    background-color: var(--front);
+    -webkit-mask: url(images/angle-right-solid.svg) no-repeat center;
+    mask: url(images/angle-right-solid.svg) no-repeat center;
+}
+
+.arrow-left {
+    position: fixed;
+    top: 45%;
+    left:1%;
+    width: 10%;
+    height: 10%;
+    background-color: var(--front);
+    -webkit-mask: url(images/angle-left-solid.svg) no-repeat center;
+    mask: url(images/angle-left-solid.svg) no-repeat center;
+}
+
+.arrow-right:hover {
+    background-color: var(--accent);
+}
+
+.arrow-left:hover {
+    background-color: var(--accent);
+}
+
+#last-container {
+    margin-bottom: 5%;
+}
+
+#backgroundLeft {
+    top: 0;
+    left: 0;
+    background-color: var(--front);
+    width: 31%;
+    position: fixed;
+    height: 100%;
+    z-index: -1;
+}

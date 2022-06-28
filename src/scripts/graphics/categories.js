@@ -1,9 +1,11 @@
+import * as helper from './helper.js'
 /**
  *
  */
 export function main () {
   const dataGlob = glob.data.categories
-  Array.from(['same_same', 'same_diff', 'diff_same']).forEach(function (category) {
+  Array.from(['same_same', 'same_diff', 'diff_same']).forEach(function (category, i) {
+    helper.createHelper('vizualization-divCat' + (i + 1), 2, 'categories'+(i+1))
     const data = dataGlob[category]
     const controls = d3.select('#controls' + category.charAt(0).toUpperCase() + category.slice(1))
     // controls
@@ -16,7 +18,6 @@ export function main () {
       .attr('id', 'selectGpe' + category)
       .on('change', function () {
         glob.data.categories[category].current_gpe = d3.select(this).property('value')
-        // Rebuild
         reBuild(category)
       })
       .selectAll('option')
@@ -25,21 +26,20 @@ export function main () {
       .append('option')
       .text(d => d)
       .attr('value', d => d)
-    glob.data.categories[category].current_gpe = d3.select('#selectGpe'+category).property('value')
+    glob.data.categories[category].current_gpe = d3.select('#selectGpe' + category).property('value')
     build(category)
   })
 }
 /**
- * @param category
+ * @param category: string, name of the category (same_same, same_diff or diff_same) to rebuild
  */
 function reBuild (category) {
   const svg = d3.select('#cat' + category.charAt(0).toUpperCase() + category.slice(1))
   svg.selectAll('*').remove()
-  console.log(glob.data.categories[category].current_gpe)
   build(category)
 }
 /**
- * @param category
+ * @param category: string, name of the category (same_same, same_diff or diff_same) to rebuild
  */
 function build (category) {
   const data = glob.data.categories[category].filter(x => x.name === glob.data.categories[category].current_gpe)[0]
@@ -70,8 +70,13 @@ function build (category) {
   // Adding y label
   svg.append('text')
     .text('Price ($)')
-    .attr('x',glob.sizes.vizSvgSizes.margin.left/2)
-    .attr('y',glob.sizes.vizSvgSizes.margin.top/2)
+    .attr('x', glob.sizes.vizSvgSizes.margin.left / 2)
+    .attr('y', glob.sizes.vizSvgSizes.margin.top / 2)
+  svg.append('text')
+    .text('Date')
+    .attr('x', glob.sizes.vizSvgSizes.margin.left + glob.sizes.vizSvgSizes.innerWidth / 2)
+    .attr('y', glob.sizes.vizSvgSizes.margin.top + glob.sizes.vizSvgSizes.innerHeight + glob.sizes.vizSvgSizes.margin.bottom)
+    .attr('text-anchor', 'middle')
   // Draw curves
   svg.append('g')
     .attr('id', 'curvesCat')
@@ -85,14 +90,14 @@ function build (category) {
       .x(function (e) { return xScale(e.date) })
       .y(function (e) { return yScale(e.value) })
     )
-    .attr('stroke', 'black')
+    .attr('stroke', 'var(--front)')
     .attr('stroke-width', '2')
     .attr('fill', 'none')
     .on('mouseenter', function (d) {
       d3.select(this)
         .attr('opacity', 1)
         .attr('stroke-width', '4')
-        .attr('stroke', 'orange')
+        .attr('stroke', 'var(--accent)')
       d3.select('body')
         .append('div')
         .attr('id', 'tooltip')
@@ -109,7 +114,69 @@ function build (category) {
     .on('mouseleave', function (d) {
       d3.select(this)
         .attr('stroke-width', '2')
-        .attr('stroke', 'black')
+        .attr('stroke', 'var(--front)')
+      d3.select('#tooltip')
+        .remove()
+    })
+  svg.append('g')
+    .attr('id', 'scatterCat')
+    .attr('transform', `translate(${glob.sizes.vizSvgSizes.margin.left}, ${glob.sizes.vizSvgSizes.margin.top})`)
+    .selectAll('g')
+    .data(data.data)
+    .enter()
+    .append('g')
+    .selectAll('circle')
+    .data(d => d)
+    .enter()
+    .append('circle')
+    .attr('cx', e => xScale(e.date))
+    .attr('cy', e => yScale(e.value))
+    .attr('fill', 'var(--front)')
+    .attr('r', '1px')
+    .attr('opacity', 0)
+    .on('mouseenter', function (d) {
+      d3.selectAll('#scatterCat')
+        .selectAll('circle')
+        // .attr('opacity', 0)
+      d3.select(this)
+        // .attr('opacity', 1)
+        .attr('r', '4px')
+        .attr('fill', 'var(--accent)')
+      d3.selectAll('#curvesCat')
+        .selectAll('path')
+        .filter(e => d.product === e[0].product)
+        .attr('stroke-width', '4')
+        .attr('stroke', 'var(--accent)')
+      d3.select('body')
+        .append('div')
+        .attr('id', 'tooltip')
+        .style('position', 'absolute')
+        .style('z-index', '10')
+        .style('background', 'white')
+        .style('padding', '10px')
+        .style('border-radius', '5px')
+        .style('box-shadow', '1px 1px 5px black')
+        .style('left', (d3.event.pageX + glob.sizes.tooltip.offsetY) + 'px')
+        .style('top', (d3.event.pageY + glob.sizes.tooltip.offsetY) + 'px')
+        .html(`<strong>${d.product}</strong>: $${d.value}`)
+    })
+    .on('mouseleave', function (d) {
+      d3.selectAll('#scatterCat')
+        .selectAll('circle')
+        // .attr('opacity', 1)
+      d3.select(this)
+        .attr('r', '2px')
+        .attr('fill', 'var(--front)')
+      d3.selectAll('#curvesCat')
+        .selectAll('path')
+        .filter(e => d.product === e[0].product)
+        .attr('stroke-width', '2')
+        .attr('stroke', 'var(--front)')
+      d3.selectAll('#curvesCat')
+        .selectAll('path')
+        .filter(e => d.product === e.product)
+        .attr('stroke-width', '2')
+        .attr('stroke', 'var(--front)')
       d3.select('#tooltip')
         .remove()
     })

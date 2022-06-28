@@ -1,3 +1,5 @@
+import * as sliderHelper from './sliderHelper.js'
+import * as helper from './helper.js'
 /**
  * @param data
  */
@@ -5,9 +7,11 @@ export function main () {
   if (glob.data.priceChanges.mainData === undefined) {
     return
   }
-
+  helper.createHelper('vizualization-div-priceChanges', 2, 'priceChanges')
+  glob.data.priceChanges.yAxisTicksOffset = 4
   createSlider()
   build()
+  sliderHelper.fillColor('#slider-1', '#slider-2', '.slider-track')
 }
 
 /**
@@ -16,10 +20,9 @@ export function main () {
 // Code for the slider inspired by https://codingartistweb.com/2021/06/double-range-slider-html-css-javascript/
 function createSlider () {
   const controls = d3.select('#controls3')
-    .attr('transform', `translate(${glob.sizes.vizSvgSizes.margin.left}, ${glob.sizes.vizSvgSizes.innerHeight + glob.sizes.vizSvgSizes.margin.top})`)
-    .attr('width', `${glob.sizes.vizSvgSizes.innerWidth}`)
-    .attr('height', 50)
-    .attr('position', 'relative')
+    .style('width', `${glob.sizes.vizSvgSizes.innerWidth}` + 'px')
+    .style('padding', '30px 30px 20px 40px')
+    .style('padding-left', `${glob.sizes.vizSvgSizes.margin.left}` + 'px')
     .append('div')
     .attr('class', 'slider-container')
 
@@ -32,7 +35,7 @@ function createSlider () {
     .attr('value', 30)
     .attr('id', 'slider-1')
     .on('change', () => {
-      slideOne()
+      sliderHelper.slideOne('#slider-1', '#slider-2', '.slider-track', drawLines)
     })
 
   controls.append('input')
@@ -42,62 +45,10 @@ function createSlider () {
     .attr('value', 70)
     .attr('id', 'slider-2')
     .on('change', () => {
-      slideTwo()
+      sliderHelper.slideTwo('#slider-1', '#slider-2', '.slider-track', drawLines)
     })
 }
 
-/**
- *
- */
-// Code taken from https://codingartistweb.com/2021/06/double-range-slider-html-css-javascript/
-function slideOne () {
-  const sliderOne = d3.select('#slider-1').node()
-  const sliderTwo = d3.select('#slider-2').node()
-  const minGap = 0
-  if (sliderTwo.value - sliderOne.value <= minGap) {
-    sliderOne.value = sliderTwo.value - minGap
-  }
-  fillColor()
-
-  d3.select('#axisValuePriceChange')
-    .attr('transform', `translate(${glob.sizes.vizSvgSizes.margin.left + sliderOne.value / 100 * (glob.sizes.vizSvgSizes.innerWidth)}, ${glob.sizes.vizSvgSizes.margin.top})`)
-  d3.select('#priceLegendChange')
-  .attr('transform', `translate(${glob.sizes.vizSvgSizes.margin.left / 3 + sliderOne.value / 100 * (glob.sizes.vizSvgSizes.innerWidth)}, ${glob.sizes.vizSvgSizes.margin.top + glob.sizes.vizSvgSizes.innerHeight / 2}) rotate(-90)`)
-  d3.selectAll('.curvePriceChange').remove()
-  drawLines()
-}
-
-/**
- *
- */
-// Code taken from https://codingartistweb.com/2021/06/double-range-slider-html-css-javascript/
-function slideTwo () {
-  const sliderOne = d3.select('#slider-1').node()
-  const sliderTwo = d3.select('#slider-2').node()
-  const minGap = 1
-  if (parseInt(sliderTwo.value) - parseInt(sliderOne.value) <= minGap) {
-    sliderTwo.value = parseInt(sliderOne.value) + minGap
-  }
-  fillColor()
-  d3.select('#secondBar')
-    .attr('transform', `translate(${sliderTwo.value / 100 * glob.sizes.vizSvgSizes.innerWidth + glob.sizes.vizSvgSizes.margin.left}, ${glob.sizes.vizSvgSizes.margin.top})`)
-  d3.selectAll('.curvePriceChange').remove()
-  drawLines()
-}
-
-/**
- *
- */
-// Code taken from https://codingartistweb.com/2021/06/double-range-slider-html-css-javascript/
-function fillColor () {
-  const sliderOne = document.getElementById('slider-1')
-  const sliderTwo = document.getElementById('slider-2')
-  const sliderTrack = document.querySelector('.slider-track')
-  const sliderMaxValue = document.getElementById('slider-1').max
-  const percent1 = (sliderOne.value / sliderMaxValue) * 100
-  const percent2 = (sliderTwo.value / sliderMaxValue) * 100
-  sliderTrack.style.background = `linear-gradient(to right, #dadae5 ${percent1}% , #3264fe ${percent1}% , #3264fe ${percent2}%, #dadae5 ${percent2}%)`
-}
 /**
  *
  */
@@ -126,6 +77,11 @@ function build () {
   svg.append('text')
     .text('Price ($)')
     .attr('id', 'priceLegendChange')
+
+  svg.append('text')
+    .text('Date')
+    .style('text-anchor', 'middle')
+    .attr('transform', `translate(${glob.sizes.vizSvgSizes.margin.left + glob.sizes.vizSvgSizes.innerWidth / 2}, ${glob.sizes.vizSvgSizes.margin.top + glob.sizes.vizSvgSizes.innerHeight + glob.sizes.vizSvgSizes.margin.bottom})`)
   svg
     .append('path')
     .attr('id', 'secondBar')
@@ -134,8 +90,8 @@ function build () {
       .x(function (a) { return a.x })
       .y(function (a) { return yScale(a.y) })
     )
-    .attr('stroke', 'black')
-    .attr('stroke-width', '2')
+    .attr('stroke', 'var(--front)')
+    .attr('stroke-width', '1')
     .attr('fill', 'none')
     .attr('transform', 'translate(' + (sliderTwo.value / 100 * glob.sizes.vizSvgSizes.innerWidth + glob.sizes.vizSvgSizes.margin.left) + ',' + glob.sizes.vizSvgSizes.margin.top + ')')
 
@@ -149,28 +105,34 @@ function build () {
     .attr('class', 'y axis')
     .attr('id', 'axisValuePriceChange')
     .call(yAxis)
+
+  d3.select('#axisValuePriceChange').selectAll('.tick text').nodes().forEach(function (d) {
+    d3.select(d).attr('transform', `translate(0, ${-glob.data.priceChanges.yAxisTicksOffset})`)
+  })
+
   svg.append('text')
     .attr('id', 'textStart')
     .style('text-anchor', 'middle')
   svg.append('text')
     .attr('id', 'textEnd')
     .style('text-anchor', 'middle')
-  // position y axis
 
+  // position y axis
   d3.select('#axisValuePriceChange')
     .attr('transform', `translate(${glob.sizes.vizSvgSizes.margin.left + sliderOne.value / 100 * (glob.sizes.vizSvgSizes.innerWidth)}, ${glob.sizes.vizSvgSizes.margin.top})`)
 
   d3.select('#priceLegendChange')
     .attr('transform', `translate(${glob.sizes.vizSvgSizes.margin.left / 3 + sliderOne.value / 100 * (glob.sizes.vizSvgSizes.innerWidth)}, ${glob.sizes.vizSvgSizes.margin.top + glob.sizes.vizSvgSizes.innerHeight / 2}) rotate(-90)`)
+
   // Create line plots and tooltip
   svg.append('g')
     .attr('id', 'linesPriceChange')
     .attr('transform', `translate(${glob.sizes.vizSvgSizes.margin.left}, ${glob.sizes.vizSvgSizes.margin.top})`)
   drawLines()
 }
+
 /**
- * @param data
- * @param dataTmp
+ *
  */
 function preprocessTop6 () {
   var startDate = new Date(Math.round((new Date(d3.select('#slider-1').node().value / 100 * (glob.data.priceChanges.maxDate - glob.data.priceChanges.minDate) + glob.data.priceChanges.minDate)).getTime()))
@@ -224,6 +186,18 @@ function preprocessTop6 () {
  *
  */
 function drawLines () {
+  const sliderOne = d3.select('#slider-1').node()
+  const sliderTwo = d3.select('#slider-2').node()
+
+  d3.select('#axisValuePriceChange')
+    .attr('transform', `translate(${glob.sizes.vizSvgSizes.margin.left + sliderOne.value / 100 * (glob.sizes.vizSvgSizes.innerWidth)}, ${glob.sizes.vizSvgSizes.margin.top})`)
+  d3.select('#priceLegendChange')
+    .attr('transform', `translate(${glob.sizes.vizSvgSizes.margin.left / 3 + sliderOne.value / 100 * (glob.sizes.vizSvgSizes.innerWidth)}, ${glob.sizes.vizSvgSizes.margin.top + glob.sizes.vizSvgSizes.innerHeight / 2}) rotate(-90)`)
+
+  d3.select('#secondBar')
+    .attr('transform', `translate(${sliderTwo.value / 100 * glob.sizes.vizSvgSizes.innerWidth + glob.sizes.vizSvgSizes.margin.left}, ${glob.sizes.vizSvgSizes.margin.top})`)
+  d3.selectAll('.curvePriceChange').remove()
+
   const xScale = glob.data.priceChanges.xScale
   const yScale = glob.data.priceChanges.yScale
   const selectedData = preprocessTop6()
@@ -242,12 +216,12 @@ function drawLines () {
       .x(d => xScale(Date.parse(d.date)))
       .y(d => yScale(d.price))
       .curve(d3.curveCatmullRom.alpha(0.5)))
-    .attr('stroke', 'black')
+    .attr('stroke', 'var(--front)')
     .attr('stroke-width', '2')
     .attr('fill', 'none')
     .on('mouseenter', function (d) {
       d3.select(this)
-        .attr('stroke', 'red')
+        .attr('stroke', 'var(--accent)')
         .attr('stroke-width', '4')
       d3.select('body')
         .append('div')
@@ -261,13 +235,13 @@ function drawLines () {
         .style('left', (d3.event.pageX + glob.sizes.tooltip.offsetY) + 'px')
         .style('top', (d3.event.pageY + glob.sizes.tooltip.offsetY) + 'px')
         .html(`<strong>Product: ${d.map(a => a.product)[0]}<br/> 
-                Price in ${d.map(a => a.date)[0]}: ${d.map(a => a.price)[0]}<br/> 
-                Price in ${d.map(a => a.date)[1]}: ${d.map(a => a.price)[1]}
+                Price in ${d.map(a => a.date)[0]}: $${d.map(a => a.price)[0]}<br/> 
+                Price in ${d.map(a => a.date)[1]}: $${d.map(a => a.price)[1]}
                 </strong>`)
     })
     .on('mouseleave', function (d) {
       d3.select(this)
-        .attr('stroke', 'black')
+        .attr('stroke', 'var(--front)')
         .attr('stroke-width', '2')
       d3.select('#tooltip')
         .remove()
@@ -280,6 +254,4 @@ function drawLines () {
   d3.select('#textEnd')
     .text(formatDate(selectedData[0][1].date))
     .attr('transform', 'translate(' + (xScale(Date.parse(selectedData[0][1].date)) + glob.sizes.vizSvgSizes.margin.left) + ',' + glob.sizes.vizSvgSizes.margin.top / 2 + ')')
-
-  
 }

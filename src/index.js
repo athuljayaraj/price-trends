@@ -9,6 +9,7 @@ import * as preprocessCat from './scripts/preprocessing/categories.js'
 import * as categories from './scripts/graphics/categories.js'
 import * as priceChanges from './scripts/graphics/priceChanges.js'
 import * as preprocessPriceChanges from './scripts/preprocessing/priceChanges.js'
+import * as styling from './scripts/graphics/styling.js'
 window.glob = {
   sizes: {
     vizDivSizes: { width: 0, height: 0 },
@@ -40,13 +41,12 @@ window.glob = {
             preprocessSmokers.main(dataNorm)
             preprocessInfl.main(dataNorm, inflationProducts, inflation)
             preprocessCat.main(dataNorm, categories)
-            build(glob.data)
+            preprocessPriceChanges.main(dataNorm)
+            build()
           })
         })
       })
     })
-    preprocessPriceChanges.main(dataNorm)
-    priceChanges.main(glob.data)
   })
 
   window.addEventListener('resize', function () {
@@ -54,12 +54,16 @@ window.glob = {
     d3.selectAll('.controls').selectAll('*').remove()
     resize.updateResize()
     build()
-    priceChanges.main(glob.data)
   })
-  function build(data) {
+  function build() {
+
+    d3.selectAll('.tmp').remove()
+    d3.select('#tooltip').remove()
     seasons.main(glob.data)
     smokers.main(glob.data.smokers)
     inflation.main()
     categories.main()
+    priceChanges.main(glob.data)
+    styling.main()
   }
 })(d3)
