@@ -18,7 +18,6 @@ export function main () {
       .attr('id', 'selectGpe' + category)
       .on('change', function () {
         glob.data.categories[category].current_gpe = d3.select(this).property('value')
-        // Rebuild
         reBuild(category)
       })
       .selectAll('option')
@@ -32,7 +31,7 @@ export function main () {
   })
 }
 /**
- * @param category
+ * @param category: string, name of the category (same_same, same_diff or diff_same) to rebuild
  */
 function reBuild (category) {
   const svg = d3.select('#cat' + category.charAt(0).toUpperCase() + category.slice(1))
@@ -40,7 +39,7 @@ function reBuild (category) {
   build(category)
 }
 /**
- * @param category
+ * @param category: string, name of the category (same_same, same_diff or diff_same) to rebuild
  */
 function build (category) {
   const data = glob.data.categories[category].filter(x => x.name === glob.data.categories[category].current_gpe)[0]

@@ -1,22 +1,8 @@
 /**
- * @param dataNorm
- * @param seasonalTrends
+ * @param dataNorm: data with prices of each product per month
+ * @param seasonalTrends: list of products with seasonal trends
  */
 export function main(dataNorm, seasonalTrends) {
-  /* We would like something like this:
-                [
-                    {
-                        name: 'product',
-                        values: [
-                            {
-                                date: '2018-01-01',
-                                value: 1
-                            },
-                            ...
-                        ]
-                    }
-                ]
-                */
   const dicoData = {}
   dataNorm.forEach(function (d) {
     if (!dicoData[d.product]) {
