@@ -7,7 +7,7 @@ export function main () {
   if (glob.data.priceChanges.mainData === undefined) {
     return
   }
-  helper.createHelper('vizualization-div-priceChagnes', 2, 'priceChanges')
+  helper.createHelper('vizualization-div-priceChanges', 2, 'priceChanges')
   glob.data.priceChanges.yAxisTicksOffset = 4
   createSlider()
   build()
