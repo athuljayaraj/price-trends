@@ -1,3 +1,4 @@
+import * as sliderHelper from './sliderHelper.js'
 /**
  * @param data
  */
@@ -8,7 +9,7 @@ export function main () {
   glob.data.priceChanges.yAxisTicksOffset = 4
   createSlider()
   build()
-  fillColor()
+  sliderHelper.fillColor('#slider-1', '#slider-2', '.slider-track')
 }
 
 /**
@@ -31,7 +32,7 @@ function createSlider () {
     .attr('value', 30)
     .attr('id', 'slider-1')
     .on('change', () => {
-      slideOne()
+      sliderHelper.slideOne('#slider-1', '#slider-2', '.slider-track', drawLines)
     })
 
   controls.append('input')
@@ -41,62 +42,10 @@ function createSlider () {
     .attr('value', 70)
     .attr('id', 'slider-2')
     .on('change', () => {
-      slideTwo()
+      sliderHelper.slideTwo('#slider-1', '#slider-2', '.slider-track', drawLines)
     })
 }
 
-/**
- *
- */
-// Code taken from https://codingartistweb.com/2021/06/double-range-slider-html-css-javascript/
-function slideOne () {
-  const sliderOne = d3.select('#slider-1').node()
-  const sliderTwo = d3.select('#slider-2').node()
-  const minGap = 0
-  if (sliderTwo.value - sliderOne.value <= minGap) {
-    sliderOne.value = sliderTwo.value - minGap
-  }
-  fillColor()
-
-  d3.select('#axisValuePriceChange')
-    .attr('transform', `translate(${glob.sizes.vizSvgSizes.margin.left + sliderOne.value / 100 * (glob.sizes.vizSvgSizes.innerWidth)}, ${glob.sizes.vizSvgSizes.margin.top})`)
-  d3.select('#priceLegendChange')
-    .attr('transform', `translate(${glob.sizes.vizSvgSizes.margin.left / 3 + sliderOne.value / 100 * (glob.sizes.vizSvgSizes.innerWidth)}, ${glob.sizes.vizSvgSizes.margin.top + glob.sizes.vizSvgSizes.innerHeight / 2}) rotate(-90)`)
-  d3.selectAll('.curvePriceChange').remove()
-  drawLines()
-}
-
-/**
- *
- */
-// Code taken from https://codingartistweb.com/2021/06/double-range-slider-html-css-javascript/
-function slideTwo () {
-  const sliderOne = d3.select('#slider-1').node()
-  const sliderTwo = d3.select('#slider-2').node()
-  const minGap = 1
-  if (parseInt(sliderTwo.value) - parseInt(sliderOne.value) <= minGap) {
-    sliderTwo.value = parseInt(sliderOne.value) + minGap
-  }
-  fillColor()
-  d3.select('#secondBar')
-    .attr('transform', `translate(${sliderTwo.value / 100 * glob.sizes.vizSvgSizes.innerWidth + glob.sizes.vizSvgSizes.margin.left}, ${glob.sizes.vizSvgSizes.margin.top})`)
-  d3.selectAll('.curvePriceChange').remove()
-  drawLines()
-}
-
-/**
- *
- */
-// Code taken from https://codingartistweb.com/2021/06/double-range-slider-html-css-javascript/
-function fillColor () {
-  const sliderOne = d3.select('#slider-1').node()
-  const sliderTwo = d3.select('#slider-2').node()
-  const sliderTrack = d3.select('.slider-track').node()
-  const sliderMaxValue = sliderOne.max
-  const percent1 = (sliderOne.value / sliderMaxValue) * 100
-  const percent2 = (sliderTwo.value / sliderMaxValue) * 100
-  sliderTrack.style.background = `linear-gradient(to right, #dadae5 ${percent1}% , var(--front) ${percent1}% , var(--front) ${percent2}%, #dadae5 ${percent2}%)`
-}
 /**
  *
  */
@@ -129,7 +78,7 @@ function build () {
   svg.append('text')
     .text('Date')
     .style('text-anchor', 'middle')
-    .attr('transform', `translate(${glob.sizes.vizSvgSizes.margin.left + glob.sizes.vizSvgSizes.innerWidth / 2}, ${glob.sizes.vizSvgSizes.margin.top + glob.sizes.vizSvgSizes.innerHeight + glob.sizes.vizSvgSizes.margin.bottom/5 * 4})`)
+    .attr('transform', `translate(${glob.sizes.vizSvgSizes.margin.left + glob.sizes.vizSvgSizes.innerWidth / 2}, ${glob.sizes.vizSvgSizes.margin.top + glob.sizes.vizSvgSizes.innerHeight + glob.sizes.vizSvgSizes.margin.bottom / 5 * 4})`)
   svg
     .append('path')
     .attr('id', 'secondBar')
@@ -234,6 +183,18 @@ function preprocessTop6 () {
  *
  */
 function drawLines () {
+  const sliderOne = d3.select('#slider-1').node()
+  const sliderTwo = d3.select('#slider-2').node()
+
+  d3.select('#axisValuePriceChange')
+    .attr('transform', `translate(${glob.sizes.vizSvgSizes.margin.left + sliderOne.value / 100 * (glob.sizes.vizSvgSizes.innerWidth)}, ${glob.sizes.vizSvgSizes.margin.top})`)
+  d3.select('#priceLegendChange')
+    .attr('transform', `translate(${glob.sizes.vizSvgSizes.margin.left / 3 + sliderOne.value / 100 * (glob.sizes.vizSvgSizes.innerWidth)}, ${glob.sizes.vizSvgSizes.margin.top + glob.sizes.vizSvgSizes.innerHeight / 2}) rotate(-90)`)
+
+  d3.select('#secondBar')
+    .attr('transform', `translate(${sliderTwo.value / 100 * glob.sizes.vizSvgSizes.innerWidth + glob.sizes.vizSvgSizes.margin.left}, ${glob.sizes.vizSvgSizes.margin.top})`)
+  d3.selectAll('.curvePriceChange').remove()
+
   const xScale = glob.data.priceChanges.xScale
   const yScale = glob.data.priceChanges.yScale
   const selectedData = preprocessTop6()

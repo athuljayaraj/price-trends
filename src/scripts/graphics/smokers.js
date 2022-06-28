@@ -1,3 +1,4 @@
+import * as sliderHelper from './sliderHelper.js'
 /* eslint-disable no-undef */
 /* eslint-disable semi */
 
@@ -54,7 +55,7 @@ export function main (data) {
 
   buildNumberOfCigTextbox(chartGroup, xScale)
   buildRectangles(chartGroup, xScale)
-  fillColor()
+  sliderHelper.fillColor('#slider-1Smoker', '#slider-2Smoker', '.slider-trackSmoker')
 }
 
 /**
@@ -111,7 +112,7 @@ function buildNumberOfCigTextbox (chartGroup, xScale) {
     .attr('id', 'cig-num')
     .attr('value', 3)
     .on('change', function () {
-      slideOne()
+      sliderHelper.slideOne('#slider-1Smoker', '#slider-2Smoker', '.slider-trackSmoker', updateCost)
     })
   control
     .append('text')
@@ -178,7 +179,7 @@ function createSlider (chartGroup, xScale) {
     .attr('id', 'slider-1Smoker')
     .style('top', '-75px')
     .on('change', () => {
-      slideOne()
+      sliderHelper.slideOne('#slider-1Smoker', '#slider-2Smoker', '.slider-trackSmoker', updateCost)
       buildRectangles(chartGroup, xScale)
     })
 
@@ -190,52 +191,10 @@ function createSlider (chartGroup, xScale) {
     .attr('id', 'slider-2Smoker')
     .style('top', '-75px')
     .on('change', () => {
-      slideTwo()
+      sliderHelper.slideTwo('#slider-1Smoker', '#slider-2Smoker', '.slider-trackSmoker', updateCost)
       buildRectangles(chartGroup, xScale)
     })
   updateCost()
-}
-/**
- *
- */
-// Code taken from https://codingartistweb.com/2021/06/double-range-slider-html-css-javascript/
-function slideOne () {
-  const sliderOne = d3.select('#slider-1Smoker').node()
-  const sliderTwo = d3.select('#slider-2Smoker').node()
-  const minGap = 0
-  if (sliderTwo.value - sliderOne.value <= minGap) {
-    sliderOne.value = sliderTwo.value - minGap
-  }
-  fillColor()
-  updateCost()
-}
-
-/**
- *
- */
-// Code taken from https://codingartistweb.com/2021/06/double-range-slider-html-css-javascript/
-function slideTwo () {
-  const sliderOne = d3.select('#slider-1Smoker').node()
-  const sliderTwo = d3.select('#slider-2Smoker').node()
-  const minGap = 1
-  if (parseInt(sliderTwo.value) - parseInt(sliderOne.value) <= minGap) {
-    sliderTwo.value = parseInt(sliderOne.value) + minGap
-  }
-  fillColor()
-  updateCost()
-}
-/**
- *
- */
-// Code taken from https://codingartistweb.com/2021/06/double-range-slider-html-css-javascript/
-function fillColor () {
-  const sliderOne = document.getElementById('slider-1Smoker')
-  const sliderTwo = document.getElementById('slider-2Smoker')
-  const sliderTrack = document.querySelector('.slider-trackSmoker')
-  const sliderMaxValue = document.getElementById('slider-1Smoker').max
-  const percent1 = (sliderOne.value / sliderMaxValue) * 100
-  const percent2 = (sliderTwo.value / sliderMaxValue) * 100
-  sliderTrack.style.background = `linear-gradient(to right, #dadae5 ${percent1}% , var(--front) ${percent1}% , var(--front) ${percent2}%, #dadae5 ${percent2}%)`
 }
 
 const mapToDate = x => new Date(Math.round((new Date(x / 100 * (glob.data.smokers.limits.maxX.getTime() - glob.data.smokers.limits.minX.getTime()) + glob.data.smokers.limits.minX.getTime())).getTime()))
