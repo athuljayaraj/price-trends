@@ -95,7 +95,7 @@ function fillColor () {
   const sliderMaxValue = sliderOne.max
   const percent1 = (sliderOne.value / sliderMaxValue) * 100
   const percent2 = (sliderTwo.value / sliderMaxValue) * 100
-  sliderTrack.style.background = `linear-gradient(to right, #dadae5 ${percent1}% , #3264fe ${percent1}% , #3264fe ${percent2}%, #dadae5 ${percent2}%)`
+  sliderTrack.style.background = `linear-gradient(to right, #dadae5 ${percent1}% , var(--front) ${percent1}% , var(--front) ${percent2}%, #dadae5 ${percent2}%)`
 }
 /**
  *
@@ -138,8 +138,8 @@ function build () {
       .x(function (a) { return a.x })
       .y(function (a) { return yScale(a.y) })
     )
-    .attr('stroke', 'black')
-    .attr('stroke-width', '2')
+    .attr('stroke', 'var(--front)')
+    .attr('stroke-width', '1')
     .attr('fill', 'none')
     .attr('transform', 'translate(' + (sliderTwo.value / 100 * glob.sizes.vizSvgSizes.innerWidth + glob.sizes.vizSvgSizes.margin.left) + ',' + glob.sizes.vizSvgSizes.margin.top + ')')
 
@@ -277,7 +277,7 @@ function drawLines () {
     })
     .on('mouseleave', function (d) {
       d3.select(this)
-        .attr('stroke', 'black')
+        .attr('stroke', 'var(--front)')
         .attr('stroke-width', '2')
       d3.select('#tooltip')
         .remove()

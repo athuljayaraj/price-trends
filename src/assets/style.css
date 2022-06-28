@@ -50,6 +50,7 @@ input[type="range"] {
     top: 0;
     bottom: 0;
     border-radius: 5px;
+    color: var(--front)
 }
 
 input[type="range"]::-webkit-slider-runnable-track {
@@ -71,7 +72,7 @@ input[type="range"]::-webkit-slider-thumb {
     -webkit-appearance: none;
     height: 1em;
     width: 1em;
-    background-color: #3264fe;
+    background-color: var(--front);
     cursor: pointer;
     margin-top: -6px;
     pointer-events: auto;
@@ -84,7 +85,7 @@ input[type="range"]::-moz-range-thumb {
     width: 1.7em;
     cursor: pointer;
     border-radius: 50%;
-    background-color: #3264fe;
+    background-color: var(--front);
     pointer-events: auto;
 }
 
@@ -94,13 +95,13 @@ input[type="range"]::-ms-thumb {
     width: 1.7em;
     cursor: pointer;
     border-radius: 50%;
-    background-color: #3264fe;
+    background-color: var(--front);
     pointer-events: auto;
 }
 
 input[type="range"]:active::-webkit-slider-thumb {
     background-color: #ffffff;
-    border: 3px solid #3264fe;
+    border: 3px solid var(--front);
 }
 /*End of code for sliders*/
 
