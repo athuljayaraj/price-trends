@@ -151,15 +151,13 @@ function build () {
     })
 }
 /**
- * @param category
+ * @param category: int representing one of the three categories of products (other products (0), products with significant deviations from inflation (1), inflation (2))
  */
 function checkIfCatVisible (category) {
   return (glob.data.inflation.selected_elem.includes(category) && glob.data.inflation.hovered_elem === null) || glob.data.inflation.hovered_elem === category
 }
 /**
- * @param category
- * @param defaultVal
- * @param d
+ * @param category: int representing one of the three categories of products (other products (0), products with significant deviations from inflation (1), inflation (2))
  */
 function opacityFunc (category) {
   if (checkIfCatVisible(category)) {
@@ -169,7 +167,7 @@ function opacityFunc (category) {
   }
 }
 /**
- * @param svg
+ * @param svg: d3 selection of the svg element
  */
 function refreshData (svg) {
   const data = svg.selectAll('.curves-graph').data().map(function (d) {

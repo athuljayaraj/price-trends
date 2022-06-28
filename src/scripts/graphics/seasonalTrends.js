@@ -1,6 +1,6 @@
 import * as helper from './helper.js'
 /**
- * @param data
+ *
  */
 export function main () {
   if (glob.data.seasonalTrends.mainData === undefined) {

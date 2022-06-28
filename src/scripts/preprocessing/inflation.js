@@ -1,8 +1,7 @@
 /**
- * @param dataNorm
+ * @param dataNorm: data with prices of each product per month
  * @param inflationProducts, list of products to highlight
- * @param inflationProducts
- * @param inflation
+ * @param inflation: inflation data
  */
 export function main (dataNorm, inflationProducts, inflation) {
   // Create main object
