@@ -95,7 +95,7 @@ function fillColor () {
   const sliderMaxValue = sliderOne.max
   const percent1 = (sliderOne.value / sliderMaxValue) * 100
   const percent2 = (sliderTwo.value / sliderMaxValue) * 100
-  sliderTrack.style.background = `linear-gradient(to right, #dadae5 ${percent1}% , #3264fe ${percent1}% , #3264fe ${percent2}%, #dadae5 ${percent2}%)`
+  sliderTrack.style.background = `linear-gradient(to right, #dadae5 ${percent1}% , var(--front) ${percent1}% , var(--front) ${percent2}%, #dadae5 ${percent2}%)`
 }
 /**
  *
@@ -125,6 +125,11 @@ function build () {
   svg.append('text')
     .text('Price ($)')
     .attr('id', 'priceLegendChange')
+
+  svg.append('text')
+    .text('Date')
+    .style('text-anchor', 'middle')
+    .attr('transform', `translate(${glob.sizes.vizSvgSizes.margin.left + glob.sizes.vizSvgSizes.innerWidth / 2}, ${glob.sizes.vizSvgSizes.margin.top + glob.sizes.vizSvgSizes.innerHeight + glob.sizes.vizSvgSizes.margin.bottom/5 * 4})`)
   svg
     .append('path')
     .attr('id', 'secondBar')
@@ -133,8 +138,8 @@ function build () {
       .x(function (a) { return a.x })
       .y(function (a) { return yScale(a.y) })
     )
-    .attr('stroke', 'black')
-    .attr('stroke-width', '2')
+    .attr('stroke', 'var(--front)')
+    .attr('stroke-width', '1')
     .attr('fill', 'none')
     .attr('transform', 'translate(' + (sliderTwo.value / 100 * glob.sizes.vizSvgSizes.innerWidth + glob.sizes.vizSvgSizes.margin.left) + ',' + glob.sizes.vizSvgSizes.margin.top + ')')
 
@@ -247,12 +252,12 @@ function drawLines () {
       .x(d => xScale(Date.parse(d.date)))
       .y(d => yScale(d.price))
       .curve(d3.curveCatmullRom.alpha(0.5)))
-    .attr('stroke', 'black')
+    .attr('stroke', 'var(--front)')
     .attr('stroke-width', '2')
     .attr('fill', 'none')
     .on('mouseenter', function (d) {
       d3.select(this)
-        .attr('stroke', 'red')
+        .attr('stroke', 'var(--accent)')
         .attr('stroke-width', '4')
       d3.select('body')
         .append('div')
@@ -272,7 +277,7 @@ function drawLines () {
     })
     .on('mouseleave', function (d) {
       d3.select(this)
-        .attr('stroke', 'black')
+        .attr('stroke', 'var(--front)')
         .attr('stroke-width', '2')
       d3.select('#tooltip')
         .remove()
