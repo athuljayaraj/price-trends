@@ -150,7 +150,6 @@ function build () {
 
   d3.select('#axisValuePriceChange').selectAll('.tick text').nodes().forEach(function (d) {
     d3.select(d).attr('transform', `translate(0, ${-glob.data.priceChanges.yAxisTicksOffset})`)
-    console.log(d3.select(d).attr('transform'))
   })
 
   svg.append('text')
@@ -159,13 +158,14 @@ function build () {
   svg.append('text')
     .attr('id', 'textEnd')
     .style('text-anchor', 'middle')
-  // position y axis
 
+  // position y axis
   d3.select('#axisValuePriceChange')
     .attr('transform', `translate(${glob.sizes.vizSvgSizes.margin.left + sliderOne.value / 100 * (glob.sizes.vizSvgSizes.innerWidth)}, ${glob.sizes.vizSvgSizes.margin.top})`)
 
   d3.select('#priceLegendChange')
     .attr('transform', `translate(${glob.sizes.vizSvgSizes.margin.left / 3 + sliderOne.value / 100 * (glob.sizes.vizSvgSizes.innerWidth)}, ${glob.sizes.vizSvgSizes.margin.top + glob.sizes.vizSvgSizes.innerHeight / 2}) rotate(-90)`)
+
   // Create line plots and tooltip
   svg.append('g')
     .attr('id', 'linesPriceChange')
