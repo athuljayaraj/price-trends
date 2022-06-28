@@ -191,9 +191,10 @@ svg {
 select {
     padding: 10px;
     border-radius: var(--corner-rad);
-    color: var(--controls-text);
-    border-color: var(--controls-text);
+    color: var(--front);
+    border-color: var(--front);
     background-color: transparent;
+    font-size: 16px;
 }
 
 option {
@@ -201,7 +202,7 @@ option {
 }
 
 .controls p {
-    color: var(--controls-text);
+    color: var(--front);
 }
 
 body {
@@ -284,4 +285,16 @@ section p {
 
 .arrow-left:hover {
     background-color: var(--accent);
+}
+body:last-child {
+    margin-bottom: 10%;
+}
+#backgroundLeft {
+    top:0;
+    left:0;
+    background-color: var(--front);
+    width:31%;
+    position: fixed;
+    height: 100%;
+    z-index: -1;
 }
