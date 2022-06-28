@@ -21,6 +21,7 @@ export function main () {
 function createSlider () {
   const controls = d3.select('#controls3')
     .style('width', `${glob.sizes.vizSvgSizes.innerWidth}` + 'px')
+    .style('padding', '30px 30px 20px 40px')
     .style('padding-left', `${glob.sizes.vizSvgSizes.margin.left}` + 'px')
     .append('div')
     .attr('class', 'slider-container')
@@ -80,7 +81,7 @@ function build () {
   svg.append('text')
     .text('Date')
     .style('text-anchor', 'middle')
-    .attr('transform', `translate(${glob.sizes.vizSvgSizes.margin.left + glob.sizes.vizSvgSizes.innerWidth / 2}, ${glob.sizes.vizSvgSizes.margin.top + glob.sizes.vizSvgSizes.innerHeight + glob.sizes.vizSvgSizes.margin.bottom / 5 * 4})`)
+    .attr('transform', `translate(${glob.sizes.vizSvgSizes.margin.left + glob.sizes.vizSvgSizes.innerWidth / 2}, ${glob.sizes.vizSvgSizes.margin.top + glob.sizes.vizSvgSizes.innerHeight + glob.sizes.vizSvgSizes.margin.bottom})`)
   svg
     .append('path')
     .attr('id', 'secondBar')
