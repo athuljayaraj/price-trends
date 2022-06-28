@@ -188,7 +188,6 @@ function build () {
         d3.select(this)
           .attr('stroke', 'var(--accent)')
           .attr('stroke-width', '4')
-          // console.log(d[0].date.getFullYear() === e.originalYear,d[0].date.getFullYear(),e.originalYear);
         d3.selectAll('.scatterSeasons')
           .filter(e => { return d[0].originalYear === e.originalYear })
           .attr('fill', 'var(--accent)')

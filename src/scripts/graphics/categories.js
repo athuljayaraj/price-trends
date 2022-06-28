@@ -37,7 +37,6 @@ export function main () {
 function reBuild (category) {
   const svg = d3.select('#cat' + category.charAt(0).toUpperCase() + category.slice(1))
   svg.selectAll('*').remove()
-  console.log(glob.data.categories[category].current_gpe)
   build(category)
 }
 /**
