@@ -58,6 +58,9 @@ window.glob = {
     priceChanges.main(glob.data)
   })
   function build(data) {
+    
+    d3.selectAll('.tmp').remove()
+    d3.select('#tooltip').remove()
     seasons.main(glob.data)
     smokers.main(glob.data.smokers)
     inflation.main()

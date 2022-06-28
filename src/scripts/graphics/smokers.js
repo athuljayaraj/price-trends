@@ -52,14 +52,50 @@ export function main (data) {
     .attr('transform', `translate(${glob.sizes.vizSvgSizes.margin.left}, ${glob.sizes.vizSvgSizes.margin.top})`)
     .call(yAxis)
 
-  buildNumberOfCigTextbox(data.data)
+  buildNumberOfCigTextbox(chartGroup, xScale)
+  buildRectangles(chartGroup, xScale)
+  fillColor()
+}
+
+/**
+ *
+ */
+function clearRectangles () {
+  d3.select('#active-smoking').remove()
+}
+
+/**
+ * @param chartGroup
+ * @param xScale
+ */
+function buildRectangles (chartGroup, xScale) {
+  const sliderOne = d3.select('#slider-1Smoker').node()
+  const sliderTwo = d3.select('#slider-2Smoker').node()
+  const activeStartDate = mapToDate(sliderOne.value)
+  const activeEndDate = mapToDate(sliderTwo.value)
+  clearRectangles()
+
+  chartGroup
+    .append('rect')
+    .attr('class', 'smoker-active-region')
+    .attr('x', xScale(activeStartDate))
+    .attr('y', 0)
+    .attr('width', xScale(activeEndDate) - xScale(activeStartDate))
+    .attr('height', glob.sizes.vizSvgSizes.innerHeight)
+    .attr('fill', 'blue')
+    .attr('stroke', '#f0f0f0')
+    .attr('stroke-width', '1')
+    .attr('opacity', 0.5)
+    .attr('id', 'active-smoking')
 }
 
 /**
  * @param data
  * @param svg
+ * @param chartGroup
+ * @param xScale
  */
-function buildNumberOfCigTextbox (data, svg) {
+function buildNumberOfCigTextbox (chartGroup, xScale) {
   const control = d3.select('#cig-control')
     .style('width', `${glob.sizes.vizSvgSizes.innerWidth}` + 'px')
     .style('padding', '30px 30px 20px 40px')
@@ -71,8 +107,9 @@ function buildNumberOfCigTextbox (data, svg) {
     .text('Number of cigarettes per day: ')
     .append('input')
     .attr('type', 'number')
-    .attr('min', 0)
+    .attr('min', 1)
     .attr('id', 'cig-num')
+    .attr('value', 3)
     .on('change', function () {
       slideOne()
     })
@@ -80,7 +117,24 @@ function buildNumberOfCigTextbox (data, svg) {
     .append('text')
     .text('Total cost in ($): 0')
     .attr('id', 'cig-cost')
-  createSlider()
+    .style('position', 'relative')
+    .style('left', `${(glob.sizes.vizSvgSizes.width / 2 - 90)}` + 'px')
+    .style('top', `${-(glob.sizes.vizSvgSizes.height) - 55}` + 'px')
+    .style('margin-left', '-80px')
+  createSlider(chartGroup, xScale)
+}
+
+/**
+ *
+ */
+function updateCost () {
+  const sliderOne = d3.select('#slider-1Smoker').node()
+  const sliderTwo = d3.select('#slider-2Smoker').node()
+  const numOfCigsPerDay = document.getElementById('cig-num').value
+  const startDate = mapToDate(sliderOne.value)
+  const endDate = mapToDate(sliderTwo.value)
+  const updatedCost = calculateCost(startDate, endDate, numOfCigsPerDay)
+  d3.select('#cig-cost').text('Total cost in ($): ' + updatedCost)
 }
 
 /**
@@ -88,25 +142,24 @@ function buildNumberOfCigTextbox (data, svg) {
  * @param startDate
  * @param endDate
  * @param numOfCigs
+ * @param numOfCigsPerDay
  */
-function calculateCost (startDate, endDate) {
+function calculateCost (startDate, endDate, numOfCigsPerDay) {
   const data = glob.data.smokers.data
   const NUMBER_OF_DAYS_PER_MONTH = 30
   const NUMBER_OF_CIGS_IN_DATA = 200
-  const numOfCigsPerDay = document.getElementById('cig-num').value
   let partialSum = 0
   data.filter(d => d[0] >= startDate && d[0] <= endDate).forEach(element => {
     partialSum = partialSum + element[1]
   });
-  console.log(partialSum)
   const totalCost = Math.round((partialSum / NUMBER_OF_CIGS_IN_DATA) * numOfCigsPerDay * NUMBER_OF_DAYS_PER_MONTH)
-  d3.select('#cig-cost').text('Total cost in ($): ' + totalCost);
-  return partialSum * numOfCigsPerDay;
+  return totalCost;
 }
 /**
- *
+ * @param chartGroup
+ * @param xScale
  */
-function createSlider () {
+function createSlider (chartGroup, xScale) {
   const controls = d3.select('#cig-control').attr('transform', `translate(${glob.sizes.vizSvgSizes.margin.left}, ${glob.sizes.vizSvgSizes.innerHeight + glob.sizes.vizSvgSizes.margin.top})`)
     .attr('width', `${glob.sizes.vizSvgSizes.innerWidth}`)
     .attr('height', 50)
@@ -126,6 +179,7 @@ function createSlider () {
     .style('top', '-75px')
     .on('change', () => {
       slideOne()
+      buildRectangles(chartGroup, xScale)
     })
 
   controls.append('input')
@@ -137,7 +191,9 @@ function createSlider () {
     .style('top', '-75px')
     .on('change', () => {
       slideTwo()
+      buildRectangles(chartGroup, xScale)
     })
+  updateCost()
 }
 /**
  *
@@ -151,11 +207,7 @@ function slideOne () {
     sliderOne.value = sliderTwo.value - minGap
   }
   fillColor()
-
-  const mapToDate = x => new Date(Math.round((new Date(x / 100 * (glob.data.smokers.limits.maxX.getTime() - glob.data.smokers.limits.minX.getTime()) + glob.data.smokers.limits.minX.getTime())).getTime()))
-  const startDate = mapToDate(sliderOne.value)
-  const endDate = mapToDate(sliderTwo.value)
-  calculateCost(startDate, endDate)
+  updateCost()
 }
 
 /**
@@ -170,10 +222,7 @@ function slideTwo () {
     sliderTwo.value = parseInt(sliderOne.value) + minGap
   }
   fillColor()
-  const mapToDate = x => new Date(Math.round((new Date(x / 100 * (glob.data.smokers.limits.maxX.getTime() - glob.data.smokers.limits.minX.getTime()) + glob.data.smokers.limits.minX.getTime())).getTime()))
-  const startDate = mapToDate(sliderOne.value)
-  const endDate = mapToDate(sliderTwo.value)
-  calculateCost(startDate, endDate)
+  updateCost()
 }
 /**
  *
@@ -188,3 +237,5 @@ function fillColor () {
   const percent2 = (sliderTwo.value / sliderMaxValue) * 100
   sliderTrack.style.background = `linear-gradient(to right, #dadae5 ${percent1}% , #3264fe ${percent1}% , #3264fe ${percent2}%, #dadae5 ${percent2}%)`
 }
+
+const mapToDate = x => new Date(Math.round((new Date(x / 100 * (glob.data.smokers.limits.maxX.getTime() - glob.data.smokers.limits.minX.getTime()) + glob.data.smokers.limits.minX.getTime())).getTime()))

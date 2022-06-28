@@ -1,9 +1,11 @@
+import * as helper from './helper.js'
 /**
  *
  */
 export function main () {
   const dataGlob = glob.data.categories
-  Array.from(['same_same', 'same_diff', 'diff_same']).forEach(function (category) {
+  Array.from(['same_same', 'same_diff', 'diff_same']).forEach(function (category, i) {
+    helper.createHelper('vizualization-divCat' + (i + 1), 2, 'categories'+(i+1))
     const data = dataGlob[category]
     const controls = d3.select('#controls' + category.charAt(0).toUpperCase() + category.slice(1))
     // controls
@@ -35,7 +37,6 @@ export function main () {
 function reBuild (category) {
   const svg = d3.select('#cat' + category.charAt(0).toUpperCase() + category.slice(1))
   svg.selectAll('*').remove()
-  console.log(glob.data.categories[category].current_gpe)
   build(category)
 }
 /**
