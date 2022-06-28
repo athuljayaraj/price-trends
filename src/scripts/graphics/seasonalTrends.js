@@ -1,10 +1,11 @@
 /**
  * @param data
  */
-export function main() {
+export function main () {
   if (glob.data.seasonalTrends.mainData === undefined) {
     return
   }
+  createHelper()
   const controls = d3.select('#controls1')
   controls
     .append('p')
@@ -30,7 +31,7 @@ export function main() {
 /**
  *
  */
-function reBuild() {
+function reBuild () {
   d3.select('#vizualization-svg1')
     .selectAll('*')
     .remove()
@@ -39,7 +40,7 @@ function reBuild() {
 /**
  *
  */
-function build() {
+function build () {
   const data = glob.data.seasonalTrends.mainData.filter(d => d.name === glob.data.seasonalTrends.current_selection)[0]
   const svg = d3.select('#vizualization-svg1')
   // Create scales
@@ -157,7 +158,7 @@ function build() {
     .call(yAxis)
   svg.append('text')
     .text('Price ($)')
-    .attr('transform', `translate(${glob.sizes.vizSvgSizes.margin.left/2}, ${glob.sizes.vizSvgSizes.margin.top/2})`)
+    .attr('transform', `translate(${glob.sizes.vizSvgSizes.margin.left / 2}, ${glob.sizes.vizSvgSizes.margin.top / 2})`)
   // Create line plots
   const lineGroup = svg.append('g')
     .attr('transform', `translate(${glob.sizes.vizSvgSizes.margin.left}, ${glob.sizes.vizSvgSizes.margin.top})`)
@@ -177,6 +178,11 @@ function build() {
         d3.select(this)
           .attr('stroke', 'red')
           .attr('stroke-width', '4')
+          // console.log(d[0].date.getFullYear() === e.originalYear,d[0].date.getFullYear(),e.originalYear);
+        d3.selectAll('.scatterSeasons')
+          .filter(e => { return d[0].originalYear === e.originalYear })
+          .attr('fill', 'var(--accent)')
+          .attr('r', '4px')
         d3.select('body')
           .append('div')
           .attr('id', 'tooltip')
@@ -199,4 +205,58 @@ function build() {
       }
       )
   })
+}
+/**
+ *
+ */
+function createHelper () {
+  const helper = d3.select('#vizualization-div1')
+    .append('div')
+    .attr('class', 'noselect')
+    .text('?')
+    .style('font-size', '20px')
+    .style('background-color', 'var(--front)')
+    .style('color', 'white')
+    .style('padding', '10px')
+    .style('border-radius', '50px')
+    .style('width', '45px')
+    .style('display', 'inline-block')
+    .style('text-align', 'center')
+    .on('mouseenter', function () {
+      d3.select(this)
+        .style('background-color', 'var(--accent)')
+    })
+    .on('mouseleave', function () {
+      d3.select(this)
+        .style('background-color', 'var(--front)')
+    })
+    .on('click', function () {
+      createHelp()
+    })
+  const divBoundings = d3.select('#vizualization-div1').node().getBoundingClientRect()
+  helper.style('position', 'absolute')
+    .style('right', '20px')
+    .style('top', divBoundings.top + 'px')
+}
+/**
+ *
+ */
+function createHelp () {
+  const popupHelp = d3.select('body')
+    .append('div')
+    .attr('id', 'popupHelp')
+    .on('click', function () {
+      d3.select(this).remove()
+    })
+  const contentDiv = popupHelp.append('div').attr('id', 'mainPopup')
+  d3.text('assets/data/popup/seasons/1.html').then(function (data) {
+    console.log(data)
+    contentDiv.node().innerHTML = data
+  })
+  popupHelp
+    .append('div')
+    .attr('class', 'arrow-right')
+  popupHelp
+    .append('div')
+    .attr('class', 'arrow-left')
 }
