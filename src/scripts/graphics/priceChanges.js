@@ -124,6 +124,11 @@ function build () {
   svg.append('text')
     .text('Price ($)')
     .attr('id', 'priceLegendChange')
+
+  svg.append('text')
+    .text('Date')
+    .style('text-anchor', 'middle')
+    .attr('transform', `translate(${glob.sizes.vizSvgSizes.margin.left + glob.sizes.vizSvgSizes.innerWidth / 2}, ${glob.sizes.vizSvgSizes.margin.top + glob.sizes.vizSvgSizes.innerHeight + glob.sizes.vizSvgSizes.margin.bottom/5 * 4})`)
   svg
     .append('path')
     .attr('id', 'secondBar')
@@ -246,12 +251,12 @@ function drawLines () {
       .x(d => xScale(Date.parse(d.date)))
       .y(d => yScale(d.price))
       .curve(d3.curveCatmullRom.alpha(0.5)))
-    .attr('stroke', 'black')
+    .attr('stroke', 'var(--front)')
     .attr('stroke-width', '2')
     .attr('fill', 'none')
     .on('mouseenter', function (d) {
       d3.select(this)
-        .attr('stroke', 'red')
+        .attr('stroke', 'var(--accent)')
         .attr('stroke-width', '4')
       d3.select('body')
         .append('div')
