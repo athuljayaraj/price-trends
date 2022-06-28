@@ -53,6 +53,7 @@ export function main (data) {
     .call(yAxis)
 
   buildNumberOfCigTextbox(data.data)
+  fillColor()
 }
 
 /**
