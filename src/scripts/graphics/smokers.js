@@ -1,4 +1,6 @@
 import * as sliderHelper from './sliderHelper.js'
+import * as helper from './helper.js'
+
 /* eslint-disable no-undef */
 /* eslint-disable semi */
 
@@ -7,6 +9,8 @@ import * as sliderHelper from './sliderHelper.js'
  * @param {*} data
  */
 export function main (data) {
+  helper.createHelper('vizualization-div-smokers', 3, 'smokers')
+
   const xScale = d3.scaleTime()
     .domain([data.limits.minX, data.limits.maxX])
     .range([0, glob.sizes.vizSvgSizes.innerWidth])
@@ -27,6 +31,11 @@ export function main (data) {
   svg.append('text')
     .text('Price ($)')
     .attr('transform', `translate(${glob.sizes.vizSvgSizes.margin.left / 2}, ${glob.sizes.vizSvgSizes.margin.top / 2})`)
+  svg.append('text')
+    .text('Date')
+    .attr('x', glob.sizes.vizSvgSizes.margin.left + glob.sizes.vizSvgSizes.innerWidth / 2)
+    .attr('y', glob.sizes.vizSvgSizes.margin.top + glob.sizes.vizSvgSizes.innerHeight + glob.sizes.vizSvgSizes.margin.bottom)
+    .attr('text-anchor', 'middle')
   // .attr('height', '100%')
   var chartGroup = svg
     .append('g')
@@ -61,7 +70,7 @@ export function main (data) {
 /**
  *
  */
-function clearRectangles () {
+function clearRectangles() {
   d3.select('#active-smoking').remove()
 }
 
@@ -69,7 +78,7 @@ function clearRectangles () {
  * @param chartGroup
  * @param xScale
  */
-function buildRectangles (chartGroup, xScale) {
+function buildRectangles(chartGroup, xScale) {
   const sliderOne = d3.select('#slider-1Smoker').node()
   const sliderTwo = d3.select('#slider-2Smoker').node()
   const activeStartDate = mapToDate(sliderOne.value)
@@ -96,7 +105,7 @@ function buildRectangles (chartGroup, xScale) {
  * @param chartGroup
  * @param xScale
  */
-function buildNumberOfCigTextbox (chartGroup, xScale) {
+function buildNumberOfCigTextbox(chartGroup, xScale) {
   const control = d3.select('#cig-control')
     .style('width', `${glob.sizes.vizSvgSizes.innerWidth}` + 'px')
     .style('padding', '30px 30px 20px 40px')
@@ -110,13 +119,13 @@ function buildNumberOfCigTextbox (chartGroup, xScale) {
     .attr('type', 'number')
     .attr('min', 1)
     .attr('id', 'cig-num')
-    .attr('value', 3)
+    .attr('value', 13.8)
     .on('change', function () {
       sliderHelper.slideOne('#slider-1Smoker', '#slider-2Smoker', '.slider-trackSmoker', updateCost)
     })
   control
     .append('text')
-    .text('Total cost in ($): 0')
+    .text('Total cost: $0')
     .attr('id', 'cig-cost')
     .style('position', 'relative')
     .style('left', `${(glob.sizes.vizSvgSizes.width / 2 - 90)}` + 'px')
@@ -128,14 +137,14 @@ function buildNumberOfCigTextbox (chartGroup, xScale) {
 /**
  *
  */
-function updateCost () {
+function updateCost() {
   const sliderOne = d3.select('#slider-1Smoker').node()
   const sliderTwo = d3.select('#slider-2Smoker').node()
   const numOfCigsPerDay = document.getElementById('cig-num').value
   const startDate = mapToDate(sliderOne.value)
   const endDate = mapToDate(sliderTwo.value)
   const updatedCost = calculateCost(startDate, endDate, numOfCigsPerDay)
-  d3.select('#cig-cost').text('Total cost in ($): ' + updatedCost)
+  d3.select('#cig-cost').text('Total cost: $' + numberWithCommas(updatedCost))
 }
 
 /**
@@ -145,7 +154,7 @@ function updateCost () {
  * @param numOfCigs
  * @param numOfCigsPerDay
  */
-function calculateCost (startDate, endDate, numOfCigsPerDay) {
+function calculateCost(startDate, endDate, numOfCigsPerDay) {
   const data = glob.data.smokers.data
   const NUMBER_OF_DAYS_PER_MONTH = 30
   const NUMBER_OF_CIGS_IN_DATA = 200
@@ -160,7 +169,7 @@ function calculateCost (startDate, endDate, numOfCigsPerDay) {
  * @param chartGroup
  * @param xScale
  */
-function createSlider (chartGroup, xScale) {
+function createSlider(chartGroup, xScale) {
   const controls = d3.select('#cig-control').attr('transform', `translate(${glob.sizes.vizSvgSizes.margin.left}, ${glob.sizes.vizSvgSizes.innerHeight + glob.sizes.vizSvgSizes.margin.top})`)
     .attr('width', `${glob.sizes.vizSvgSizes.innerWidth}`)
     .attr('height', 50)
@@ -198,3 +207,5 @@ function createSlider (chartGroup, xScale) {
 }
 
 const mapToDate = x => new Date(Math.round((new Date(x / 100 * (glob.data.smokers.limits.maxX.getTime() - glob.data.smokers.limits.minX.getTime()) + glob.data.smokers.limits.minX.getTime())).getTime()))
+
+const numberWithCommas = x => x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
