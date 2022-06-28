@@ -255,7 +255,7 @@ section p {
 }
 #mainPopup-content {
 
-    background-color: rgb(255, 255, 255);
+    background-color: var(--background);
     border-radius: 25px;
     padding: 25px;
     overflow: hidden;
@@ -270,7 +270,10 @@ section p {
     object-fit: cover;
     
 }
-
+#mainPopup-content p {
+    font-size: 18px;
+    color:var(--front)
+}
 .arrow-right {
     position: fixed;
     top: 45%;
