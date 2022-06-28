@@ -193,6 +193,7 @@ select {
     color: var(--front);
     border-color: var(--front);
     background-color: transparent;
+    font-size: 16px;
 }
 
 option {
@@ -286,4 +287,13 @@ section p {
 }
 body:last-child {
     margin-bottom: 10%;
+}
+#backgroundLeft {
+    top:0;
+    left:0;
+    background-color: var(--front);
+    width:31%;
+    position: fixed;
+    height: 100%;
+    z-index: -1;
 }
