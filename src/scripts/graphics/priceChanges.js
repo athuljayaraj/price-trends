@@ -1,4 +1,5 @@
 import * as sliderHelper from './sliderHelper.js'
+import * as helper from './helper.js'
 /**
  * @param data
  */
@@ -6,6 +7,7 @@ export function main () {
   if (glob.data.priceChanges.mainData === undefined) {
     return
   }
+  helper.createHelper('vizualization-div-priceChagnes', 2, 'priceChanges')
   glob.data.priceChanges.yAxisTicksOffset = 4
   createSlider()
   build()

@@ -45,5 +45,5 @@ export function fillColor (sliderId1, sliderId2, sliderTrackClass) {
   const sliderMaxValue = sliderOne.max
   const percent1 = (sliderOne.value / sliderMaxValue) * 100
   const percent2 = (sliderTwo.value / sliderMaxValue) * 100
-  sliderTrack.style.background = `linear-gradient(to right, #dadae5 ${percent1}% , var(--front) ${percent1}% , var(--front) ${percent2}%, #dadae5 ${percent2}%)`
+  sliderTrack.style.background = `linear-gradient(to right, #dadae5 ${percent1}% , #3264fe ${percent1}% , #3264fe ${percent2}%, #dadae5 ${percent2}%)`
 }
