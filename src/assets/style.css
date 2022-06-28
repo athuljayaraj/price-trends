@@ -290,8 +290,8 @@ section p {
     width: 10%;
     height: 10%;
     background-color: var(--front);
-    -webkit-mask: url(data/images/angle-right-solid.svg) no-repeat center;
-    mask: url(data/images/angle-right-solid.svg) no-repeat center;
+    -webkit-mask: url(images/angle-right-solid.svg) no-repeat center;
+    mask: url(images/angle-right-solid.svg) no-repeat center;
 }
 
 .arrow-left {
@@ -301,8 +301,8 @@ section p {
     width: 10%;
     height: 10%;
     background-color: var(--front);
-    -webkit-mask: url(data/images/angle-left-solid.svg) no-repeat center;
-    mask: url(data/images/angle-left-solid.svg) no-repeat center;
+    -webkit-mask: url(images/angle-left-solid.svg) no-repeat center;
+    mask: url(images/angle-left-solid.svg) no-repeat center;
 }
 
 .arrow-right:hover {
