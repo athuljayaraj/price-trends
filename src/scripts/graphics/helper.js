@@ -23,7 +23,7 @@ export function createHelper (divId, numStates, folderName) {
     .style('color', 'white')
     .style('padding', '10px')
     .style('border-radius', '50px')
-    .style('width', '45px')
+    .style('width', '43px')
     .style('display', 'inline-block')
     .style('text-align', 'center')
     .on('mouseenter', function () {
