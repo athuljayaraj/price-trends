@@ -41,13 +41,12 @@ window.glob = {
             preprocessSmokers.main(dataNorm)
             preprocessInfl.main(dataNorm, inflationProducts, inflation)
             preprocessCat.main(dataNorm, categories)
+            preprocessPriceChanges.main(dataNorm)
             build(glob.data)
           })
         })
       })
     })
-    preprocessPriceChanges.main(dataNorm)
-    priceChanges.main(glob.data)
   })
 
   window.addEventListener('resize', function () {
@@ -55,7 +54,6 @@ window.glob = {
     d3.selectAll('.controls').selectAll('*').remove()
     resize.updateResize()
     build()
-    priceChanges.main(glob.data)
   })
   function build(data) {
     
@@ -65,6 +63,7 @@ window.glob = {
     smokers.main(glob.data.smokers)
     inflation.main()
     categories.main()
+    priceChanges.main(glob.data)
     styling.main()
   }
 })(d3)
