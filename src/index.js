@@ -42,7 +42,7 @@ window.glob = {
             preprocessInfl.main(dataNorm, inflationProducts, inflation)
             preprocessCat.main(dataNorm, categories)
             preprocessPriceChanges.main(dataNorm)
-            build(glob.data)
+            build()
           })
         })
       })
@@ -55,8 +55,8 @@ window.glob = {
     resize.updateResize()
     build()
   })
-  function build(data) {
-    
+  function build() {
+
     d3.selectAll('.tmp').remove()
     d3.select('#tooltip').remove()
     seasons.main(glob.data)

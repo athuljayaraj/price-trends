@@ -313,8 +313,8 @@ section p {
     background-color: var(--accent);
 }
 
-body:last-child {
-    margin-bottom: 10%;
+#last-container {
+    margin-bottom: 5%;
 }
 
 #backgroundLeft {
