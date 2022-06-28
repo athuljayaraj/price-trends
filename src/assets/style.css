@@ -193,6 +193,7 @@ select {
     border-radius: var(--corner-rad);
     color: var(--front);
     border-color: var(--front);
+    border-width: 3px;
     background-color: transparent;
     font-size: 16px;
 }
