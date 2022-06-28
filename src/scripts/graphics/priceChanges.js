@@ -8,6 +8,7 @@ export function main () {
   glob.data.priceChanges.yAxisTicksOffset = 4
   createSlider()
   build()
+  fillColor()
 }
 
 /**
