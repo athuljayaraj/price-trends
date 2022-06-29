@@ -1,7 +1,7 @@
 /* eslint-disable no-undef */ // For the glob variable
 /**
  * @param {string} divId id of the div containing the svg
- * @param {int} numStates number of window that explain how the visualization works
+ * @param {number} numStates number of window that explain how the visualization works
  * @param {string} folderName name of the folder where the html file for the help content is
  */
 export function createHelper (divId, numStates, folderName) {
