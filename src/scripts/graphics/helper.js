@@ -8,12 +8,12 @@ export function createHelper (divId, numStates, folderName) {
   d3.select('#' + divId)
     .select(function () { return this.parentNode })
     .append('div')
-    .style('width','0px')
-    .style('height','0px')
+    .style('width', '0px')
+    .style('height', '0px')
     .append('div')
     .style('position', 'relative')
     .style('right', '20px')
-    .style('top', '0px')
+    .style('top', '-35px')
     .style('float', 'right')
     .attr('class', 'noselect tmp')
     .text('?')
@@ -88,7 +88,7 @@ function createHelp (numStates, folderName) {
     })
 }
 /**
- * @param contentDiv: d3 selection of the div that will contain the help 
+ * @param contentDiv: d3 selection of the div that will contain the help
  * @param numStates: number of window that explain how the visualization works
  * @param folderName: name of the folder where the html file for the help content is
  */

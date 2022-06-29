@@ -1,13 +1,14 @@
-// Code taken from https://codingartistweb.com/2021/06/double-range-slider-html-css-javascript/
+// Code taken and adapted from https://codingartistweb.com/2021/06/double-range-slider-html-css-javascript/
 /**
- * @param sliderId1
- * @param sliderId2
- * @param updateGraph
+ * @param {string} sliderId1 The id selector of the first slider
+ * @param {string} sliderId2 The id selector of the second slider
+ * @param {string} sliderTrackClass The class selector of the slider track div
+ * @param {Function} updateGraph The function to update the graph
  */
 export function slideOne (sliderId1, sliderId2, sliderTrackClass, updateGraph) {
   const sliderOne = d3.select(sliderId1).node()
   const sliderTwo = d3.select(sliderId2).node()
-  const minGap = 0
+  const minGap = 1
   if (sliderTwo.value - sliderOne.value <= minGap) {
     sliderOne.value = sliderTwo.value - minGap
   }
@@ -16,11 +17,12 @@ export function slideOne (sliderId1, sliderId2, sliderTrackClass, updateGraph) {
 }
 
 /**
- * @param sliderId1
- * @param sliderId2
- * @param updateGraph
+ * @param {string} sliderId1 The id selector of the first slider
+ * @param {string} sliderId2 The id selector of the second slider
+ * @param {string} sliderTrackClass The class selector of the slider track div
+ * @param {Function} updateGraph The function to update the graph
  */
-// Code taken from https://codingartistweb.com/2021/06/double-range-slider-html-css-javascript/
+// Code taken and adapted from https://codingartistweb.com/2021/06/double-range-slider-html-css-javascript/
 export function slideTwo (sliderId1, sliderId2, sliderTrackClass, updateGraph) {
   const sliderOne = d3.select(sliderId1).node()
   const sliderTwo = d3.select(sliderId2).node()
@@ -33,11 +35,11 @@ export function slideTwo (sliderId1, sliderId2, sliderTrackClass, updateGraph) {
 }
 
 /**
- * @param sliderId1
- * @param sliderId2
- * @param sliderTrackClass
+ * @param {string} sliderId1 The id selector of the first slider
+ * @param {string} sliderId2 The id selector of the second slider
+ * @param {string} sliderTrackClass The class selector of the slider track div
  */
-// Code taken from https://codingartistweb.com/2021/06/double-range-slider-html-css-javascript/
+// Code taken and adapted from https://codingartistweb.com/2021/06/double-range-slider-html-css-javascript/
 export function fillColor (sliderId1, sliderId2, sliderTrackClass) {
   const sliderOne = d3.select(sliderId1).node()
   const sliderTwo = d3.select(sliderId2).node()
