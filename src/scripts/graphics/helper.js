@@ -1,12 +1,11 @@
 
 /**
- * @param svgId
- * @param divId
- * @param numStates
- * @param folderName
+ * @param divId: id of the div containing the svg
+ * @param numStates: number of window that explain how the visualization works
+ * @param folderName: name of the folder where the html file for the help content is
  */
 export function createHelper (divId, numStates, folderName) {
-  const helper = d3.select('#' + divId)
+  d3.select('#' + divId)
     .select(function () { return this.parentNode })
     .append('div')
     .style('width','0px')
@@ -39,8 +38,8 @@ export function createHelper (divId, numStates, folderName) {
     })
 }
 /**
- * @param numStates
- * @param folderName
+ * @param numStates: number of window that explain how the visualization works
+ * @param folderName: name of the folder where the html file for the help content is
  */
 function createHelp (numStates, folderName) {
   d3.select('#popup')
@@ -89,9 +88,9 @@ function createHelp (numStates, folderName) {
     })
 }
 /**
- * @param contentDiv
- * @param numStates
- * @param folderName
+ * @param contentDiv: d3 selection of the div that will contain the help 
+ * @param numStates: number of window that explain how the visualization works
+ * @param folderName: name of the folder where the html file for the help content is
  */
 function loadNext (contentDiv, numStates, folderName) {
   d3.text('assets/data/popup/' + folderName + '/' + glob.data.seasonalTrends.popup.curr + '.html').then(function (data) {
