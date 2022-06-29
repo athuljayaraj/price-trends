@@ -310,10 +310,22 @@ function createCurves (selectedData) {
 function formatYAxesDateLabels (selectedData) {
   const xScale = glob.data.priceChanges.xScale
   const formatDate = d => (new Date(d)).toLocaleDateString('en-CA', { year: 'numeric', month: 'long' })
-  d3.select('#textStart')
+  const textStartBoundings = d3.select('#textStart')
     .text(formatDate(selectedData[0][0].date))
     .attr('transform', 'translate(' + (xScale(Date.parse(selectedData[0][0].date)) + glob.sizes.vizSvgSizes.margin.left) + ',' + glob.sizes.vizSvgSizes.margin.top / 2 + ')')
-  d3.select('#textEnd')
+    .node()
+    .getBoundingClientRect()
+  const textEndBoundings = d3.select('#textEnd')
     .text(formatDate(selectedData[0][1].date))
     .attr('transform', 'translate(' + (xScale(Date.parse(selectedData[0][1].date)) + glob.sizes.vizSvgSizes.margin.left) + ',' + glob.sizes.vizSvgSizes.margin.top / 2 + ')')
+    .node()
+    .getBoundingClientRect()
+
+  // Adjust position to avoid overlapping
+  if (textStartBoundings.x + textStartBoundings.width / 2 >= textEndBoundings.x - textEndBoundings.width / 2) {
+    d3.select('#textEnd')
+      .attr('transform', 'translate(' + (xScale(Date.parse(selectedData[0][1].date)) + glob.sizes.vizSvgSizes.margin.left + textEndBoundings.width / 2.0) + ',' + glob.sizes.vizSvgSizes.margin.top / 2 + ')')
+    d3.select('#textStart')
+      .attr('transform', 'translate(' + (xScale(Date.parse(selectedData[0][1].date)) + glob.sizes.vizSvgSizes.margin.left - textStartBoundings.width / 2.0) + ',' + glob.sizes.vizSvgSizes.margin.top / 2 + ')')
+  }
 }
