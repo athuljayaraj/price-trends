@@ -1,5 +1,5 @@
 /**
- * @param dataNorm
+ * @param {object[]} dataNorm The data set to process
  */
 export function main (dataNorm) {
   /* We would like something like this:
@@ -17,7 +17,6 @@ export function main (dataNorm) {
       dicoData[d.product] = []
     }
     const date = d.date.slice(0, -2) + '02' // Because the 1st day returns the previous month
-    // date = date.toLocaleDateString('fr-CA', { year: 'numeric', month: 'long', day: 'numeric' })
 
     dicoData[d.product][date] = {}
     dicoData[d.product][date].value = parseFloat(d.value)
@@ -33,11 +32,9 @@ export function main (dataNorm) {
       })
     }
   }
-  
+
   glob.data.priceChanges = {
     mainData: data,
-    currentSelectedStartDate: data[0].date,
-    currentSelectedEndDate: data[1].date,
     minDate: d3.min(dataNorm, d => (new Date(d.date.slice(0, -2) + '02')).getTime()),
     maxDate: d3.max(dataNorm, d => (new Date(d.date.slice(0, -2) + '02')).getTime())
   }

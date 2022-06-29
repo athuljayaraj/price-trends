@@ -1,7 +1,7 @@
 import * as sliderHelper from './sliderHelper.js'
 import * as helper from './helper.js'
 /**
- * @param data
+ *
  */
 export function main () {
   if (glob.data.priceChanges.mainData === undefined) {
@@ -14,10 +14,10 @@ export function main () {
   sliderHelper.fillColor('#slider-1', '#slider-2', '.slider-track')
 }
 
+// Code for the slider inspired by https://codingartistweb.com/2021/06/double-range-slider-html-css-javascript/
 /**
  *
  */
-// Code for the slider inspired by https://codingartistweb.com/2021/06/double-range-slider-html-css-javascript/
 function createSlider () {
   const controls = d3.select('#controls3')
     .style('width', `${glob.sizes.vizSvgSizes.innerWidth}` + 'px')
@@ -67,6 +67,7 @@ function build () {
   glob.data.priceChanges.xScale = xScale
   glob.data.priceChanges.sliderScale = sliderScale
   glob.data.priceChanges.yScale = yScale
+
   // Create axes
   const xAxis = d3.axisBottom(xScale)
   const yAxis = d3.axisLeft(yScale)
@@ -77,7 +78,6 @@ function build () {
   svg.append('text')
     .text('Price ($)')
     .attr('id', 'priceLegendChange')
-
   svg.append('text')
     .text('Date')
     .style('text-anchor', 'middle')
@@ -132,19 +132,24 @@ function build () {
 }
 
 /**
- *
+ * @returns {object} The start and end dates computed from the slider
  */
-function preprocessTop6 () {
-  var startDate = new Date(Math.round((new Date(d3.select('#slider-1').node().value / 100 * (glob.data.priceChanges.maxDate - glob.data.priceChanges.minDate) + glob.data.priceChanges.minDate)).getTime()))
+function computeStartEndDates () {
+  let startDate = new Date(Math.round((new Date(d3.select('#slider-1').node().value / 100 * (glob.data.priceChanges.maxDate - glob.data.priceChanges.minDate) + glob.data.priceChanges.minDate)).getTime()))
   startDate.setDate(2)
-  var endDate = new Date(Math.round((new Date(d3.select('#slider-2').node().value / 100 * (glob.data.priceChanges.maxDate - glob.data.priceChanges.minDate) + glob.data.priceChanges.minDate)).getTime()))
+  let endDate = new Date(Math.round((new Date(d3.select('#slider-2').node().value / 100 * (glob.data.priceChanges.maxDate - glob.data.priceChanges.minDate) + glob.data.priceChanges.minDate)).getTime()))
   endDate.setDate(2)
   startDate = startDate.toLocaleDateString('fr-CA', { year: 'numeric', month: 'numeric', day: 'numeric' })
   endDate = endDate.toLocaleDateString('fr-CA', { year: 'numeric', month: 'numeric', day: 'numeric' })
-  const data = glob.data.priceChanges.mainData.filter(d => {
-    return d.date === startDate || d.date === endDate
-  })
-  // Group data by product
+
+  return { startDate: startDate, endDate: endDate }
+}
+
+/**
+ * @param {object[]} data  The data set to process
+ * @returns {object} The data grouped by product
+ */
+function groupDataByProduct (data) {
   const groupData = {}
   data.forEach((d) => {
     if (d.product in groupData) {
@@ -162,26 +167,56 @@ function preprocessTop6 () {
     }
   })
 
-  const newData = []
+  return groupData
+}
+
+/**
+ * @param {object} groupData  The data grouped by product
+ * @returns {object[]} The data grouped by product sorted
+ */
+function sortGroupData (groupData) {
+  const sortedData = []
   for (const p in groupData) {
     if (groupData[p].length === 2) {
-      newData.push({
+      sortedData.push({
         product: p,
         values: groupData[p]
       })
     }
   }
 
-  // Select 3 biggest and 3 smallest changes
-  newData.sort((product1, product2) => {
+  sortedData.sort((product1, product2) => {
     const change = Math.abs(product1.values[0].price - product1.values[1].price) - Math.abs(product2.values[0].price - product2.values[1].price)
     return change
   })
-  return Array.from([0, 1, 2, newData.length - 3, newData.length - 2, newData.length - 1]).map(x => {
-    const val = groupData[newData[x].product]
+
+  return sortedData
+}
+
+/**
+ * @returns {object[]} The information (product, date, price) of the 3 smallest and 3 greatest changes
+ */
+function preprocessTop6 () {
+  const computedDates = computeStartEndDates()
+  const startDate = computedDates.startDate
+  const endDate = computedDates.endDate
+  const data = glob.data.priceChanges.mainData.filter(d => {
+    return d.date === startDate || d.date === endDate
+  })
+  const groupData = groupDataByProduct(data, startDate, endDate)
+
+  // Select 3 biggest and 3 smallest changes
+  const newData = sortGroupData(groupData)
+  const top6Data = Array.from([0, 1, 2, newData.length - 3, newData.length - 2, newData.length - 1]).map(x => {
+    const val = newData[x] !== undefined ? groupData[newData[x].product] : undefined
     return val
   })
+
+  return top6Data.filter(d => {
+    return d !== undefined
+  })
 }
+
 /**
  *
  */
@@ -198,27 +233,21 @@ function drawLines () {
     .attr('transform', `translate(${sliderTwo.value / 100 * glob.sizes.vizSvgSizes.innerWidth + glob.sizes.vizSvgSizes.margin.left}, ${glob.sizes.vizSvgSizes.margin.top})`)
   d3.selectAll('.curvePriceChange').remove()
 
-  const xScale = glob.data.priceChanges.xScale
-  const yScale = glob.data.priceChanges.yScale
   const selectedData = preprocessTop6()
-  const min = d3.min(selectedData, x => d3.min(x, d => d.price))
-  const max = d3.max(selectedData, x => d3.max(x, d => d.price))
-  yScale.domain([min, max])
+  if (selectedData.length === 0) {
+    return
+  }
+  createCurves(selectedData)
+  createToolTip()
+  formatYAxesDateLabels(selectedData)
+}
+
+/**
+ *
+ */
+function createToolTip () {
   d3.select('#linesPriceChange')
     .selectAll('.curvePriceChange')
-    .data(selectedData)
-    .enter()
-    .append('g')
-    .attr('class', 'curvePriceChange')
-    .append('path')
-    .datum(d => d)
-    .attr('d', d3.line()
-      .x(d => xScale(Date.parse(d.date)))
-      .y(d => yScale(d.price))
-      .curve(d3.curveCatmullRom.alpha(0.5)))
-    .attr('stroke', 'var(--front)')
-    .attr('stroke-width', '2')
-    .attr('fill', 'none')
     .on('mouseenter', function (d) {
       d3.select(this)
         .attr('stroke', 'var(--accent)')
@@ -239,7 +268,7 @@ function drawLines () {
                 Price in ${d.map(a => a.date)[1]}: $${d.map(a => a.price)[1]}
                 </strong>`)
     })
-    .on('mouseleave', function (d) {
+    .on('mouseleave', function () {
       d3.select(this)
         .attr('stroke', 'var(--front)')
         .attr('stroke-width', '2')
@@ -247,6 +276,39 @@ function drawLines () {
         .remove()
     }
     )
+}
+
+/**
+ * @param {object[]} selectedData The information (product, date, price) of the 3 smallest and 3 greatest changes
+ */
+function createCurves (selectedData) {
+  const xScale = glob.data.priceChanges.xScale
+  const yScale = glob.data.priceChanges.yScale
+  const min = d3.min(selectedData, x => d3.min(x, d => d.price))
+  const max = d3.max(selectedData, x => d3.max(x, d => d.price))
+  yScale.domain([min, max])
+  d3.select('#linesPriceChange')
+    .selectAll('.curvePriceChange')
+    .data(selectedData)
+    .enter()
+    .append('g')
+    .attr('class', 'curvePriceChange')
+    .append('path')
+    .datum(d => d)
+    .attr('d', d3.line()
+      .x(d => xScale(Date.parse(d.date)))
+      .y(d => yScale(d.price))
+      .curve(d3.curveCatmullRom.alpha(0.5)))
+    .attr('stroke', 'var(--front)')
+    .attr('stroke-width', '2')
+    .attr('fill', 'none')
+}
+
+/**
+ * @param {object[]} selectedData The information (product, date, price) of the 3 smallest and 3 greatest changes
+ */
+function formatYAxesDateLabels (selectedData) {
+  const xScale = glob.data.priceChanges.xScale
   const formatDate = d => (new Date(d)).toLocaleDateString('en-CA', { year: 'numeric', month: 'long' })
   d3.select('#textStart')
     .text(formatDate(selectedData[0][0].date))
