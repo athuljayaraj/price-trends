@@ -30,11 +30,9 @@ if __name__ == "__main__":
         ]
     )
     df.columns = ["date", "product", "unit", "value", "decimals"]
-    print(len(df["product"].unique()))
     df = df[df["unit"] == "Dollars"]
     df.loc[:, "date"] = pd.to_datetime(df.loc[:, "date"])
     df = df[df["date"].isin(date_infl)]
-    px.box(df_infl, x="consumer price index", orientation="h").show()
     # Merge data with inflation data
     df = pd.merge(df, df_infl, on="date")
 
