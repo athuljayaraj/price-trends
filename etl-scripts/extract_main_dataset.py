@@ -31,16 +31,10 @@ if __name__ == "__main__":
     )
     df.columns = ["date", "product", "unit", "value", "decimals"]
     print(len(df["product"].unique()))
-    # indexes_cents = df["unit"] != "Dollars"
-    # df.loc[indexes_cents,"value"] = df.loc[indexes_cents,"value"]/100
-    # df.loc[indexes_cents,"unit"] = "Dollars"
     df = df[df["unit"] == "Dollars"]
     df.loc[:, "date"] = pd.to_datetime(df.loc[:, "date"])
     df = df[df["date"].isin(date_infl)]
     px.box(df_infl, x="consumer price index", orientation="h").show()
-    print("----------------------------------------------------")
-    print(df_infl.describe())
-    print("----------------------------------------------------")
     # Merge data with inflation data
     df = pd.merge(df, df_infl, on="date")
 
@@ -50,30 +44,3 @@ if __name__ == "__main__":
     df_infl = df[["date","consumer price index"]].drop_duplicates()
     df_infl.sort_values(["date"], inplace=True)
     df_infl.to_csv("data/inflation_preprocessed.csv")
-    fig = px.box(
-        df,
-        x="product",
-        y="value",
-        labels={"value": "Value ($)", "product": "Product"},
-        log_y=True,
-    )
-    fig.show()
-
-    # Load categories
-    with open(str(Path(__file__).parent / "data/categories.json"), "r") as f:
-        categories = json.load(f)
-
-    # Filter by categories
-    # category = "vegetables"
-    # df = df[df["product"].isin(categories[category])]
-
-    # Plot
-    fig = px.line(
-        df,
-        x="date",
-        y="value_norm",
-        color="product",
-        title="Product values normalized by consumer price index",
-    )
-    fig.write_html("data/plot1.html")
-    fig.show()
