@@ -2,11 +2,11 @@ import * as sliderHelper from './sliderHelper.js'
 import * as helper from './helper.js'
 
 /* eslint-disable no-undef */
-/* eslint-disable semi */
 
 /**
+ * Method to build the visualization
  *
- * @param {*} data
+ * @param {*} data data and limits required to generate smokers visualization
  */
 export function main (data) {
   helper.createHelper('vizualization-div-smokers', 3, 'smokers')
@@ -26,7 +26,6 @@ export function main (data) {
 
   // append the svg object to the body of the page
   var svg = d3.select('#vizualization-smokers')
-    // .append('svg')
     .attr('width', '100%')
   svg.append('text')
     .text('Price ($)')
@@ -36,7 +35,6 @@ export function main (data) {
     .attr('x', glob.sizes.vizSvgSizes.margin.left + glob.sizes.vizSvgSizes.innerWidth / 2)
     .attr('y', glob.sizes.vizSvgSizes.margin.top + glob.sizes.vizSvgSizes.innerHeight + glob.sizes.vizSvgSizes.margin.bottom)
     .attr('text-anchor', 'middle')
-  // .attr('height', '100%')
   var chartGroup = svg
     .append('g')
     .attr('transform', 'translate(' + glob.sizes.vizSvgSizes.margin.left + ',' + glob.sizes.vizSvgSizes.margin.top + ')')
@@ -69,16 +67,19 @@ export function main (data) {
 
 /**
  *
+ * Clear the rectangle representing active smoking
  */
-function clearRectangles() {
+function clearRectangles () {
   d3.select('#active-smoking').remove()
 }
 
 /**
- * @param chartGroup
- * @param xScale
+ * Build the rectangle representing active smoking
+ *
+ * @param {*} chartGroup chartgroup to which rectangle is appended
+ * @param {*} xScale d3 scale for xAxis of the graphic
  */
-function buildRectangles(chartGroup, xScale) {
+function buildRectangles (chartGroup, xScale) {
   const sliderOne = d3.select('#slider-1Smoker').node()
   const sliderTwo = d3.select('#slider-2Smoker').node()
   const activeStartDate = mapToDate(sliderOne.value)
@@ -100,12 +101,12 @@ function buildRectangles(chartGroup, xScale) {
 }
 
 /**
- * @param {} data
- * @param svg
- * @param chartGroup
- * @param xScale
+ * Text box to enter number of cigarettes smoked
+ *
+ * @param {*} chartGroup chartgroup to which rectangle is appended
+ * @param {*} xScale d3 scale for xAxis of the graphic
  */
-function buildNumberOfCigTextbox(chartGroup, xScale) {
+function buildNumberOfCigTextbox (chartGroup, xScale) {
   const control = d3.select('#cig-control')
     .style('width', `${glob.sizes.vizSvgSizes.innerWidth}` + 'px')
     .style('padding', '30px 30px 20px 40px')
@@ -135,9 +136,9 @@ function buildNumberOfCigTextbox(chartGroup, xScale) {
 }
 
 /**
- *
+ * Method to update the total cost in the UI
  */
-function updateCost() {
+function updateCost () {
   const sliderOne = d3.select('#slider-1Smoker').node()
   const sliderTwo = d3.select('#slider-2Smoker').node()
   const numOfCigsPerDay = document.getElementById('cig-num').value
@@ -148,28 +149,32 @@ function updateCost() {
 }
 
 /**
- * @param data
- * @param startDate
- * @param endDate
- * @param numOfCigs
- * @param numOfCigsPerDay
+ * Method to calculate the cost
+ *
+ * @param {Date} startDate starting date of active smoking period
+ * @param {Date} endDate end date of active smoking period
+ * @param {number} numOfCigsPerDay average number of cigarettes smoked per day
+ * @returns {number} totalCost
  */
-function calculateCost(startDate, endDate, numOfCigsPerDay) {
+function calculateCost (startDate, endDate, numOfCigsPerDay) {
   const data = glob.data.smokers.data
   const NUMBER_OF_DAYS_PER_MONTH = 30
   const NUMBER_OF_CIGS_IN_DATA = 200
   let partialSum = 0
   data.filter(d => d[0] >= startDate && d[0] <= endDate).forEach(element => {
     partialSum = partialSum + element[1]
-  });
+  })
   const totalCost = Math.round((partialSum / NUMBER_OF_CIGS_IN_DATA) * numOfCigsPerDay * NUMBER_OF_DAYS_PER_MONTH)
-  return totalCost;
+  return totalCost
 }
+
 /**
- * @param chartGroup
- * @param xScale
+ * Create the slider to choose active smoking period
+ *
+ * @param {*} chartGroup chartgroup to which rectangle is appended
+ * @param {*} xScale d3 scale for xAxis of the graphic
  */
-function createSlider(chartGroup, xScale) {
+function createSlider (chartGroup, xScale) {
   const controls = d3.select('#cig-control').attr('transform', `translate(${glob.sizes.vizSvgSizes.margin.left}, ${glob.sizes.vizSvgSizes.innerHeight + glob.sizes.vizSvgSizes.margin.top})`)
     .attr('width', `${glob.sizes.vizSvgSizes.innerWidth}`)
     .attr('height', 50)
@@ -208,4 +213,4 @@ function createSlider(chartGroup, xScale) {
 
 const mapToDate = x => new Date(Math.round((new Date(x / 100 * (glob.data.smokers.limits.maxX.getTime() - glob.data.smokers.limits.minX.getTime()) + glob.data.smokers.limits.minX.getTime())).getTime()))
 
-const numberWithCommas = x => x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+const numberWithCommas = x => x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')

@@ -33,6 +33,7 @@ window.glob = {
 
 /**
  *
+ * Method to read all required dataset, and invoke methods to build the components
  */
 (function (d3) {
   resize.updateResize()
@@ -66,7 +67,7 @@ window.glob = {
    *
    * Function to build all the visualizations on the page
    */
-  function build() {
+  function build () {
     d3.selectAll('.tmp').remove()
     d3.select('#tooltip').remove()
     seasons.main(glob.data)
@@ -78,7 +79,10 @@ window.glob = {
   }
 })(d3)
 
-function positionIntro() {
+/**
+ * Adjust the position of intro icon on each graphic
+ */
+function positionIntro () {
   const boundings = d3.select('#introduction').node().getBoundingClientRect()
   d3.select('#introduction').style('margin-top', 'calc(50vh - ' + boundings.height / 2 + 'px)')
   d3.select('#introduction').style('margin-bottom', 'calc(50vh - ' + boundings.height / 2 + 'px)')
