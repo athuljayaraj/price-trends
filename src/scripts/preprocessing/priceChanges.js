@@ -1,16 +1,8 @@
+/* eslint-disable no-undef */ // For the glob variable
 /**
  * @param {object[]} dataNorm The data set to process
  */
 export function main (dataNorm) {
-  /* We would like something like this:
-                  [
-                      {
-                          date: '2018',
-                          price: 1
-                          product: orange
-                      }
-                  ]
-                  */
   const dicoData = {}
   dataNorm.forEach(function (d) {
     if (!dicoData[d.product]) {

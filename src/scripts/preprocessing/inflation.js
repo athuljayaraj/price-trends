@@ -1,7 +1,8 @@
+/* eslint-disable no-undef */ // For the glob variable
 /**
- * @param dataNorm: data with prices of each product per month
- * @param inflationProducts, list of products to highlight
- * @param inflation: inflation data
+ * @param {object[]} dataNorm data with prices of each product per month
+ * @param {object[]} inflationProducts list of products to highlight
+ * @param {object[]} inflation inflation data
  */
 export function main (dataNorm, inflationProducts, inflation) {
   // Create main object

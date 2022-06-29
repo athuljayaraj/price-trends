@@ -1,8 +1,8 @@
 /**
- * @param dataNorm
- * @param categories
+ * @param {list} dataNorm
+ * @param {list} categories
  */
-export function main(dataNorm) {
+export function main (dataNorm) {
   const cigaretteKey = 'Cigarettes (200)'
   const out = dataNorm.filter(data => data.product === cigaretteKey).map(data => [new Date(data.date), parseFloat(data.value)])
   const limits = {

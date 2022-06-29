@@ -1,6 +1,7 @@
+/* eslint-disable no-undef */ // For the glob variable
 /**
- * @param dataNorm
- * @param categories
+ * @param {object[]} dataNorm
+ * @param {object[]} categories
  */
 export function main (dataNorm, categories) {
   const out = {

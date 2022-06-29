@@ -1,11 +1,12 @@
 import * as helper from './helper.js'
+/* eslint-disable no-undef */ // For the glob variable
 /**
- *
+ * Method to build the visualization
  */
 export function main () {
   const dataGlob = glob.data.categories
   Array.from(['same_same', 'same_diff', 'diff_same']).forEach(function (category, i) {
-    helper.createHelper('vizualization-divCat' + (i + 1), 2, 'categories'+(i+1))
+    helper.createHelper('vizualization-divCat' + (i + 1), 2, 'categories' + (i + 1))
     const data = dataGlob[category]
     const controls = d3.select('#controls' + category.charAt(0).toUpperCase() + category.slice(1))
     // controls
@@ -31,7 +32,7 @@ export function main () {
   })
 }
 /**
- * @param category: string, name of the category (same_same, same_diff or diff_same) to rebuild
+ * @param category {string}, name of the category (same_same, same_diff or diff_same) to rebuild
  */
 function reBuild (category) {
   const svg = d3.select('#cat' + category.charAt(0).toUpperCase() + category.slice(1))
@@ -39,7 +40,7 @@ function reBuild (category) {
   build(category)
 }
 /**
- * @param category: string, name of the category (same_same, same_diff or diff_same) to rebuild
+ * @param category {string}, name of the category (same_same, same_diff or diff_same) to rebuild
  */
 function build (category) {
   const data = glob.data.categories[category].filter(x => x.name === glob.data.categories[category].current_gpe)[0]
@@ -137,9 +138,7 @@ function build (category) {
     .on('mouseenter', function (d) {
       d3.selectAll('#scatterCat')
         .selectAll('circle')
-        // .attr('opacity', 0)
       d3.select(this)
-        // .attr('opacity', 1)
         .attr('r', '4px')
         .attr('fill', 'var(--accent)')
       d3.selectAll('#curvesCat')
@@ -163,7 +162,6 @@ function build (category) {
     .on('mouseleave', function (d) {
       d3.selectAll('#scatterCat')
         .selectAll('circle')
-        // .attr('opacity', 1)
       d3.select(this)
         .attr('r', '2px')
         .attr('fill', 'var(--front)')

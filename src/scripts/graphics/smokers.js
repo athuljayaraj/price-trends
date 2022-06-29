@@ -100,7 +100,7 @@ function buildRectangles(chartGroup, xScale) {
 }
 
 /**
- * @param data
+ * @param {} data
  * @param svg
  * @param chartGroup
  * @param xScale

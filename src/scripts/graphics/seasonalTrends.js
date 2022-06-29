@@ -1,6 +1,7 @@
 import * as helper from './helper.js'
+/* eslint-disable no-undef */ // For the glob variable
 /**
- *
+ * Method to build the visualization
  */
 export function main () {
   if (glob.data.seasonalTrends.mainData === undefined) {
@@ -30,7 +31,7 @@ export function main () {
   build()
 }
 /**
- *
+ * Refresh the elements on the visualization
  */
 function reBuild () {
   d3.select('#vizualization-svg1')
@@ -39,7 +40,7 @@ function reBuild () {
   build()
 }
 /**
- *
+ * Build the graphic
  */
 function build () {
   const data = glob.data.seasonalTrends.mainData.filter(d => d.name === glob.data.seasonalTrends.current_selection)[0]

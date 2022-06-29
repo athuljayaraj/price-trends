@@ -1,6 +1,7 @@
 import * as helper from './helper.js'
+/* eslint-disable no-undef */ // For the glob variable
 /**
- *
+ * Method to build the visualization
  */
 export function main () {
   glob.data.inflation.hovered_elem = null
@@ -9,7 +10,7 @@ export function main () {
   build()
 }
 /**
- *
+ * Build the visualization
  */
 function build () {
   const data = glob.data.inflation
@@ -151,13 +152,15 @@ function build () {
     })
 }
 /**
- * @param category: int representing one of the three categories of products (other products (0), products with significant deviations from inflation (1), inflation (2))
+ * @param {int} category representing one of the three categories of products (other products (0), products with significant deviations from inflation (1), inflation (2))
+ * @returns {boolean} true if the category must be visible else false
  */
 function checkIfCatVisible (category) {
   return (glob.data.inflation.selected_elem.includes(category) && glob.data.inflation.hovered_elem === null) || glob.data.inflation.hovered_elem === category
 }
 /**
- * @param category: int representing one of the three categories of products (other products (0), products with significant deviations from inflation (1), inflation (2))
+ * @param {int} category representing one of the three categories of products (other products (0), products with significant deviations from inflation (1), inflation (2))
+ * @returns {number} the opacity required for the legend depending if the category is visible or not
  */
 function opacityFunc (category) {
   if (checkIfCatVisible(category)) {
@@ -167,7 +170,7 @@ function opacityFunc (category) {
   }
 }
 /**
- * @param svg: d3 selection of the svg element
+ * @param {object} svg d3 selection of the svg element
  */
 function refreshData (svg) {
   const data = svg.selectAll('.curves-graph').data().map(function (d) {

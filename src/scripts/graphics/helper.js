@@ -1,8 +1,8 @@
-
+/* eslint-disable no-undef */ // For the glob variable
 /**
- * @param divId: id of the div containing the svg
- * @param numStates: number of window that explain how the visualization works
- * @param folderName: name of the folder where the html file for the help content is
+ * @param {string} divId id of the div containing the svg
+ * @param {int} numStates number of window that explain how the visualization works
+ * @param {string} folderName name of the folder where the html file for the help content is
  */
 export function createHelper (divId, numStates, folderName) {
   d3.select('#' + divId)
@@ -38,8 +38,8 @@ export function createHelper (divId, numStates, folderName) {
     })
 }
 /**
- * @param numStates: number of window that explain how the visualization works
- * @param folderName: name of the folder where the html file for the help content is
+ * @param {int} numStates number of window that explain how the visualization works
+ * @param {string} folderName name of the folder where the html file for the help content is
  */
 function createHelp (numStates, folderName) {
   d3.select('#popup')
@@ -88,9 +88,9 @@ function createHelp (numStates, folderName) {
     })
 }
 /**
- * @param contentDiv: d3 selection of the div that will contain the help
- * @param numStates: number of window that explain how the visualization works
- * @param folderName: name of the folder where the html file for the help content is
+ * @param {object} contentDiv d3 selection of the div that will contain the help
+ * @param {int} numStates number of window that explain how the visualization works
+ * @param {string} folderName name of the folder where the html file for the help content is
  */
 function loadNext (contentDiv, numStates, folderName) {
   d3.text('assets/data/popup/' + folderName + '/' + glob.data.seasonalTrends.popup.curr + '.html').then(function (data) {
