@@ -1,10 +1,12 @@
+import * as helper from './helper.js'
 /**
- * @param data
+ *
  */
 export function main () {
   if (glob.data.seasonalTrends.mainData === undefined) {
     return
   }
+  helper.createHelper('vizualization-div1', 3, 'seasons')
   const controls = d3.select('#controls1')
   controls
     .append('p')
@@ -81,10 +83,14 @@ function build () {
   const seasonsScale = d3.scaleOrdinal()
     .domain([...new Set(Array.from(seasons.map(d => d.name)))])
     .range(['blue', 'lightgreen', 'green', 'orange'])
-  svg.append('g')
+  const container = svg.append('g')
     .attr('id', 'seasons-container')
     .attr('transform', `translate(${glob.sizes.vizSvgSizes.margin.left}, ${glob.sizes.vizSvgSizes.margin.top})`)
-    .selectAll('.seasons')
+  container.append('rect')
+    .attr('width', glob.sizes.vizSvgSizes.innerWidth)
+    .attr('height', glob.sizes.vizSvgSizes.innerHeight)
+    .attr('fill', 'white')
+  container.selectAll('.seasons')
     .data(seasons)
     .enter()
     .append('rect')
@@ -125,7 +131,7 @@ function build () {
         .text(season.name)
         .style('background', 'transparent')
       divTooltip.append('img')
-        .attr('src', 'assets/data/images/' + season.name.toLocaleLowerCase() + '.png')
+        .attr('src', 'assets/images/' + season.name.toLocaleLowerCase() + '.png')
         .style('width', '25px')
         .style('background', 'transparent')
       d3.select('#tooltip')
@@ -182,7 +188,6 @@ function build () {
         d3.select(this)
           .attr('stroke', 'var(--accent)')
           .attr('stroke-width', '4')
-          // console.log(d[0].date.getFullYear() === e.originalYear,d[0].date.getFullYear(),e.originalYear); 
         d3.selectAll('.scatterSeasons')
           .filter(e => { return d[0].originalYear === e.originalYear })
           .attr('fill', 'var(--accent)')

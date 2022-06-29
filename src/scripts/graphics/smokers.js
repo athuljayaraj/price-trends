@@ -1,3 +1,6 @@
+import * as sliderHelper from './sliderHelper.js'
+import * as helper from './helper.js'
+
 /* eslint-disable no-undef */
 /* eslint-disable semi */
 
@@ -6,6 +9,8 @@
  * @param {*} data
  */
 export function main (data) {
+  helper.createHelper('vizualization-div-smokers', 3, 'smokers')
+
   const xScale = d3.scaleTime()
     .domain([data.limits.minX, data.limits.maxX])
     .range([0, glob.sizes.vizSvgSizes.innerWidth])
@@ -26,6 +31,11 @@ export function main (data) {
   svg.append('text')
     .text('Price ($)')
     .attr('transform', `translate(${glob.sizes.vizSvgSizes.margin.left / 2}, ${glob.sizes.vizSvgSizes.margin.top / 2})`)
+  svg.append('text')
+    .text('Date')
+    .attr('x', glob.sizes.vizSvgSizes.margin.left + glob.sizes.vizSvgSizes.innerWidth / 2)
+    .attr('y', glob.sizes.vizSvgSizes.margin.top + glob.sizes.vizSvgSizes.innerHeight + glob.sizes.vizSvgSizes.margin.bottom)
+    .attr('text-anchor', 'middle')
   // .attr('height', '100%')
   var chartGroup = svg
     .append('g')
@@ -52,15 +62,54 @@ export function main (data) {
     .attr('transform', `translate(${glob.sizes.vizSvgSizes.margin.left}, ${glob.sizes.vizSvgSizes.margin.top})`)
     .call(yAxis)
 
-  buildNumberOfCigTextbox(data.data)
+  buildNumberOfCigTextbox(chartGroup, xScale)
+  buildRectangles(chartGroup, xScale)
+  sliderHelper.fillColor('#slider-1Smoker', '#slider-2Smoker', '.slider-trackSmoker')
+}
+
+/**
+ *
+ */
+function clearRectangles() {
+  d3.select('#active-smoking').remove()
+}
+
+/**
+ * @param chartGroup
+ * @param xScale
+ */
+function buildRectangles(chartGroup, xScale) {
+  const sliderOne = d3.select('#slider-1Smoker').node()
+  const sliderTwo = d3.select('#slider-2Smoker').node()
+  const activeStartDate = mapToDate(sliderOne.value)
+  const activeEndDate = mapToDate(sliderTwo.value)
+  clearRectangles()
+
+  chartGroup
+    .append('rect')
+    .attr('class', 'smoker-active-region')
+    .attr('x', xScale(activeStartDate))
+    .attr('y', 0)
+    .attr('width', xScale(activeEndDate) - xScale(activeStartDate))
+    .attr('height', glob.sizes.vizSvgSizes.innerHeight)
+    .attr('fill', 'blue')
+    .attr('stroke', '#f0f0f0')
+    .attr('stroke-width', '1')
+    .attr('opacity', 0.5)
+    .attr('id', 'active-smoking')
 }
 
 /**
  * @param data
  * @param svg
+ * @param chartGroup
+ * @param xScale
  */
-function buildNumberOfCigTextbox (data, svg) {
+function buildNumberOfCigTextbox(chartGroup, xScale) {
   const control = d3.select('#cig-control')
+    .style('width', `${glob.sizes.vizSvgSizes.innerWidth}` + 'px')
+    .style('padding', '30px 30px 20px 40px')
+    .style('padding-left', `${glob.sizes.vizSvgSizes.margin.left}` + 'px')
 
   control
     .append('div')
@@ -68,16 +117,34 @@ function buildNumberOfCigTextbox (data, svg) {
     .text('Number of cigarettes per day: ')
     .append('input')
     .attr('type', 'number')
-    .attr('min', 0)
+    .attr('min', 1)
     .attr('id', 'cig-num')
+    .attr('value', 13.8)
     .on('change', function () {
-      slideOne()
+      sliderHelper.slideOne('#slider-1Smoker', '#slider-2Smoker', '.slider-trackSmoker', updateCost)
     })
   control
     .append('text')
-    .text('Total cost in ($): 0')
+    .text('Total cost: $0')
     .attr('id', 'cig-cost')
-  createSlider()
+    .style('position', 'relative')
+    .style('left', `${(glob.sizes.vizSvgSizes.width / 2 - 90)}` + 'px')
+    .style('top', `${-(glob.sizes.vizSvgSizes.height) - 55}` + 'px')
+    .style('margin-left', '-80px')
+  createSlider(chartGroup, xScale)
+}
+
+/**
+ *
+ */
+function updateCost() {
+  const sliderOne = d3.select('#slider-1Smoker').node()
+  const sliderTwo = d3.select('#slider-2Smoker').node()
+  const numOfCigsPerDay = document.getElementById('cig-num').value
+  const startDate = mapToDate(sliderOne.value)
+  const endDate = mapToDate(sliderTwo.value)
+  const updatedCost = calculateCost(startDate, endDate, numOfCigsPerDay)
+  d3.select('#cig-cost').text('Total cost: $' + numberWithCommas(updatedCost))
 }
 
 /**
@@ -85,25 +152,24 @@ function buildNumberOfCigTextbox (data, svg) {
  * @param startDate
  * @param endDate
  * @param numOfCigs
+ * @param numOfCigsPerDay
  */
-function calculateCost (startDate, endDate) {
+function calculateCost(startDate, endDate, numOfCigsPerDay) {
   const data = glob.data.smokers.data
   const NUMBER_OF_DAYS_PER_MONTH = 30
   const NUMBER_OF_CIGS_IN_DATA = 200
-  const numOfCigsPerDay = document.getElementById('cig-num').value
   let partialSum = 0
   data.filter(d => d[0] >= startDate && d[0] <= endDate).forEach(element => {
     partialSum = partialSum + element[1]
   });
-  console.log(partialSum)
   const totalCost = Math.round((partialSum / NUMBER_OF_CIGS_IN_DATA) * numOfCigsPerDay * NUMBER_OF_DAYS_PER_MONTH)
-  d3.select('#cig-cost').text('Total cost in ($): ' + totalCost);
-  return partialSum * numOfCigsPerDay;
+  return totalCost;
 }
 /**
- *
+ * @param chartGroup
+ * @param xScale
  */
-function createSlider () {
+function createSlider(chartGroup, xScale) {
   const controls = d3.select('#cig-control').attr('transform', `translate(${glob.sizes.vizSvgSizes.margin.left}, ${glob.sizes.vizSvgSizes.innerHeight + glob.sizes.vizSvgSizes.margin.top})`)
     .attr('width', `${glob.sizes.vizSvgSizes.innerWidth}`)
     .attr('height', 50)
@@ -122,7 +188,8 @@ function createSlider () {
     .attr('id', 'slider-1Smoker')
     .style('top', '-75px')
     .on('change', () => {
-      slideOne()
+      sliderHelper.slideOne('#slider-1Smoker', '#slider-2Smoker', '.slider-trackSmoker', updateCost)
+      buildRectangles(chartGroup, xScale)
     })
 
   controls.append('input')
@@ -133,55 +200,12 @@ function createSlider () {
     .attr('id', 'slider-2Smoker')
     .style('top', '-75px')
     .on('change', () => {
-      slideTwo()
+      sliderHelper.slideTwo('#slider-1Smoker', '#slider-2Smoker', '.slider-trackSmoker', updateCost)
+      buildRectangles(chartGroup, xScale)
     })
-}
-/**
- *
- */
-// Code taken from https://codingartistweb.com/2021/06/double-range-slider-html-css-javascript/
-function slideOne () {
-  const sliderOne = d3.select('#slider-1Smoker').node()
-  const sliderTwo = d3.select('#slider-2Smoker').node()
-  const minGap = 0
-  if (sliderTwo.value - sliderOne.value <= minGap) {
-    sliderOne.value = sliderTwo.value - minGap
-  }
-  fillColor()
-
-  const mapToDate = x => new Date(Math.round((new Date(x / 100 * (glob.data.smokers.limits.maxX.getTime() - glob.data.smokers.limits.minX.getTime()) + glob.data.smokers.limits.minX.getTime())).getTime()))
-  const startDate = mapToDate(sliderOne.value)
-  const endDate = mapToDate(sliderTwo.value)
-  calculateCost(startDate, endDate)
+  updateCost()
 }
 
-/**
- *
- */
-// Code taken from https://codingartistweb.com/2021/06/double-range-slider-html-css-javascript/
-function slideTwo () {
-  const sliderOne = d3.select('#slider-1Smoker').node()
-  const sliderTwo = d3.select('#slider-2Smoker').node()
-  const minGap = 1
-  if (parseInt(sliderTwo.value) - parseInt(sliderOne.value) <= minGap) {
-    sliderTwo.value = parseInt(sliderOne.value) + minGap
-  }
-  fillColor()
-  const mapToDate = x => new Date(Math.round((new Date(x / 100 * (glob.data.smokers.limits.maxX.getTime() - glob.data.smokers.limits.minX.getTime()) + glob.data.smokers.limits.minX.getTime())).getTime()))
-  const startDate = mapToDate(sliderOne.value)
-  const endDate = mapToDate(sliderTwo.value)
-  calculateCost(startDate, endDate)
-}
-/**
- *
- */
-// Code taken from https://codingartistweb.com/2021/06/double-range-slider-html-css-javascript/
-function fillColor () {
-  const sliderOne = document.getElementById('slider-1Smoker')
-  const sliderTwo = document.getElementById('slider-2Smoker')
-  const sliderTrack = document.querySelector('.slider-trackSmoker')
-  const sliderMaxValue = document.getElementById('slider-1Smoker').max
-  const percent1 = (sliderOne.value / sliderMaxValue) * 100
-  const percent2 = (sliderTwo.value / sliderMaxValue) * 100
-  sliderTrack.style.background = `linear-gradient(to right, #dadae5 ${percent1}% , #3264fe ${percent1}% , #3264fe ${percent2}%, #dadae5 ${percent2}%)`
-}
+const mapToDate = x => new Date(Math.round((new Date(x / 100 * (glob.data.smokers.limits.maxX.getTime() - glob.data.smokers.limits.minX.getTime()) + glob.data.smokers.limits.minX.getTime())).getTime()))
+
+const numberWithCommas = x => x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")

@@ -1,9 +1,11 @@
+import * as helper from './helper.js'
 /**
  *
  */
 export function main () {
   glob.data.inflation.hovered_elem = null
   glob.data.inflation.selected_elem = [0, 1, 2]
+  helper.createHelper('vizualization-divInfl', 3, 'inflation')
   build()
 }
 /**
@@ -16,10 +18,10 @@ function build () {
   svg.append('text')
     .text('Price monthly growth rate (%)')
     .attr('transform', `translate(${glob.sizes.vizSvgSizes.margin.left / 2}, ${glob.sizes.vizSvgSizes.margin.top / 2})`)
-    svg.append('text')
-      .text('Date')
-      .attr('transform', `translate(${glob.sizes.vizSvgSizes.margin.left  + glob.sizes.vizSvgSizes.innerWidth/2}, ${glob.sizes.vizSvgSizes.margin.top+ glob.sizes.vizSvgSizes.innerHeight + glob.sizes.vizSvgSizes.margin.bottom})`)
-      .style('text-anchor','middle')
+  svg.append('text')
+    .text('Date')
+    .attr('transform', `translate(${glob.sizes.vizSvgSizes.margin.left + glob.sizes.vizSvgSizes.innerWidth / 2}, ${glob.sizes.vizSvgSizes.margin.top + glob.sizes.vizSvgSizes.innerHeight + glob.sizes.vizSvgSizes.margin.bottom})`)
+    .style('text-anchor', 'middle')
   // Create scales
   const xScale = d3.scaleTime()
     .domain([data.minX, data.maxX])
@@ -64,7 +66,9 @@ function build () {
     .on('mouseleave', function (d) {
       glob.data.inflation.hovered_elem = null
       svg.selectAll('.legend-rect')
-        .attr('opacity', 1)
+        .attr('opacity', function (e) {
+          return opacityFunc(e.category)
+        })
       refreshData(svg)
     })
     .on('click', function (d) {
@@ -147,15 +151,13 @@ function build () {
     })
 }
 /**
- * @param category
+ * @param category: int representing one of the three categories of products (other products (0), products with significant deviations from inflation (1), inflation (2))
  */
 function checkIfCatVisible (category) {
   return (glob.data.inflation.selected_elem.includes(category) && glob.data.inflation.hovered_elem === null) || glob.data.inflation.hovered_elem === category
 }
 /**
- * @param category
- * @param defaultVal
- * @param d
+ * @param category: int representing one of the three categories of products (other products (0), products with significant deviations from inflation (1), inflation (2))
  */
 function opacityFunc (category) {
   if (checkIfCatVisible(category)) {
@@ -165,7 +167,7 @@ function opacityFunc (category) {
   }
 }
 /**
- * @param svg
+ * @param svg: d3 selection of the svg element
  */
 function refreshData (svg) {
   const data = svg.selectAll('.curves-graph').data().map(function (d) {
