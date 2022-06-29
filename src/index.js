@@ -11,7 +11,7 @@ import * as priceChanges from './scripts/graphics/priceChanges.js'
 import * as preprocessPriceChanges from './scripts/preprocessing/priceChanges.js'
 import * as styling from './scripts/graphics/styling.js'
 
-const DATA_DIR = 'src/assets/data/'
+const DATA_DIR = 'assets/data/'
 
 window.glob = {
   sizes: {
