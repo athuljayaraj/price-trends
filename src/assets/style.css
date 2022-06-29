@@ -117,18 +117,29 @@ section {
 .text-container {
   width: 30%;
 }
-
+#introduction {
+  --marginIntro: 15%;
+  margin-top: var(--marginIntro);
+  margin-bottom: var(--marginIntro);
+}
 .description {
-  position: absolute;
-  left: 37em;
-  width: 60%;
+  display:table-cell;
+  padding: 20px;
+  padding-left:120px;
+  padding-right: 3%;
+  margin-left: 10px;
+  width: calc(70% - 100px);
+  margin: 10px 10px 10px 10px;
+}
+.description p {
+  text-align: justify;
+  font-size: 25px;
 }
 #intro {
-    position: absolute;
-    left: 101px;
-    top: 5em;
+  display:table-cell;
     color: rgb(255,183,4);
     font-size: 43px;
+    text-align: center;
 }
 .container {
   padding-top: 200px;
@@ -330,4 +341,10 @@ section p {
   position: fixed;
   height: 100%;
   z-index: -1;
+}
+#scroll {
+  width: 3%;
+  position: absolute;
+  top:90%;
+  left:63%;
 }
