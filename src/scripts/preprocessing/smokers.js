@@ -1,6 +1,7 @@
 /**
- * @param {list} dataNorm
- * @param {list} categories
+ * Method to preprocess raw data to add smokers data
+ *
+ * @param {object[]} dataNorm raw dataset
  */
 export function main (dataNorm) {
   const cigaretteKey = 'Cigarettes (200)'
