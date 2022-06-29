@@ -38,7 +38,7 @@ export function createHelper (divId, numStates, folderName) {
     })
 }
 /**
- * @param {int} numStates number of window that explain how the visualization works
+ * @param {number} numStates number of window that explain how the visualization works
  * @param {string} folderName name of the folder where the html file for the help content is
  */
 function createHelp (numStates, folderName) {
@@ -89,7 +89,7 @@ function createHelp (numStates, folderName) {
 }
 /**
  * @param {object} contentDiv d3 selection of the div that will contain the help
- * @param {int} numStates number of window that explain how the visualization works
+ * @param {number} numStates number of window that explain how the visualization works
  * @param {string} folderName name of the folder where the html file for the help content is
  */
 function loadNext (contentDiv, numStates, folderName) {
