@@ -27,11 +27,11 @@ window.glob = {
   },
   data: {}
 };
+/**
+ *
+ */
 (function (d3) {
-  // TODO: programmatically add the sections texts
-  // scroller.centerSections()
   resize.updateResize()
-  // scroller.svgCenter()
   d3.csv('assets/data/data_norm.csv').then(function (dataNorm) {
     d3.json('assets/data/seasonalTrends.json').then(function (seasonalTrends) {
       d3.json('assets/data/inflationProducts.json').then(function (inflationProducts) {
@@ -42,6 +42,7 @@ window.glob = {
             preprocessInfl.main(dataNorm, inflationProducts, inflation)
             preprocessCat.main(dataNorm, categories)
             preprocessPriceChanges.main(dataNorm)
+            positionIntro()
             build()
           })
         })
@@ -53,10 +54,10 @@ window.glob = {
     d3.selectAll('.visualization-svg').selectAll('*').remove()
     d3.selectAll('.controls').selectAll('*').remove()
     resize.updateResize()
+    positionIntro()
     build()
   })
-  function build() {
-
+  function build () {
     d3.selectAll('.tmp').remove()
     d3.select('#tooltip').remove()
     seasons.main(glob.data)
@@ -67,3 +68,9 @@ window.glob = {
     styling.main()
   }
 })(d3)
+function positionIntro () {
+  const boundings = d3.select('#introduction').node().getBoundingClientRect()
+  console.log('calc(100%-' + boundings.height + 'px)')
+  d3.select('#introduction').style('margin-top', 'calc(50vh - ' + boundings.height/2 + 'px)')
+  d3.select('#introduction').style('margin-bottom', 'calc(50vh - ' + boundings.height/2 + 'px)')
+}

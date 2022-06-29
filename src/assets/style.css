@@ -117,10 +117,9 @@ section {
 .text-container {
   width: 30%;
 }
-#introduction {
-  --marginIntro: 15%;
-  margin-top: var(--marginIntro);
-  margin-bottom: var(--marginIntro);
+#introduction div {
+  margin-top: 0;
+  padding-top: 0;
 }
 .description {
   display:table-cell;
@@ -343,8 +342,8 @@ section p {
   z-index: -1;
 }
 #scroll {
-  width: 3%;
+  width: 100px;
   position: absolute;
-  top:90%;
+  bottom:5%;
   left:63%;
 }
