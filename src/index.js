@@ -10,6 +10,9 @@ import * as categories from './scripts/graphics/categories.js'
 import * as priceChanges from './scripts/graphics/priceChanges.js'
 import * as preprocessPriceChanges from './scripts/preprocessing/priceChanges.js'
 import * as styling from './scripts/graphics/styling.js'
+
+const DATA_DIR = 'assets/data/'
+
 window.glob = {
   sizes: {
     vizDivSizes: { width: 0, height: 0 },
@@ -27,16 +30,17 @@ window.glob = {
   },
   data: {}
 };
+
 /**
  *
  */
 (function (d3) {
   resize.updateResize()
-  d3.csv('assets/data/data_norm.csv').then(function (dataNorm) {
-    d3.json('assets/data/seasonalTrends.json').then(function (seasonalTrends) {
-      d3.json('assets/data/inflationProducts.json').then(function (inflationProducts) {
-        d3.csv('assets/data/inflation.csv').then(function (inflation) {
-          d3.json('assets/data/categories_groups.json').then(function (categories) {
+  d3.csv(`${DATA_DIR}data_norm.csv`).then(function (dataNorm) {
+    d3.json(`${DATA_DIR}seasonalTrends.json`).then(function (seasonalTrends) {
+      d3.json(`${DATA_DIR}inflationProducts.json`).then(function (inflationProducts) {
+        d3.csv(`${DATA_DIR}inflation.csv`).then(function (inflation) {
+          d3.json(`${DATA_DIR}categories_groups.json`).then(function (categories) {
             preprocessSeason.main(dataNorm, seasonalTrends)
             preprocessSmokers.main(dataNorm)
             preprocessInfl.main(dataNorm, inflationProducts, inflation)
@@ -50,14 +54,19 @@ window.glob = {
     })
   })
 
-  window.addEventListener('resize', function () {
+  window.addEventListener('resize', () => {
     d3.selectAll('.visualization-svg').selectAll('*').remove()
     d3.selectAll('.controls').selectAll('*').remove()
     resize.updateResize()
     positionIntro()
     build()
   })
-  function build () {
+
+  /**
+   *
+   * Function to build all the visualizations on the page
+   */
+  function build() {
     d3.selectAll('.tmp').remove()
     d3.select('#tooltip').remove()
     seasons.main(glob.data)
@@ -68,9 +77,9 @@ window.glob = {
     styling.main()
   }
 })(d3)
-function positionIntro () {
+
+function positionIntro() {
   const boundings = d3.select('#introduction').node().getBoundingClientRect()
-  console.log('calc(100%-' + boundings.height + 'px)')
-  d3.select('#introduction').style('margin-top', 'calc(50vh - ' + boundings.height/2 + 'px)')
-  d3.select('#introduction').style('margin-bottom', 'calc(50vh - ' + boundings.height/2 + 'px)')
+  d3.select('#introduction').style('margin-top', 'calc(50vh - ' + boundings.height / 2 + 'px)')
+  d3.select('#introduction').style('margin-bottom', 'calc(50vh - ' + boundings.height / 2 + 'px)')
 }
