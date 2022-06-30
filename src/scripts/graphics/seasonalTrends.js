@@ -3,7 +3,7 @@ import * as helper from './helper.js'
 /**
  * Method to build the visualization
  */
-export function main () {
+export function main() {
   if (glob.data.seasonalTrends.mainData === undefined) {
     return
   }
@@ -33,7 +33,7 @@ export function main () {
 /**
  * Refresh the elements on the visualization
  */
-function reBuild () {
+function reBuild() {
   d3.select('#vizualization-svg1')
     .selectAll('*')
     .remove()
@@ -42,7 +42,7 @@ function reBuild () {
 /**
  * Build the graphic
  */
-function build () {
+function build() {
   const data = glob.data.seasonalTrends.mainData.filter(d => d.name === glob.data.seasonalTrends.current_selection)[0]
   const svg = d3.select('#vizualization-svg1')
   // Create scales
@@ -108,17 +108,13 @@ function build () {
     .on('mouseenter', function (season) {
       d3.select(this)
         .attr('opacity', 0.75)
-      const svgInfos = d3.select('#vizualization-svg1').node().getBoundingClientRect()
-      const margingContainerGraphic = 10
+      const svgInfos = d3.select('#vizualization-div1').node().getBoundingClientRect()
       const middleX = svgInfos.left +
         glob.sizes.vizSvgSizes.margin.left +
-        margingContainerGraphic +
         xScale(season.start) + (xScale(season.end) - xScale(season.start)) / 2
-      const middleYMarginTooltip = 10
-      const middleY = svgInfos.top +
-        glob.sizes.vizSvgSizes.margin.top -
-        middleYMarginTooltip
-      const divTooltip = d3.select('#vizualization-div1')
+      const marginControls = 70
+      const middleY = 1500
+      const divTooltip = d3.select('body')
         .append('div')
         .attr('id', 'tooltip')
         .style('position', 'absolute')
@@ -138,12 +134,11 @@ function build () {
       d3.select('#tooltip')
         .style('left', function () {
           const offset = d3.select(this).node().getBoundingClientRect().width / 2
-          return (middleX - offset) + 'px'
+          return (offset + middleX) + 'px'
         }
         )
         .style('top', function () {
-          const offset = d3.select(this).node().getBoundingClientRect().height
-          return (middleY - offset) + 'px'
+          return (middleY+100) + 'px'
         })
     })
     .on('mouseleave', function (season) {
