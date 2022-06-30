@@ -10,7 +10,7 @@ import * as categories from './scripts/graphics/categories.js'
 import * as priceChanges from './scripts/graphics/priceChanges.js'
 import * as preprocessPriceChanges from './scripts/preprocessing/priceChanges.js'
 import * as styling from './scripts/graphics/styling.js'
-
+/* eslint-disable no-undef */ // For the glob variable
 const DATA_DIR = 'assets/data/'
 
 window.glob = {

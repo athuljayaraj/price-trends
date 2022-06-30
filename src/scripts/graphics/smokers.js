@@ -1,7 +1,7 @@
 import * as sliderHelper from './sliderHelper.js'
 import * as helper from './helper.js'
 
-/* eslint-disable no-undef */
+/* eslint-disable no-undef */ // For the glob variable
 
 /**
  * Method to build the visualization
