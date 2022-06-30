@@ -238,44 +238,7 @@ function drawLines () {
     return
   }
   createCurves(selectedData)
-  createToolTip()
   formatYAxesDateLabels(selectedData)
-}
-
-/**
- *
- */
-function createToolTip () {
-  d3.select('#linesPriceChange')
-    .selectAll('.curvePriceChange')
-    .on('mouseenter', function (d) {
-      d3.select(this)
-        .attr('stroke', 'var(--accent)')
-        .attr('stroke-width', '4')
-      d3.select('body')
-        .append('div')
-        .attr('id', 'tooltip')
-        .style('position', 'absolute')
-        .style('z-index', '10')
-        .style('background', 'white')
-        .style('padding', '10px')
-        .style('border-radius', '5px')
-        .style('box-shadow', '1px 1px 5px black')
-        .style('left', (d3.event.pageX + glob.sizes.tooltip.offsetY) + 'px')
-        .style('top', (d3.event.pageY + glob.sizes.tooltip.offsetY) + 'px')
-        .html(`<strong>Product: ${d.map(a => a.product)[0]}<br/> 
-                Price in ${d.map(a => a.date)[0]}: $${d.map(a => a.price)[0]}<br/> 
-                Price in ${d.map(a => a.date)[1]}: $${d.map(a => a.price)[1]}
-                </strong>`)
-    })
-    .on('mouseleave', function () {
-      d3.select(this)
-        .attr('stroke', 'var(--front)')
-        .attr('stroke-width', '2')
-      d3.select('#tooltip')
-        .remove()
-    }
-    )
 }
 
 /**
@@ -302,6 +265,34 @@ function createCurves (selectedData) {
     .attr('stroke', 'var(--front)')
     .attr('stroke-width', '2')
     .attr('fill', 'none')
+    .on('mouseenter', function (d) {
+      d3.select(this)
+        .attr('stroke', 'var(--accent')
+        .attr('stroke-width', '4')
+      d3.select('body')
+        .append('div')
+        .attr('id', 'tooltip')
+        .style('position', 'absolute')
+        .style('z-index', '10')
+        .style('background', 'white')
+        .style('padding', '10px')
+        .style('border-radius', '5px')
+        .style('box-shadow', '1px 1px 5px black')
+        .style('left', (d3.event.pageX + glob.sizes.tooltip.offsetY) + 'px')
+        .style('top', (d3.event.pageY + glob.sizes.tooltip.offsetY) + 'px')
+        .html(`<strong>Product: ${d.map(a => a.product)[0]}<br/> 
+                Price in ${d.map(a => a.date)[0]}: $${d.map(a => a.price)[0]}<br/> 
+                Price in ${d.map(a => a.date)[1]}: $${d.map(a => a.price)[1]}
+                </strong>`)
+    })
+    .on('mouseleave', function () {
+      d3.select(this)
+        .attr('stroke', 'var(--front)')
+        .attr('stroke-width', '2')
+      d3.select('#tooltip')
+        .remove()
+    }
+    )
 }
 
 /**
