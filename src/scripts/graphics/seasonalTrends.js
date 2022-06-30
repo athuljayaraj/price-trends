@@ -3,7 +3,7 @@ import * as helper from './helper.js'
 /**
  * Method to build the visualization
  */
-export function main() {
+export function main () {
   if (glob.data.seasonalTrends.mainData === undefined) {
     return
   }
@@ -33,7 +33,7 @@ export function main() {
 /**
  * Refresh the elements on the visualization
  */
-function reBuild() {
+function reBuild () {
   d3.select('#vizualization-svg1')
     .selectAll('*')
     .remove()
@@ -42,7 +42,7 @@ function reBuild() {
 /**
  * Build the graphic
  */
-function build() {
+function build () {
   const data = glob.data.seasonalTrends.mainData.filter(d => d.name === glob.data.seasonalTrends.current_selection)[0]
   const svg = d3.select('#vizualization-svg1')
   // Create scales
@@ -112,16 +112,21 @@ function build() {
       const middleX = svgInfos.left +
         glob.sizes.vizSvgSizes.margin.left +
         xScale(season.start) + (xScale(season.end) - xScale(season.start)) / 2
-      const marginControls = 70
-      const middleY = 1500
-      const divTooltip = d3.select('body')
+      const middleY = svgInfos.top
+      const divTooltip = d3.select('#vizualization-div1')
+        .select(function () { return this.parentNode })
+        .append('div')
+        .style('width', '0px')
+        .style('height', '0px')
         .append('div')
         .attr('id', 'tooltip')
-        .style('position', 'absolute')
+        .style('float', 'right')
+        .style('position', 'relative')
         .style('z-index', '10')
         .style('background', 'white')
         .style('padding', '10px')
-        .style('top', middleY + 'px')
+        .style('top', -35 + 'px')
+        .style('right', `calc(70vw - 225px - ${xScale(season.start) + (xScale(season.end) - xScale(season.start)) / 2}px)`)
         .style('background', 'transparent')
         .style('text-align', 'center')
       divTooltip.append('p')
@@ -131,15 +136,15 @@ function build() {
         .attr('src', 'assets/images/' + season.name.toLocaleLowerCase() + '.png')
         .style('width', '25px')
         .style('background', 'transparent')
-      d3.select('#tooltip')
-        .style('left', function () {
-          const offset = d3.select(this).node().getBoundingClientRect().width / 2
-          return (offset + middleX) + 'px'
-        }
-        )
-        .style('top', function () {
-          return (middleY+100) + 'px'
-        })
+      // d3.select('#tooltip')
+      //   .style('left', function () {
+      //     const offset = d3.select(this).node().getBoundingClientRect().width / 2
+      //     return (offset + middleX) + 'px'
+      //   }
+      //   )
+      //   .style('top', function () {
+      //     return '150vh'
+      //   })
     })
     .on('mouseleave', function (season) {
       d3.select(this)
