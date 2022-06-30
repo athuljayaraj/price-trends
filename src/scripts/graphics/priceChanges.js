@@ -1,7 +1,9 @@
 import * as sliderHelper from './sliderHelper.js'
 import * as helper from './helper.js'
+/* eslint-disable no-undef */ // For the glob variable
+
 /**
- *
+ * Method to build the visualization
  */
 export function main () {
   if (glob.data.priceChanges.mainData === undefined) {
@@ -16,7 +18,7 @@ export function main () {
 
 // Code for the slider inspired by https://codingartistweb.com/2021/06/double-range-slider-html-css-javascript/
 /**
- *
+ * Method to create the custom slider
  */
 function createSlider () {
   const controls = d3.select('#controls3')
@@ -50,7 +52,7 @@ function createSlider () {
 }
 
 /**
- *
+ * Method to draw the graphic
  */
 function build () {
   const sliderOne = d3.select('#slider-1').node()
@@ -132,6 +134,8 @@ function build () {
 }
 
 /**
+ * Method to compute  the end and start dates from the slider values
+ *
  * @returns {object} The start and end dates computed from the slider
  */
 function computeStartEndDates () {
@@ -146,6 +150,8 @@ function computeStartEndDates () {
 }
 
 /**
+ * Method to group the data by product
+ *
  * @param {object[]} data  The data set to process
  * @returns {object} The data grouped by product
  */
@@ -171,6 +177,8 @@ function groupDataByProduct (data) {
 }
 
 /**
+ * Method to sort the groups of data by price variation
+ *
  * @param {object} groupData  The data grouped by product
  * @returns {object[]} The data grouped by product sorted
  */
@@ -194,6 +202,8 @@ function sortGroupData (groupData) {
 }
 
 /**
+ * Method to get the top six products to display
+ *
  * @returns {object[]} The information (product, date, price) of the 3 smallest and 3 greatest changes
  */
 function preprocessTop6 () {
@@ -218,6 +228,7 @@ function preprocessTop6 () {
 }
 
 /**
+ * Method to draw the curves of the graph
  *
  */
 function drawLines () {
@@ -242,6 +253,8 @@ function drawLines () {
 }
 
 /**
+ * Method to create curves from given data
+ *
  * @param {object[]} selectedData The information (product, date, price) of the 3 smallest and 3 greatest changes
  */
 function createCurves (selectedData) {
@@ -296,27 +309,29 @@ function createCurves (selectedData) {
 }
 
 /**
+ * Method to format the date labels of y axes
+ *
  * @param {object[]} selectedData The information (product, date, price) of the 3 smallest and 3 greatest changes
  */
 function formatYAxesDateLabels (selectedData) {
   const xScale = glob.data.priceChanges.xScale
   const formatDate = d => (new Date(d)).toLocaleDateString('en-CA', { year: 'numeric', month: 'long' })
-  const textStartBoundings = d3.select('#textStart')
+  const textStartBounding = d3.select('#textStart')
     .text(formatDate(selectedData[0][0].date))
     .attr('transform', 'translate(' + (xScale(Date.parse(selectedData[0][0].date)) + glob.sizes.vizSvgSizes.margin.left) + ',' + glob.sizes.vizSvgSizes.margin.top / 2 + ')')
     .node()
     .getBoundingClientRect()
-  const textEndBoundings = d3.select('#textEnd')
+  const textEndBounding = d3.select('#textEnd')
     .text(formatDate(selectedData[0][1].date))
     .attr('transform', 'translate(' + (xScale(Date.parse(selectedData[0][1].date)) + glob.sizes.vizSvgSizes.margin.left) + ',' + glob.sizes.vizSvgSizes.margin.top / 2 + ')')
     .node()
     .getBoundingClientRect()
 
   // Adjust position to avoid overlapping
-  if (textStartBoundings.x + textStartBoundings.width / 2 >= textEndBoundings.x - textEndBoundings.width / 2) {
+  if (textStartBounding.x + textStartBounding.width / 2 >= textEndBounding.x - textEndBounding.width / 2) {
     d3.select('#textEnd')
-      .attr('transform', 'translate(' + (xScale(Date.parse(selectedData[0][1].date)) + glob.sizes.vizSvgSizes.margin.left + textEndBoundings.width / 2.0) + ',' + glob.sizes.vizSvgSizes.margin.top / 2 + ')')
+      .attr('transform', 'translate(' + (xScale(Date.parse(selectedData[0][1].date)) + glob.sizes.vizSvgSizes.margin.left + textEndBounding.width / 2.0) + ',' + glob.sizes.vizSvgSizes.margin.top / 2 + ')')
     d3.select('#textStart')
-      .attr('transform', 'translate(' + (xScale(Date.parse(selectedData[0][1].date)) + glob.sizes.vizSvgSizes.margin.left - textStartBoundings.width / 2.0) + ',' + glob.sizes.vizSvgSizes.margin.top / 2 + ')')
+      .attr('transform', 'translate(' + (xScale(Date.parse(selectedData[0][1].date)) + glob.sizes.vizSvgSizes.margin.left - textStartBounding.width / 2.0) + ',' + glob.sizes.vizSvgSizes.margin.top / 2 + ')')
   }
 }

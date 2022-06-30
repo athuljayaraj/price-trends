@@ -1,4 +1,8 @@
+/* eslint-disable no-undef */ // For the glob variable
+
 /**
+ * Method to preprocess the data set
+ *
  * @param {object[]} dataNorm The data set to process
  */
 export function main (dataNorm) {
