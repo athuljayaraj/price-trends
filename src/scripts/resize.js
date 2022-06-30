@@ -1,6 +1,6 @@
 /* eslint-disable no-undef */ // For the glob variable
 /**
- *
+ * Method to resize the visualization
  */
 export function updateResize () {
   const svgSizes = window.getComputedStyle(d3.select('#vizualization-svg1').node())
