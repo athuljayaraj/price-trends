@@ -152,14 +152,14 @@ function build () {
     })
 }
 /**
- * @param {int} category representing one of the three categories of products (other products (0), products with significant deviations from inflation (1), inflation (2))
+ * @param {number} category representing one of the three categories of products (other products (0), products with significant deviations from inflation (1), inflation (2))
  * @returns {boolean} true if the category must be visible else false
  */
 function checkIfCatVisible (category) {
   return (glob.data.inflation.selected_elem.includes(category) && glob.data.inflation.hovered_elem === null) || glob.data.inflation.hovered_elem === category
 }
 /**
- * @param {int} category representing one of the three categories of products (other products (0), products with significant deviations from inflation (1), inflation (2))
+ * @param {number} category representing one of the three categories of products (other products (0), products with significant deviations from inflation (1), inflation (2))
  * @returns {number} the opacity required for the legend depending if the category is visible or not
  */
 function opacityFunc (category) {
