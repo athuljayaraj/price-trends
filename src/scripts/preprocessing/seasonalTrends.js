@@ -1,8 +1,9 @@
+/* eslint-disable no-undef */ // For the glob variable
 /**
- * @param dataNorm: data with prices of each product per month
- * @param seasonalTrends: list of products with seasonal trends
+ * @param {object[]} dataNorm data with prices of each product per month
+ * @param {object[]} seasonalTrends list of products with seasonal trends
  */
-export function main(dataNorm, seasonalTrends) {
+export function main (dataNorm, seasonalTrends) {
   const dicoData = {}
   dataNorm.forEach(function (d) {
     if (!dicoData[d.product]) {

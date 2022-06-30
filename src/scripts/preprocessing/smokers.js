@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */ // For the glob variable
 /**
  * Method to preprocess raw data to add smokers data
  *

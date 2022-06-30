@@ -1,5 +1,5 @@
 /**
- *
+ * Global styling of the graphics
  */
 export function main () {
   d3.selectAll('.tick').selectAll('line').attr('stroke', 'var(--front)')
